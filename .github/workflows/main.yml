@@ -8,3 +8,7 @@ on:
 
 
   jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Dummy Job does nothing for the moment
