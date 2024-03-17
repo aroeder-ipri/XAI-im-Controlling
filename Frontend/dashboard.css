@@ -63,23 +63,9 @@ p {
 /* Effekte beim Überfahren mit der Maus */
 .custom-btn:hover {
     color: #fff; /* Textfarbe beim Überfahren */
-    background-color: #5e8e12; /* Hintergrundfarbe beim Überfahren */
-    border-color: #5e8e12; /* Rahmenfarbe beim Überfahren */
+    background-color: #5c9021; /* Hintergrundfarbe beim Überfahren */
+    border-color: #5c9021; /* Rahmenfarbe beim Überfahren */
 }
-
-/* Aktiver Zustand */
-.custom-btn:active {
-    color: #fff; /* Textfarbe im aktiven Zustand */
-    background-color: #4d7c00; /* Hintergrundfarbe im aktiven Zustand */
-    border-color: #4d7c00; /* Rahmenfarbe im aktiven Zustand */
-}
-
-/* Fokus-Zustand */
-.custom-btn:focus {
-    box-shadow: 0 0 0 0.25rem rgba(116, 176, 39, 0.5); /* Schatten beim Fokus */
-    outline: 0; /* Entfernen des Standard-Umrisses */
-}
-
 
 /* Medienabfrage für eine bessere Lesbarkeit auf kleinen Bildschirmen */
 @media (max-width: 768px) {
@@ -102,7 +88,7 @@ p {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-  }
+}
 
 /* Modalfensterinhalt */
 .modal-content {
@@ -136,3 +122,44 @@ p {
     background-color: #74B027;
 }
 
+.canvas-container {
+    overflow: auto; /* Löscht den Bereich um die schwebenden Elemente */
+}
+
+#lineChart2 {
+    float: left;
+}
+
+/* Fragezeichen Button */
+#questionButton {
+    float: right;
+    background-color: #74B027;
+    color: white;
+    padding: 0; /* Kein Padding */
+    width: 30px; /* Breite des Buttons */
+    height: 30px; /* Höhe des Buttons */
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%; /* Runde Form */
+    line-height: 30px; /* Zeilenhöhe */
+    text-align: center; /* Textausrichtung zentriert */
+}
+
+#questionButton:hover {
+    background-color: #5c9021; /* Hintergrundfarbe ändern, wenn der Button aktiv ist */
+    font-weight: bold; /* Fragezeichen fett anzeigen */
+}
+
+.question-mark {
+    display: inline-block;
+    width: 20px; /* Breite des Symbols */
+    height: 20px; /* Höhe des Symbols */
+    background-color: #74B027; /* Hintergrundfarbe */
+    color: white; /* Textfarbe */
+    font-size: 16px; /* Schriftgröße */
+    text-align: center; /* Zentrieren des Textes */
+    line-height: 20px; /* Vertikale Ausrichtung */
+    border-radius: 50%; /* Runde Form */
+    pointer-events: none; /* Symbol nicht klickbar machen */
+}
