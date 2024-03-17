@@ -134,10 +134,12 @@
         if (vorhersageWert === 0) {
             lineCtx.style.display = 'block';
             lineCtx2.style.display = 'none';
+            questionButton.style.display = 'none';
             updateGraphWithCSVData(filteredDataWithCondition, lineChart); // Daten für den ersten Line-Chart aktualisieren
         } else {
             lineCtx.style.display = 'none';
             lineCtx2.style.display = 'block';
+            questionButton.style.display = 'block';
             updateGraphWithCSVData(filteredData, lineChart2); // Daten für den zweiten Line-Chart aktualisieren
         }
     }
@@ -169,18 +171,6 @@
         chart.update();
     }
 
-    // Funktion, um eine zufällige Farbe zu generieren
-    function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
-
-
     // CSV-Datei laden und Checkboxen erstellen
     loadCSV('fiktiv.csv')
         .then(csv => {
@@ -200,7 +190,12 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'top'
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 10
+                                }
+                            }
                         },
                         tooltip: {
                             boxPadding: 3
@@ -220,110 +215,114 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'top'
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 10
+                                }
+                            }
                         },
                         tooltip: {
-                            boxPadding: 20,
-                            callbacks: {
-                                label: function(tooltipItem, data) {
-                        return ["Einflussfaktoren:","- Nachfrage aus dem Ausland", "- Umfang der Rabattaktionen"];
-                    }
-                            }
+                            boxPadding: 3
                         }
                     }
                 }
             });
 
             // Funktion zum Anzeigen des benutzerdefinierten Modalfensters mit Informationen
-function showModalWithInfo(infoText) {
-    const modal = document.getElementById('modal');
-    const modalText = document.getElementById('modal-text');
-    modalText.textContent = infoText;
-    modal.style.display = 'block';
-
-    // Schließen-Schaltfläche
-    const closeBtn = document.getElementsByClassName('close')[0];
-    closeBtn.onclick = function() {
-        modal.style.display = 'none';
-    }
-
-    // Klicken außerhalb des Modalfensters, um es zu schließen
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    }
-}
-
-// Funktion zum Anzeigen von näheren Informationen beim Klicken auf das Balkendiagramm
-function showBarChartInfo(event, chart) {
-    const activePoints = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
-
-    if (activePoints.length > 0) {
-        const firstPoint = activePoints[0];
-        const data = chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
-
-        // Benutzerdefiniertes Modalfenster anzeigen und Informationen einfügen
-        showModalWithInfo("Nachfolgend ist zu sehen, welche Einflussfaktoren den größten Einfluss auf die Umsatzprognose hatten:");
-    }
-}
-
-// Funktion zum Öffnen des zweiten Modalfensters
-document.getElementById('mehrButton').addEventListener('click', function() {
-    document.getElementById('modal2').style.display = 'block';
-});
-
-// Funktion zum Schließen des zweiten Modalfensters
-function closeModal2() {
-    document.getElementById('modal2').style.display = 'none';
-}
-
-// Eventlistener für den zweiten Close-Button im zweiten Modalfenster
-const closeBtn2 = document.querySelector('#modal2 .close');
-closeBtn2.addEventListener('click', closeModal2);
-
-// Funktion zum Schließen des zweiten Modalfensters bei Klick außerhalb des Fensters
-window.onclick = function(event) {
-    const modal2 = document.getElementById('modal2');
-    if (event.target == modal2) {
-        modal2.style.display = 'none';
-    }
-}
-
-
-// Balkendiagramm initialisieren
-barChart = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-        labels: ['2019', '2020', '2021', '2022', '2023'],
-        datasets: [{
-            label: 'Jahresumsatz',
-            data: [50000, 60000, 75000, 90000, 100000],
-            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'], // Unterschiedliche Farben für die Balken
-            borderColor: 'transparent',
-            borderWidth: 1,
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+            function showModalWithInfo(infoText) {
+                const modal = document.getElementById('modal');
+                const modalText = document.getElementById('modal-text');
+                modalText.textContent = infoText;
+                modal.style.display = 'block';
             }
-        },
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                boxPadding: 3
-            }
-        },
-        onClick: function(event, elements) {
-            showBarChartInfo(event, this);
-        }
-    }
-});
 
+            // Funktion zum Schließen des Modalfensters
+            function closeModal() {
+                document.getElementById('modal').style.display = 'none';
+            }
+
+            // Eventlistener für den Close-Button im zweiten Modalfenster
+            const closeBtn = document.querySelector('#modal .close');
+            closeBtn.addEventListener('click', closeModal);
+
+            // Funktion zum Schließen des Modalfensters bei Klick außerhalb des Fensters
+            window.onclick = function(event) {
+                const modal = document.getElementById('modal');
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            // Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
+            document.getElementById('questionButton').addEventListener('click', function() {
+                const modal = document.getElementById('modal');
+                modal.style.display = 'block';
+            });
+
+            // Funktion zum Öffnen des zweiten Modalfensters
+            document.getElementById('mehrButton').addEventListener('click', function() {
+                document.getElementById('modal2').style.display = 'block';
+            });
+
+            // Funktion zum Schließen des zweiten Modalfensters
+            function closeModal2() {
+                document.getElementById('modal2').style.display = 'none';
+            }
+
+            // Eventlistener für den zweiten Close-Button im zweiten Modalfenster
+            const closeBtn2 = document.querySelector('#modal2 .close');
+            closeBtn2.addEventListener('click', closeModal2);
+
+            // Funktion zum Schließen des zweiten Modalfensters bei Klick außerhalb des Fensters
+            window.onclick = function(event) {
+                const modal2 = document.getElementById('modal2');
+                if (event.target == modal2) {
+                    modal2.style.display = 'none';
+                }
+            }
+
+            // Event-Listener für den Bestätigen-Button im Modalfenster 2
+            document.getElementById('bestaetigenButton').addEventListener('click', function() {
+                // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
+                const additionalText = document.createElement('p');
+                additionalText.textContent = 'Um den angestrebten Umsatz zu erreichen, müsste eine 10% Rabattaktion bestehen und die Nachfrage aus dem Ausland 15% höher sein.';
+                
+                // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
+                const modalContent2 = document.querySelector('#modal2 .modal-content');
+                modalContent2.appendChild(additionalText);
+            });
+
+            // Balkendiagramm initialisieren
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2019', '2020', '2021', '2022', '2023'],
+                    datasets: [{
+                        label: 'Jahresumsatz',
+                        data: [50000, 60000, 75000, 90000, 100000],
+                        backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'], // Unterschiedliche Farben für die Balken
+                        borderColor: 'transparent',
+                        borderWidth: 1,
+                        barThickness: 50,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            boxPadding: 3
+                        }
+                    }
+                }
+            });
 
             // Rufe die Funktion zum Aktualisieren des Graphen mit den vorausgewählten Stores auf
             updateChartWithSelectedStores();
