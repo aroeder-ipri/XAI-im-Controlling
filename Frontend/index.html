@@ -51,9 +51,10 @@
       <input type="number" id="zahlInput" style="margin-bottom: 10px; margin-right: 5px;">
       <span>€</span>
       <button id="bestaetigenButton" class="btn custom-btn" style="margin-left: 10px;">Bestätigen</button>
-    </div>
+  </div>
   </div>
 </div>
+
 
   <div class="container">
     <!-- Seitenüberschrift -->
@@ -65,13 +66,17 @@
         <div class="content-box1 mt-3">
           <!-- Hier wird der Graph eingebettet -->
           <!-- Der erste Linechart -->
-          <canvas id="lineChart" style="display: none;"></canvas>
+          <canvas id="lineChart" style="display: none;" width="2000" height="600"></canvas>
           <!-- Der zweite Linechart -->
-          <canvas id="lineChart2" style="display: none;"></canvas>
-        </div>
+              <canvas id="lineChart2" style="display: none;" width="2000" height="600"></canvas>
+              <div class="canvas-container">
+              <button id="questionButton">?</button>
+          </div>
+      </div>
+      
         <div class="content-box1 mt-3">
           <!-- Hier wird der Graph eingebettet -->
-          <canvas id="barChart"></canvas>
+          <canvas id="barChart" width="2000" height="600"></canvas>
         </div>
       </div>
       <!-- Rechte Seite - Nebenboxen -->
@@ -80,7 +85,7 @@
           <h2>Vorhersage</h2>
           <button type="button" id="anzeigenButton" class="btn custom-btn">anzeigen</button>
           <button type="button" id="ausblendenButton" class="btn custom-btn">ausblenden</button>
-          <p>Erhalten Sie mehr Informationen, indem Sie in der Vorhersage auf Klicken.</p>
+          <p>Erhalten Sie mehr Informationen, indem Sie in der Vorhersage auf <span class="question-mark">?</span> Klicken.</p>
         </div>
         <div class="content-box3 mt-3">
           <h2>Store ändern</h2>
