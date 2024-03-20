@@ -6,10 +6,10 @@
   <title>Bootstrap Dashboard</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <!-- Eigene CSS-Datei -->
   <link rel="stylesheet" href="dashboard.css">
-
   <!-- Eigene JavaScript-Datei -->
   <script src="dashboard.js" defer></script>
 </head>
@@ -17,6 +17,7 @@
 
 <!-- Modalfenster -->
 <div id="modal" class="modal">
+  <div class="modal-background"></div> <!-- Hintergrund des Modalfensters -->
   <div class="modal-content">
     <span class="close">&times;</span>
     <p id="modal-text">
@@ -40,6 +41,7 @@
   </div>
 </div>
 
+
 <!-- Modalfenster 2 -->
 <div id="modal2" class="modal" style="display: none;">
   <div class="modal-content">
@@ -48,13 +50,12 @@
     <p>Geben Sie Ihren erwarteten Umsatz an:</p>
     <!-- Textfeld für die Eingabe einer Zahl mit Eurozeichen und Bestätigungs-Button -->
     <div style="display: flex; align-items: center;">
-      <input type="number" id="zahlInput" style="margin-bottom: 10px; margin-right: 5px;">
+      <input type="text" id="zahlInput" style="margin-bottom: 10px; margin-right: 5px;">
       <span>€</span>
-      <button id="bestaetigenButton" class="btn custom-btn" style="margin-left: 10px;">Bestätigen</button>
-  </div>
+      <button id="bestaetigenButton" class="btn custom-btn" style="margin-left: 10px;" disabled>Bestätigen</button>
+    </div>
   </div>
 </div>
-
 
   <div class="container">
     <!-- Seitenüberschrift -->
@@ -94,7 +95,10 @@
         </div>
         <div class="content-box3 mt-3">
           <h2>Store-Info</h2>
-          <div id="storeInfo"></div> <!-- Bereich zum Anzeigen der Store-Informationen -->
+          <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
+          <span id="currentStore"></span>
+          <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
+          <div id="storeInfo"></div>
         </div>
       </div>
     </div>
