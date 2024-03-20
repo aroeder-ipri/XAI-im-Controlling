@@ -13,6 +13,8 @@
     let lineChart2;
     let barChart;
     let vorhersageWert = 0; // Initialisierung des Vorhersage-Werts
+    let storeInfoData; // Globale Variable für Store-Informationen
+    let selectedStoreIndex = 0; // Variable zur Verwaltung des aktuellen Store-Index
 
     // Funktion zum Laden der CSV-Datei
     async function loadCSV(url) {
@@ -67,6 +69,72 @@
         return data;
     }
 
+        // Funktion zum Analysieren der CSV-Daten und Extrahieren der Store-Informationen
+        function parseStoreInfo(csv) {
+            const lines = csv.split('\n');
+            const data = {};
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i];
+                const parts = line.split(';');
+                const store = parts[0].trim();
+                const storeInfo = parts[4].trim(); // Die 5. Spalte in der CSV-Datei enthält Store-Informationen
+                data[store] = storeInfo;
+            }
+
+            return data;
+        }
+
+
+
+// Funktion zum Aktualisieren der Store-Informationen im HTML
+function updateStoreInfo(selectedStore, storeInfoData) {
+    const storeInfoContainer = document.getElementById('storeInfo');
+    const currentStoreElement = document.getElementById('currentStore');
+    storeInfoContainer.innerHTML = '';
+    
+    // Aktuellen Store einfügen
+    currentStoreElement.textContent = selectedStore;
+
+    // Store-Informationen einfügen
+    const storeInfo = storeInfoData[selectedStore];
+    const storeInfoDiv = document.createElement('div');
+    storeInfoDiv.textContent = storeInfo;
+    storeInfoContainer.appendChild(storeInfoDiv);
+}
+
+// Funktion zum Aktualisieren des angezeigten Stores im Carousel
+function updateSelectedStore() {
+    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+    const selectedStore = stores[selectedStoreIndex];
+    updateStoreInfo(selectedStore, storeInfoData);
+}
+
+// Funktion zum Wechseln zum nächsten Store im Carousel
+function nextStore() {
+    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+    selectedStoreIndex = (selectedStoreIndex + 1) % stores.length;
+    updateSelectedStore();
+}
+
+// Funktion zum Wechseln zum vorherigen Store im Carousel
+function prevStore() {
+    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+    selectedStoreIndex = (selectedStoreIndex - 1 + stores.length) % stores.length;
+    updateSelectedStore();
+}
+
+// Event-Listener für die nächste Store-Schaltfläche
+document.getElementById('nextStoreButton').addEventListener('click', nextStore);
+
+// Event-Listener für die vorherige Store-Schaltfläche
+document.getElementById('prevStoreButton').addEventListener('click', prevStore);
+
+
+
+
+
+
     // Event-Listener für den Anzeigen-Button
     document.getElementById('anzeigenButton').addEventListener('click', function () {
         vorhersageWert = 1;
@@ -116,8 +184,10 @@
     // Event-Listener für Änderungen in den Checkboxen
     function updateChartWithSelectedStores() {
         const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+        updateStoreInfo(selectedStores, storeInfoData);
         const filteredData = {};
         const filteredDataWithCondition = {};
+        updateSelectedStore();
 
         for (const store in csvData) {
             if (selectedStores.includes(store)) {
@@ -176,6 +246,7 @@
         .then(csv => {
             csvDataWithCondition = parseCSVWithCondition(csv); // Für den ersten Chart nur Daten mit Bedingung laden
             csvData = parseCSVAll(csv); // Für den zweiten Chart alle Daten laden
+            storeInfoData = parseStoreInfo(csv); // Store-Informationen laden
             const stores = Object.keys(csvData);
             createCheckboxes(stores);
 
@@ -242,17 +313,17 @@
                 document.getElementById('modal').style.display = 'none';
             }
 
-            // Eventlistener für den Close-Button im zweiten Modalfenster
+            // Eventlistener für den Close-Button im Modalfenster
             const closeBtn = document.querySelector('#modal .close');
             closeBtn.addEventListener('click', closeModal);
 
-            // Funktion zum Schließen des Modalfensters bei Klick außerhalb des Fensters
-            window.onclick = function(event) {
-                const modal = document.getElementById('modal');
-                if (event.target == modal) {
-                    modal.style.display = 'none';
-                }
-            }
+            // Funktion zum Schließen des Modalfensters bei Klick außerhalb des Fensters *funktioniert noch nicht*
+            //const modal = document.getElementById('modal');
+            //modal.addEventListener('click', function(event) {
+            //    if (event.target === modal) {
+            //        closeModal();
+            //    }
+            //});
 
             // Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
             document.getElementById('questionButton').addEventListener('click', function() {
@@ -268,30 +339,63 @@
             // Funktion zum Schließen des zweiten Modalfensters
             function closeModal2() {
                 document.getElementById('modal2').style.display = 'none';
+                clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
+                removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
             }
 
             // Eventlistener für den zweiten Close-Button im zweiten Modalfenster
             const closeBtn2 = document.querySelector('#modal2 .close');
             closeBtn2.addEventListener('click', closeModal2);
 
-            // Funktion zum Schließen des zweiten Modalfensters bei Klick außerhalb des Fensters
-            window.onclick = function(event) {
-                const modal2 = document.getElementById('modal2');
-                if (event.target == modal2) {
-                    modal2.style.display = 'none';
-                }
-            }
+            // Funktion zum Schließen des zweiten Modalfensters bei Klick außerhalb des Fensters *funktioniert noch nicht*
+            //window.onclick = function(event) {
+            //    const modal2 = document.getElementById('modal2');
+            //    if (event.target == modal2) {
+            //        modal2.style.display = 'none';
+            //        clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
+            //        removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
+            //    }
+            //}
 
             // Event-Listener für den Bestätigen-Button im Modalfenster 2
             document.getElementById('bestaetigenButton').addEventListener('click', function() {
-                // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
-                const additionalText = document.createElement('p');
-                additionalText.textContent = 'Um den angestrebten Umsatz zu erreichen, müsste eine 10% Rabattaktion bestehen und die Nachfrage aus dem Ausland 15% höher sein.';
-                
-                // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
-                const modalContent2 = document.querySelector('#modal2 .modal-content');
-                modalContent2.appendChild(additionalText);
+                // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
+                if (!document.getElementById('additionalText')) {
+                    // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
+                    const additionalText = document.createElement('p');
+                    additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
+                    additionalText.textContent = 'Um den angestrebten Umsatz zu erreichen, müsste eine 10% Rabattaktion bestehen und die Nachfrage aus dem Ausland 15% höher sein.';
+                    
+                    // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
+                    const modalContent2 = document.querySelector('#modal2 .modal-content');
+                    modalContent2.appendChild(additionalText);
+                }
             });
+
+            // Funktion zum Leeren des Eingabefelds
+            function clearInputField() {
+                document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
+            }
+
+            // Funktion zum Entfernen des zusätzlichen Texts
+            function removeAdditionalText() {
+                const additionalText = document.getElementById('additionalText');
+                if (additionalText) {
+                    additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
+                }
+            }
+
+            // Überprüfung der Eingabe und Aktivierung des Buttons
+            document.getElementById('zahlInput').addEventListener('input', function() {
+                var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
+                var button = document.getElementById('bestaetigenButton');
+                if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
+                    button.disabled = false;
+                } else {
+                    button.disabled = true;
+                }
+            });
+
 
             // Balkendiagramm initialisieren
             barChart = new Chart(barCtx, {
