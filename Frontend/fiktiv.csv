@@ -1,37 +1,37 @@
-Store;Umsatz;Wann;Vorhersage
-Ulm;12500;Januar;0
-Ulm;11000;Februar;0
-Ulm;16800;März;0
-Ulm;12000;April;0
-Ulm;8000;Mai;0
-Ulm;9800;Juni;0
-Ulm;13500;Juli;0
-Ulm;14900;August;0
-Ulm;14500;September;0
-Ulm;13200;Oktober;0
-Ulm;16000;November;0
-Ulm;20000;Dezember;1
-München;12000;Januar;0
-München;8000;Februar;0
-München;9800;März;0
-München;13500;April;0
-München;14900;Mai;0
-München;14500;Juni;0
-München;13200;Juli;0
-München;16000;August;0
-München;18500;September;0
-München;12500;Oktober;0
-München;11000;November;0
-München;20000;Dezember;1
-Stuttgart;12000;Januar;0
-Stuttgart;8000;Februar;0
-Stuttgart;14500;März;0
-Stuttgart;13200;April;0
-Stuttgart;16000;Mai;0
-Stuttgart;18500;Juni;0
-Stuttgart;12000;Juli;0
-Stuttgart;8000;August;0
-Stuttgart;9800;September;0
-Stuttgart;13500;Oktober;0
-Stuttgart;14900;November;0
-Stuttgart;20000;Dezember;1
+Store;Umsatz;Wann;Vorhersage;Store-Info
+Ulm;12500;Januar;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;11000;Februar;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;16800;März;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;12000;April;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;8000;Mai;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;9800;Juni;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;13500;Juli;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;14900;August;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;14500;September;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;13200;Oktober;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;16000;November;0;Ulm ist eine Stadt in Baden-Württemberg
+Ulm;20000;Dezember;1;Ulm ist eine Stadt in Baden-Württemberg
+München;12000;Januar;0;München ist die Landeshauptstadt von Bayern
+München;8000;Februar;0;München ist die Landeshauptstadt von Bayern
+München;9800;März;0;München ist die Landeshauptstadt von Bayern
+München;13500;April;0;München ist die Landeshauptstadt von Bayern
+München;14900;Mai;0;München ist die Landeshauptstadt von Bayern
+München;14500;Juni;0;München ist die Landeshauptstadt von Bayern
+München;13200;Juli;0;München ist die Landeshauptstadt von Bayern
+München;16000;August;0;München ist die Landeshauptstadt von Bayern
+München;18500;September;0;München ist die Landeshauptstadt von Bayern
+München;12500;Oktober;0;München ist die Landeshauptstadt von Bayern
+München;11000;November;0;München ist die Landeshauptstadt von Bayern
+München;20000;Dezember;1;München ist die Landeshauptstadt von Bayern
+Stuttgart;12000;Januar;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;8000;Februar;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;14500;März;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;13200;April;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;16000;Mai;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;18500;Juni;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;12000;Juli;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;8000;August;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;9800;September;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;13500;Oktober;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;14900;November;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Stuttgart;20000;Dezember;1;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
