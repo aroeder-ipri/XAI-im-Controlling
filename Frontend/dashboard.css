@@ -6,7 +6,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 225px; /* Festlegen einer festen Höhe für die Boxen */
+    height: 278px; /* Festlegen einer festen Höhe für die Boxen */
 }
 .content-box2 {
     background-color: #FFE699; /* Hintergrundfarbe */
@@ -15,7 +15,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 146px; /* Festlegen einer festen Höhe für die Boxen */
+    height: 150px; /* Festlegen einer festen Höhe für die Boxen */
 }
 .content-box3 {
     background-color: #F2F2F2; /* Hintergrundfarbe */
@@ -24,7 +24,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 144px; /* Festlegen einer festen Höhe für die Boxen */
+    height: 195px; /* Festlegen einer festen Höhe für die Boxen */
 }
 
 /* Stil für die Seitenüberschrift */
@@ -96,10 +96,10 @@ p {
     margin: 15% auto;
     padding: 20px;
     border-radius: 10px; /* Runde Ecken für das Modalfenster */
-    border-color: #74B027;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten für das Modalfenster */
+    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
     max-width: 400px; /* Maximalbreite des Modalfensters */
     width: 90%; /* 90% der verfügbaren Breite */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten für das Modalfenster */
 }
 
 /* Schließen-Schaltfläche */
@@ -117,33 +117,46 @@ p {
     cursor: pointer;
 }
 
+/* Hintergrund des Modalfensters */
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4); /* Hintergrundfarbe mit Transparenz */
+}
+
 /* Progressbar */
 .progress-bar {
     background-color: #74B027;
 }
 
 .canvas-container {
-    overflow: auto; /* Löscht den Bereich um die schwebenden Elemente */
+    position: relative;
 }
 
 #lineChart2 {
-    float: left;
+    position: relative;
 }
 
-/* Fragezeichen Button */
+/* Fragezeichen-Button für Modalfenster */
 #questionButton {
-    float: right;
+    position: absolute;
+    top: -140px;
+    right: 30px;
     background-color: #74B027;
     color: white;
-    padding: 0; /* Kein Padding */
-    width: 30px; /* Breite des Buttons */
-    height: 30px; /* Höhe des Buttons */
+    padding: 0;
+    width: 30px;
+    height: 30px;
     font-size: 20px;
     border: none;
     cursor: pointer;
-    border-radius: 50%; /* Runde Form */
-    line-height: 30px; /* Zeilenhöhe */
-    text-align: center; /* Textausrichtung zentriert */
+    border-radius: 50%;
+    line-height: 30px;
+    text-align: center;
+    z-index: 9999;
 }
 
 #questionButton:hover {
@@ -151,6 +164,7 @@ p {
     font-weight: bold; /* Fragezeichen fett anzeigen */
 }
 
+/* Fragezeichen (nur Bild, nicht klickbar) */
 .question-mark {
     display: inline-block;
     width: 20px; /* Breite des Symbols */
