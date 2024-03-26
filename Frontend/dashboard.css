@@ -67,13 +67,12 @@ p {
     border-color: #5c9021; /* Rahmenfarbe beim Überfahren */
 }
 
-/* Medienabfrage für eine bessere Lesbarkeit auf kleinen Bildschirmen */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 1.8rem; /* Größere Schriftgröße für kleinere Bildschirme */
-    }
-    h2 {
-        font-size: 1.2rem; /* Kleinere Schriftgröße für Hauptüberschriften */
+    /* Automatische Höhe für die Boxen auf kleinen Bildschirmen */
+    .content-box1,
+    .content-box2,
+    .content-box3 {
+        height: auto;
     }
 }
 
@@ -142,8 +141,8 @@ p {
 
 /* Fragezeichen-Button für Modalfenster */
 #questionButton {
-    position: absolute;
-    top: -140px;
+    position: relative;
+    top: -250px;
     right: 30px;
     background-color: #74B027;
     color: white;
@@ -176,4 +175,25 @@ p {
     line-height: 20px; /* Vertikale Ausrichtung */
     border-radius: 50%; /* Runde Form */
     pointer-events: none; /* Symbol nicht klickbar machen */
+}
+
+/* Carousel-Buttons deaktiviert */
+#prevStoreButton[disabled],
+#nextStoreButton[disabled] {
+    background-color: transparent; /* Ändere die Hintergrundfarbe für deaktivierte Schaltflächen */
+    cursor: not-allowed; /* Ändere den Cursor-Stil für deaktivierte Schaltflächen */
+}
+
+/* Stil für die Carousel-Buttons */
+#prevStoreButton,
+#nextStoreButton {
+    background-color: transparent; /* Transparenter Hintergrund */
+    border: none; /* Kein Rahmen */
+    cursor: pointer; /* Zeige den Zeiger beim Überfahren an */
+}
+
+/* Stil für die Carousel-Buttons beim Überfahren, jedoch nicht wenn deaktiviert */
+#prevStoreButton:not([disabled]):hover i,
+#nextStoreButton:not([disabled]):hover i {
+    color: #74B027; /* Ändere die Farbe beim Überfahren */
 }
