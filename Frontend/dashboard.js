@@ -84,9 +84,7 @@
 
             return data;
         }
-
-
-
+        
 // Funktion zum Aktualisieren der Store-Informationen im HTML
 function updateStoreInfo(selectedStore, storeInfoData) {
     const storeInfoContainer = document.getElementById('storeInfo');
@@ -130,10 +128,21 @@ document.getElementById('nextStoreButton').addEventListener('click', nextStore);
 // Event-Listener für die vorherige Store-Schaltfläche
 document.getElementById('prevStoreButton').addEventListener('click', prevStore);
 
+// Funktion zum Aktualisieren der Schaltflächenaktivität basierend auf der Anzahl der ausgewählten Stores
+function updateButtonActivity() {
+    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+    const prevButton = document.getElementById('prevStoreButton');
+    const nextButton = document.getElementById('nextStoreButton');
 
-
-
-
+    // Wenn weniger als zwei Stores ausgewählt sind, deaktiviere die Schaltflächen
+    if (stores.length === 1) {
+        prevButton.disabled = true;
+        nextButton.disabled = true;
+    } else {
+        prevButton.disabled = false;
+        nextButton.disabled = false;
+    }
+}
 
     // Event-Listener für den Anzeigen-Button
     document.getElementById('anzeigenButton').addEventListener('click', function () {
@@ -187,7 +196,6 @@ document.getElementById('prevStoreButton').addEventListener('click', prevStore);
         updateStoreInfo(selectedStores, storeInfoData);
         const filteredData = {};
         const filteredDataWithCondition = {};
-        updateSelectedStore();
 
         for (const store in csvData) {
             if (selectedStores.includes(store)) {
@@ -212,6 +220,10 @@ document.getElementById('prevStoreButton').addEventListener('click', prevStore);
             questionButton.style.display = 'block';
             updateGraphWithCSVData(filteredData, lineChart2); // Daten für den zweiten Line-Chart aktualisieren
         }
+
+        // Aktualisierungen für Store-Infos
+        updateButtonActivity();
+        updateSelectedStore();
     }
 
     // Funktion zum Aktualisieren des Graphen mit CSV-Daten
@@ -299,6 +311,28 @@ document.getElementById('prevStoreButton').addEventListener('click', prevStore);
                     }
                 }
             });
+
+// Event-Handler für AfterDraw, um die Position des Buttons für Line-Chart 2 nach dem Zeichnen des Diagramms zu aktualisieren
+lineChart2.options.animation = {
+    onComplete: function() {
+        const dataset = lineChart2.data.datasets[0];
+        const lastValueIndex = dataset.data.length - 1;
+        const lastValue = dataset.data[lastValueIndex];
+        const button = document.getElementById('questionButton');
+        const scale = lineChart2.scales.y;
+        const meta = lineChart2.getDatasetMeta(0);
+        const rect = meta.data[lastValueIndex].getProps(['x', 'y', 'base']);
+
+        // Animation für das Einfliegen des Buttons
+        button.style.transition = 'top 0.5s, left 0.5s';
+
+        // Position des Buttons über dem Linienwert berechnen und setzen
+        const buttonTop = scale.getPixelForValue(lastValue); // Top-Position des Linienwertes
+        const buttonLeft = rect.x - button.offsetWidth / 2 + rect.width / 2; // Linker Rand des Linienpunkts
+        button.style.top = (buttonTop - button.offsetHeight - 250) + 'px'; // Neue Position nach Animation
+        button.style.left = (buttonLeft - button.offsetLeft - 200) + 'px'; // Neue Position nach Animation
+    }
+};
 
             // Funktion zum Anzeigen des benutzerdefinierten Modalfensters mit Informationen
             function showModalWithInfo(infoText) {
@@ -397,36 +431,36 @@ document.getElementById('prevStoreButton').addEventListener('click', prevStore);
             });
 
 
-            // Balkendiagramm initialisieren
-            barChart = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['2019', '2020', '2021', '2022', '2023'],
-                    datasets: [{
-                        label: 'Jahresumsatz',
-                        data: [50000, 60000, 75000, 90000, 100000],
-                        backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'], // Unterschiedliche Farben für die Balken
-                        borderColor: 'transparent',
-                        borderWidth: 1,
-                        barThickness: 50,
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            boxPadding: 3
-                        }
-                    }
-                }
-            });
+// Balkendiagramm initialisieren
+barChart = new Chart(barCtx, {
+    type: 'bar',
+    data: {
+        labels: ['2019', '2020', '2021', '2022', '2023'],
+        datasets: [{
+            label: 'Jahresumsatz',
+            data: [50000, 60000, 75000, 90000, 10000],
+            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'], // Unterschiedliche Farben für die Balken
+            borderColor: 'transparent',
+            borderWidth: 1,
+            barThickness: 50,
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                boxPadding: 3
+            }
+        }
+    }
+});
 
             // Rufe die Funktion zum Aktualisieren des Graphen mit den vorausgewählten Stores auf
             updateChartWithSelectedStores();
