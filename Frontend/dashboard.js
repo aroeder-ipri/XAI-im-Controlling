@@ -122,6 +122,7 @@ function prevStore() {
     updateSelectedStore();
 }
 
+
 // Event-Listener für die nächste Store-Schaltfläche
 document.getElementById('nextStoreButton').addEventListener('click', nextStore);
 
@@ -251,6 +252,7 @@ function updateButtonActivity() {
         chart.data.labels = labels;
         chart.data.datasets = datasets;
         chart.update();
+
     }
 
     // CSV-Datei laden und Checkboxen erstellen
@@ -287,33 +289,49 @@ function updateButtonActivity() {
                 }
             });
 
-            // Zweiten Line Chart initialisieren
-            lineChart2 = new Chart(lineCtx2, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: []
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        },
-                        tooltip: {
-                            boxPadding: 3
-                        }
+            // Media Query für kleine Bildschirme
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                // Optionen für kleine Bildschirme anpassen
+                lineChart.options.plugins.legend.display = false; // Legende ausblenden
+                // Charts aktualisieren
+                lineChart.update();
+}
+
+// Zweiten Line Chart initialisieren
+lineChart2 = new Chart(lineCtx2, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: []
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    font: {
+                        size: 10
                     }
                 }
-            });
+            },
+            tooltip: {
+                boxPadding: 3
+            }
+        }
+    }
+});
 
-// Event-Handler für AfterDraw, um die Position des Buttons für Line-Chart 2 nach dem Zeichnen des Diagramms zu aktualisieren
-lineChart2.options.animation = {
+// Media Query für kleine Bildschirme
+if (window.matchMedia('(max-width: 768px)').matches) {
+    // Optionen für kleine Bildschirme anpassen
+    lineChart2.options.plugins.legend.display = false; // Legende ausblenden
+    // Charts aktualisieren
+    lineChart2.update();
+}
+
+
+    lineChart2.options.animation = {
     onComplete: function() {
         const dataset = lineChart2.data.datasets[0];
         const lastValueIndex = dataset.data.length - 1;
@@ -328,9 +346,25 @@ lineChart2.options.animation = {
 
         // Position des Buttons über dem Linienwert berechnen und setzen
         const buttonTop = scale.getPixelForValue(lastValue); // Top-Position des Linienwertes
-        const buttonLeft = rect.x - button.offsetWidth / 2 + rect.width / 2; // Linker Rand des Linienpunkts
-        button.style.top = (buttonTop - button.offsetHeight - 250) + 'px'; // Neue Position nach Animation
-        button.style.left = (buttonLeft - button.offsetLeft - 200) + 'px'; // Neue Position nach Animation
+
+        // Überprüfen der Bildschirmgröße
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Anpassung der Position basierend auf der Bildschirmgröße
+        let buttonOffsetTop;
+
+        // Überprüfen, ob die Bildschirmbreite unter 1200 Pixel liegt
+        if (viewportWidth < 1200) {
+            buttonOffsetTop = 0; // Position unverändert lassen
+        } else {
+            buttonOffsetTop = 0.29 * viewportHeight;
+
+            // Neue Position des Buttons
+            const newTop = buttonTop - button.offsetHeight - buttonOffsetTop;
+
+            button.style.top = newTop + 'px'; // Neue Position nach Animation
+        }
     }
 };
 
@@ -350,14 +384,6 @@ lineChart2.options.animation = {
             // Eventlistener für den Close-Button im Modalfenster
             const closeBtn = document.querySelector('#modal .close');
             closeBtn.addEventListener('click', closeModal);
-
-            // Funktion zum Schließen des Modalfensters bei Klick außerhalb des Fensters *funktioniert noch nicht*
-            //const modal = document.getElementById('modal');
-            //modal.addEventListener('click', function(event) {
-            //    if (event.target === modal) {
-            //        closeModal();
-            //    }
-            //});
 
             // Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
             document.getElementById('questionButton').addEventListener('click', function() {
@@ -380,16 +406,6 @@ lineChart2.options.animation = {
             // Eventlistener für den zweiten Close-Button im zweiten Modalfenster
             const closeBtn2 = document.querySelector('#modal2 .close');
             closeBtn2.addEventListener('click', closeModal2);
-
-            // Funktion zum Schließen des zweiten Modalfensters bei Klick außerhalb des Fensters *funktioniert noch nicht*
-            //window.onclick = function(event) {
-            //    const modal2 = document.getElementById('modal2');
-            //    if (event.target == modal2) {
-            //        modal2.style.display = 'none';
-            //        clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
-            //        removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
-            //    }
-            //}
 
             // Event-Listener für den Bestätigen-Button im Modalfenster 2
             document.getElementById('bestaetigenButton').addEventListener('click', function() {
@@ -430,6 +446,74 @@ lineChart2.options.animation = {
                 }
             });
 
+// Funktion zum Erstellen der Tabs basierend auf den ausgewählten Stores
+function createTabs(selectedStores) {
+    const tabContainer = document.getElementById('myTab');
+    const tabContentContainer = document.getElementById('myTabContent');
+    tabContainer.innerHTML = '';
+    tabContentContainer.innerHTML = '';
+
+    selectedStores.forEach(store => {
+        // Tab-Link erstellen
+        const tabLink = document.createElement('button');
+        tabLink.classList.add('nav-link');
+        tabLink.setAttribute('id', `${store}-tab`);
+        tabLink.setAttribute('data-bs-toggle', 'tab');
+        tabLink.setAttribute('data-bs-target', `#${store}`);
+        tabLink.setAttribute('type', 'button');
+        tabLink.setAttribute('role', 'tab');
+        tabLink.setAttribute('aria-controls', store);
+        tabLink.setAttribute('aria-selected', 'false');
+        tabLink.textContent = store;
+
+        // Tab-Inhalt erstellen
+        const tabContent = document.createElement('div');
+        tabContent.classList.add('tab-pane', 'fade');
+        tabContent.setAttribute('id', store);
+        tabContent.setAttribute('role', 'tabpanel');
+        tabContent.setAttribute('aria-labelledby', `${store}-tab`);
+        tabContent.innerHTML = `
+            <p id="modal-text">
+            <p></p>
+                <p>Nachfolgend ist zu sehen, welche Einflussfaktoren den größten Einfluss auf die Umsatzprognose hatten:</p>
+                <p></p>
+                <p>- Nachfrage aus dem Ausland</p>
+                <!-- Progress bar-->
+                <div class="progress" style="margin-bottom: 15px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%;"></div>
+                </div>
+                <p>- Umfang der Rabattaktionen<br></p>
+                <!-- Progress bar-->
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                </div>
+            </p>
+        `;
+
+        // Tab-Link und Tab-Inhalt dem Container hinzufügen
+        tabContainer.appendChild(tabLink);
+        tabContentContainer.appendChild(tabContent);
+    });
+
+    // Den ersten Tab als aktiv markieren
+    const firstTab = tabContainer.firstElementChild;
+    const firstTabContent = tabContentContainer.firstElementChild;
+    firstTab.classList.add('active');
+    firstTab.setAttribute('aria-selected', 'true');
+    firstTabContent.classList.add('show', 'active');
+}
+
+// Funktion zum Aktualisieren der Tabs basierend auf den ausgewählten Stores
+function updateTabs() {
+    const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+    createTabs(selectedStores);
+}
+
+// Event-Listener für Änderungen in den Checkboxen
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', updateTabs);
+});
+
 
 // Balkendiagramm initialisieren
 barChart = new Chart(barCtx, {
@@ -439,7 +523,7 @@ barChart = new Chart(barCtx, {
         datasets: [{
             label: 'Jahresumsatz',
             data: [50000, 60000, 75000, 90000, 10000],
-            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'], // Unterschiedliche Farben für die Balken
+            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'],
             borderColor: 'transparent',
             borderWidth: 1,
             barThickness: 50,
