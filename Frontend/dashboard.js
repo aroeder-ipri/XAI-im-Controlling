@@ -450,6 +450,7 @@ if (window.matchMedia('(max-width: 768px)').matches) {
 function createTabs(selectedStores) {
     const tabContainer = document.getElementById('myTab');
     const tabContentContainer = document.getElementById('myTabContent');
+    const questionButton = document.getElementById('questionButton');
     tabContainer.innerHTML = '';
     tabContentContainer.innerHTML = '';
 
@@ -477,22 +478,68 @@ function createTabs(selectedStores) {
             <p></p>
                 <p>Nachfolgend ist zu sehen, welche Einflussfaktoren den größten Einfluss auf die Umsatzprognose hatten:</p>
                 <p></p>
-                <p>- Nachfrage aus dem Ausland</p>
-                <!-- Progress bar-->
                 <div class="progress" style="margin-bottom: 15px;">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%;"></div>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
-                <p>- Umfang der Rabattaktionen<br></p>
-                <!-- Progress bar-->
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
+                <div class="data-container"></div>
             </p>
         `;
 
         // Tab-Link und Tab-Inhalt dem Container hinzufügen
         tabContainer.appendChild(tabLink);
         tabContentContainer.appendChild(tabContent);
+    });
+
+// Event-Listener für den questionButton, um Daten zu laden
+questionButton.addEventListener('click', function() {
+    const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
+    const tabContent = document.querySelector(`#${activeTabId}`);
+    fetch('http://127.0.0.1:8000/data/')
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Netzwerkantwort war nicht ok');
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            const progressContainers = tabContent.querySelectorAll('.progress');
+            const dataContainer = tabContent.querySelector('.data-container');
+
+            dataContainer.innerHTML = '';
+            progressContainers.forEach(container => {
+                const label = container.previousElementSibling;
+                if (label && label.tagName === "P") {
+                    label.remove();
+                }
+            });
+
+            // Beschränke die Verarbeitung auf die ersten zwei Einträge der API-Antwort
+            const itemsToProcess = data.slice(0, 2);
+            itemsToProcess.forEach((item, index) => {
+                if (progressContainers[index]) {
+                    // Erstelle und füge neue Beschriftung hinzu
+                    const progressLabel = document.createElement('p');
+                    progressLabel.textContent = "- " + item.col_name;
+                    progressContainers[index].parentNode.insertBefore(progressLabel, progressContainers[index]);
+
+                    // Aktualisiere Progress Bar
+                    const progressBar = progressContainers[index].querySelector('.progress-bar');
+                    const value = item.percentage_importance;
+                    progressBar.setAttribute('aria-valuenow', value);
+                    progressBar.style.width = `${value}%`;
+                    progressBar.textContent = `${value}%`;
+                }
+            });
+
+        })
+        .catch(function(error) {
+            console.error('Fehler beim Abrufen der Daten:', error);
+            dataContainer.innerHTML = `<p>Fehler beim Laden der Daten</p>`;
+        });
+    
     });
 
     // Den ersten Tab als aktiv markieren
