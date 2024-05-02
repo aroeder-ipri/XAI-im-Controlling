@@ -124,6 +124,23 @@ shap_importance.sort_values(by=['feature_importance_vals'],
 shap_importance
 
 """
+*MAX*Feature importance in JSON for the frontend
+"""
+# Berechne Gesamtwert der Feature Importance-Werte
+total_importance = vals.sum()
+
+# Berechne prozentuale Feature Importance
+shap_importance = pd.DataFrame({
+    'col_name': feature_names,
+    'percentage_importance': ((vals / total_importance) * 100).round()
+})
+shap_importance.sort_values(by=['percentage_importance'], ascending=False, inplace=True)
+
+shap_importance.to_json('shap_feature_importance.json', orient='records')
+
+print("SHAP feature importance saved to shap_feature_importance.json")
+
+"""
 Generate counterfactuals with DiCE package
 """
 
