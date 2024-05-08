@@ -10,5 +10,15 @@ on:
   jobs:
     deploy:
       runs-on: ubuntu-latest
+
       steps:
-        - name: Dummy Job does nothing for the moment
+        - name:
+            Pull Repository from Github
+          uses: appleboy/ssh-action@v0.1.5
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USER }}
+            key: ${{ secrets.KEY }}
+            script: |
+              cd XAI-im-Controlling
+              git pull
