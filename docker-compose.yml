@@ -1,7 +1,7 @@
 services:
   frontend:
     build:
-      context: ./frontend
+      context: ./Frontend
       # ports:
         # - "8042:80"
     restart: always
