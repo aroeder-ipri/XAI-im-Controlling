@@ -28,7 +28,7 @@
         const lines = csv.split('\n');
         const data = {};
 
-        for (let i = 1; i < lines.length-1; i++) {
+        for (let i = 1; i < lines.length; i++) {
             const line = lines[i];
             const parts = line.split(';');
             if (parts.length >= 4 && parts[3].trim() === '0') {
@@ -52,7 +52,7 @@
         const lines = csv.split('\n');
         const data = {};
 
-        for (let i = 1; i < lines.length; i++) {
+        for (let i = 1; i < lines.length-1; i++) {
             const line = lines[i];
             const parts = line.split(';');
             const store = parts[0].trim();
