@@ -1,0 +1,207 @@
+/* Allgemeine Stile für die Boxen */
+.content-box1 {
+    background-color: #F2F2F2; /* Hintergrundfarbe */
+    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
+    border-radius: 5px; /* Abrundung der Ecken */
+    padding: 15px; /* Innenabstand */
+    margin-top: 15px; /* Abstand nach oben */
+    margin-bottom: 15px; /* Abstand nach unten */
+    height: 49.3%;
+}
+.content-box2 {
+    background-color: #FFE699; /* Hintergrundfarbe */
+    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
+    border-radius: 5px; /* Abrundung der Ecken */
+    padding: 15px; /* Innenabstand */
+    margin-top: 15px; /* Abstand nach oben */
+    margin-bottom: 15px; /* Abstand nach unten */
+    height: 30%;
+}
+.content-box3 {
+    background-color: #F2F2F2; /* Hintergrundfarbe */
+    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
+    border-radius: 5px; /* Abrundung der Ecken */
+    padding: 15px; /* Innenabstand */
+    margin-top: 15px; /* Abstand nach oben */
+    margin-bottom: 15px; /* Abstand nach unten */
+    height: 33%;
+}
+
+/* Stil für die Seitenüberschrift */
+h1 {
+    margin-top: 20px; /* Abstand nach oben */
+}
+
+/* Stil für die Hauptüberschriften */
+h2 {
+    color: #333; /* Textfarbe */
+    font-size: 1.5rem; /* Schriftgröße */
+    margin-bottom: 10px; /* Abstand nach unten */
+}
+
+/* Stil für die Textabschnitte */
+p {
+    color: #555; /* Textfarbe */
+    font-size: 1rem; /* Schriftgröße */
+}
+
+#storeInfo {
+    max-height: 80px; /* Maximal zulässige Höhe der div */
+    overflow-y: auto; /* Vertikales Scrollen aktivieren, wenn der Inhalt die Höhe überschreitet */
+    padding: 10px; /* Innenabstand für die Inhalte */
+    word-wrap: break-word; /* Automatisches Umbruch von langen Wörtern */
+}
+
+
+/* Benutzerdefinierte Button-Klasse mit der Farbe #74B027 */
+.custom-btn {
+    color: #fff; /* Textfarbe */
+    background-color: #74B027; /* Hintergrundfarbe */
+    border-color: #74B027; /* Rahmenfarbe */
+}
+
+/* Effekte beim Überfahren mit der Maus */
+.custom-btn:hover {
+    color: #fff; /* Textfarbe beim Überfahren */
+    background-color: #5c9021; /* Hintergrundfarbe beim Überfahren */
+    border-color: #5c9021; /* Rahmenfarbe beim Überfahren */
+}
+
+@media (max-width: 768px) {
+    /* Automatische Höhe für die Boxen auf kleinen Bildschirmen */
+    .content-box1{
+        height: 45%;
+    }
+    .content-box2{
+        height: 30%;
+    }
+    .content-box3 {
+        height: 30%;
+    }
+}
+
+/* Das Modalfenster ausblenden, bis es angezeigt wird */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Modalfensterinhalt */
+.modal-content {
+    background-color: #F2F2F2;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px; /* Runde Ecken für das Modalfenster */
+    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
+    max-width: 400px; /* Maximalbreite des Modalfensters */
+    width: 90%; /* 90% der verfügbaren Breite */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten für das Modalfenster */
+}
+
+/* Tabs Schriftfarbe */
+.nav-tabs .nav-link {
+    color: #74B027;
+}
+
+/* Schließen-Schaltfläche */
+.close {
+    color: #aaa;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #74B027;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Hintergrund des Modalfensters */
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4); /* Hintergrundfarbe mit Transparenz */
+}
+
+/* Progressbar */
+.progress-bar {
+    background-color: #74B027;
+}
+
+.canvas-container {
+    position: relative;
+}
+
+#lineChart2 {
+    position: relative; /*muss relativ*/
+}
+
+/* Fragezeichen-Button für Modalfenster */
+#questionButton {
+    position: relative;
+    top: -45px;
+    right: -7px;
+    background-color: #74B027;
+    color: white;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    line-height: 30px;
+    text-align: center;
+    z-index: 9999;
+}
+
+#questionButton:hover {
+    background-color: #5c9021; /* Hintergrundfarbe ändern, wenn der Button aktiv ist */
+    font-weight: bold; /* Fragezeichen fett anzeigen */
+}
+
+/* Fragezeichen (nur Bild, nicht klickbar) */
+.question-mark {
+    display: inline-block;
+    width: 20px; /* Breite des Symbols */
+    height: 20px; /* Höhe des Symbols */
+    background-color: #74B027; /* Hintergrundfarbe */
+    color: white; /* Textfarbe */
+    font-size: 16px; /* Schriftgröße */
+    text-align: center; /* Zentrieren des Textes */
+    line-height: 20px; /* Vertikale Ausrichtung */
+    border-radius: 50%; /* Runde Form */
+    pointer-events: none; /* Symbol nicht klickbar machen */
+}
+
+/* Carousel-Buttons deaktiviert */
+#prevStoreButton[disabled],
+#nextStoreButton[disabled] {
+    background-color: transparent; /* Ändere die Hintergrundfarbe für deaktivierte Schaltflächen */
+    cursor: not-allowed; /* Ändere den Cursor-Stil für deaktivierte Schaltflächen */
+}
+
+/* Stil für die Carousel-Buttons */
+#prevStoreButton,
+#nextStoreButton {
+    background-color: transparent; /* Transparenter Hintergrund */
+    border: none; /* Kein Rahmen */
+    cursor: pointer; /* Zeige den Zeiger beim Überfahren an */
+}
+
+/* Stil für die Carousel-Buttons beim Überfahren, jedoch nicht wenn deaktiviert */
+#prevStoreButton:not([disabled]):hover i,
+#nextStoreButton:not([disabled]):hover i {
+    color: #74B027; /* Ändere die Farbe beim Überfahren */
+}
