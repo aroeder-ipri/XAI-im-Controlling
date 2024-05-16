@@ -284,3 +284,18 @@ def case_statement(top_features, i, query):
 print(response)
 for i in range(0,3):
     print(case_statement(top_three, i, query))
+
+"""
+*MAX*Counterfactuals in JSON for the frontend
+"""
+# Interpretation der Counterfactuals
+changes = [case_statement(top_three, i, query) for i in range(0, 3)]
+response_values = {
+    'sales_actual': round(y_query.values[0], 1),
+    'sales_counterfactual': round(cf_instance.values[-1][0], 1),
+    'changes': changes
+}
+
+# JSON-Datei mit den Werten der Counterfactuals speichern
+with open('counterfactual_explanations.json', 'w') as json_file:
+    json.dump(response_values, json_file)
