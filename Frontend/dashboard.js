@@ -52,7 +52,7 @@
         const lines = csv.split('\n');
         const data = {};
 
-        for (let i = 1; i < lines.length-1; i++) {
+        for (let i = 1; i < lines.length; i++) {
             const line = lines[i];
             const parts = line.split(';');
             const store = parts[0].trim();
@@ -407,44 +407,45 @@ if (window.matchMedia('(max-width: 768px)').matches) {
             const closeBtn2 = document.querySelector('#modal2 .close');
             closeBtn2.addEventListener('click', closeModal2);
 
+//AKTUELL NICHT GEBRAUCHT
             // Event-Listener für den Bestätigen-Button im Modalfenster 2
-            document.getElementById('bestaetigenButton').addEventListener('click', function() {
+            //document.getElementById('bestaetigenButton').addEventListener('click', function() {
                 // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
-                if (!document.getElementById('additionalText')) {
+                //if (!document.getElementById('additionalText')) {
                     // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
-                    const additionalText = document.createElement('p');
-                    additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
-                    additionalText.textContent = 'Um den angestrebten Umsatz zu erreichen, müsste eine 10% Rabattaktion bestehen und die Nachfrage aus dem Ausland 15% höher sein.';
+                    //const additionalText = document.createElement('p');
+                    //additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
+                    //additionalText.textContent = 'Um den angestrebten Umsatz zu erreichen, müsste eine 10% Rabattaktion bestehen und die Nachfrage aus dem Ausland 15% höher sein.';
                     
                     // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
-                    const modalContent2 = document.querySelector('#modal2 .modal-content');
-                    modalContent2.appendChild(additionalText);
-                }
-            });
+                    //const modalContent2 = document.querySelector('#modal2 .modal-content');
+                    //modalContent2.appendChild(additionalText);
+                //}
+            //});
 
             // Funktion zum Leeren des Eingabefelds
-            function clearInputField() {
-                document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
-            }
+            //function clearInputField() {
+                //document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
+            //}
 
             // Funktion zum Entfernen des zusätzlichen Texts
-            function removeAdditionalText() {
-                const additionalText = document.getElementById('additionalText');
-                if (additionalText) {
-                    additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
-                }
-            }
+            //function removeAdditionalText() {
+                //const additionalText = document.getElementById('additionalText');
+                //if (additionalText) {
+                    //additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
+                //}
+            //}
 
             // Überprüfung der Eingabe und Aktivierung des Buttons
-            document.getElementById('zahlInput').addEventListener('input', function() {
-                var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
-                var button = document.getElementById('bestaetigenButton');
-                if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
-                    button.disabled = false;
-                } else {
-                    button.disabled = true;
-                }
-            });
+            //document.getElementById('zahlInput').addEventListener('input', function() {
+                //var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
+                //var button = document.getElementById('bestaetigenButton');
+                //if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
+                    //button.disabled = false;
+                //} else {
+                    //button.disabled = true;
+                //}
+            //});
 
 // Funktion zum Erstellen der Tabs basierend auf den ausgewählten Stores
 function createTabs(selectedStores) {
@@ -497,7 +498,7 @@ function createTabs(selectedStores) {
 questionButton.addEventListener('click', function() {
     const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
     const tabContent = document.querySelector(`#${activeTabId}`);
-    fetch('http://127.0.0.1:8000/data/')
+    fetch('http://127.0.0.1:8000/feature_importance/')
         .then(function(response) {
             if (!response.ok) {
                 throw new Error('Netzwerkantwort war nicht ok');
@@ -542,6 +543,43 @@ questionButton.addEventListener('click', function() {
     
     });
 
+    questionButton.addEventListener('click', function() {
+        var modalContent = document.querySelector('#modal2 .modal-content');
+    
+        // Funktion zum Entfernen alter Paragraphen
+        function removeOldParagraphs() {
+            // Entferne alle alten Paragraphen
+            var paragraphs = modalContent.querySelectorAll('p');
+            paragraphs.forEach(paragraph => {
+                paragraph.remove();
+            });
+        }
+    
+        // Lade die Daten von der API
+        fetch('http://127.0.0.1:8000/counterfactual_explanations/')
+            .then(response => response.json())
+            .then(data => {
+                removeOldParagraphs(); // Entferne alte Paragraphen
+    
+                data.forEach(item => {
+                    var paragraph = document.createElement('p');
+                    
+                    var salesActual = item.sales_actual;
+                    var salesCounterfactual = item.sales_counterfactual;
+                    var changes = item.changes;
+                    // Formatiere Absätze
+                    var formattedChanges = changes.map(change => `- ${change}`).join('<br>');
+    
+                    paragraph.innerHTML = `Der Umsatz liegt bei ${salesActual}€.<br>Der Umsatz würde bei ${salesCounterfactual}€ liegen, wenn folgende Änderungen eintreten würden:<br>${formattedChanges}`;
+    
+                    modalContent.appendChild(paragraph);
+                });
+            })
+            .catch(error => {
+                console.error('Fehler beim Abrufen der Daten:', error);
+            });
+    });
+
     // Den ersten Tab als aktiv markieren
     const firstTab = tabContainer.firstElementChild;
     const firstTabContent = tabContentContainer.firstElementChild;
@@ -560,7 +598,6 @@ function updateTabs() {
 document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', updateTabs);
 });
-
 
 // Balkendiagramm initialisieren
 barChart = new Chart(barCtx, {

@@ -7,27 +7,28 @@ import xgboost as xgb
 import dice_ml
 from dice_ml import Dice
 import shap
-#from sklearn.metrics import mean_squared_error as MSE
+import random
+#from multiprocessing import Process, Queue
+from threading import Thread
+import functools
+random.seed(1)
 
-# Test performance
-EPSILON =  1e-10 
-def rmspe(y_true, y_pred):
-    return (np.sqrt(np.mean(np.square((y_true - y_pred) / (y_true + EPSILON))))) * 100
-
-"""
+'''
 Set aggregation period: daily, weekly, monthly
-"""
-period = "weekly"
+'''
+period = 'monthly'
 shap_nfeat = 0 # set to nr>0 to set 
-explain_week_after = "2015-01-01"
+explain_week_after = '2015-01-01'
 store_type=1 # default
+store=470
+month=4
 
-path = "train_extended_"+period+".csv"
+path = 'train_extended_'+period+'.csv'
 
-if period=="daily":
-    df = pd.read_csv("train_store.csv", sep=",", index_col = 'Date')
+if period=='daily':
+    df = pd.read_csv('train_store.csv', sep=',', index_col = 'Date')
 else:
-    df = pd.read_csv(path, sep=";", decimal=",")
+    df = pd.read_csv(path, sep=';', decimal=',')
     
 # Get relevant columns for model
 
@@ -74,9 +75,11 @@ if period in ['weekly', 'monthly']:
 if 'WeekOfYear' in df.columns:
     df['WeekOfYear'] = df['WeekOfYear'].astype(float).round()
 
-"""
+#plt.plot(df.loc[df['Store']==470]['Sales'])
+
+'''
 Train XGBoost model without parameter tuning
-"""
+'''
 
 # Split train and test
 split_date = 2015
@@ -89,18 +92,16 @@ X_test = test.drop(labels=['Sales'], axis=1)
 y_test = test['Sales']
 
 # XGB Model
-print("Train a XGBoost model")
+print('Train a XGBoost model')
 model = xgb.XGBRegressor()
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
 
-#print("XGBoost model test RMSPE: ", rmspe(y_test.values, y_pred))
-#plt.plot(y_test.values-y_pred)
 
-"""
+'''
 Calculate feature importance using SHAP
-"""
+'''
 
 # instatiate SHAP explainer
 explainer = shap.Explainer(model)
@@ -122,9 +123,9 @@ shap_importance.sort_values(by=['feature_importance_vals'],
                                ascending=False, inplace=True)
 shap_importance
 
-"""
+'''
 *MAX*Feature importance in JSON for the frontend
-"""
+'''
 # Berechne Gesamtwert der Feature Importance-Werte
 total_importance = vals.sum()
 
@@ -137,150 +138,196 @@ shap_importance.sort_values(by=['percentage_importance'], ascending=False, inpla
 
 shap_importance.to_json('shap_feature_importance.json', orient='records')
 
-print("SHAP feature importance saved to shap_feature_importance.json")
+print('SHAP feature importance saved to shap_feature_importance.json')
+
+'''
+Define functions for CF
+'''
+
+def timeout(timeout):
+    def deco(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            res = [Exception('function [%s] timeout [%s seconds] exceeded!' % (func.__name__, timeout))]
+            def newFunc():
+                try:
+                    res[0] = func(*args, **kwargs)
+                except Exception as e:
+                    res[0] = e
+            t = Thread(target=newFunc)
+            t.daemon = True
+            try:
+                t.start()
+                t.join(timeout)
+            except Exception as je:
+                print ('error starting thread')
+                raise je
+            ret = res[0]
+            if isinstance(ret, BaseException):
+                raise ret
+            return ret
+        return wrapper
+    return deco
+
+@timeout(10)
+def generate_cf(query, desired_range, features_vary, permitted_range):
+    cf = exp_genetic_rossmann.generate_counterfactuals(query, total_CFs=1, 
+                      desired_range=desired_range,
+                      features_to_vary = features_vary,
+                      permitted_range = permitted_range)
+    return cf
 
 
-"""
-Generate counterfactuals with DiCE package
-"""
+def get_cf(store, month, X_test, y_pred, desired_range, features_vary):
+    query_instances_rossmann = X_test[7*store-8+month:7*store-7+month]
+    y_query = y_pred[7*store-8+month:7*store-7+month]
+    query = query_instances_rossmann
+    permitted_range = {'Month': [max(1,query['Month'].values[0]-1),min(12,query['Month'].values[0]+1)],
+                       'Holidays_lastmonth':[max(0,query['Holidays_lastmonth'].values[0]-5),min(28,query['Holidays_lastmonth'].values[0]+5)],
+                       'Holidays_nextmonth':[max(0,query['Holidays_nextmonth'].values[0]-5),min(28,query['Holidays_nextmonth'].values[0]+5)],
+                       'Holidays_thismonth':[max(0,query['Holidays_thismonth'].values[0]-5),min(28,query['Holidays_thismonth'].values[0]+5)]}
+    #desired_range = [desired_percentage*y_query.values[0], 5*y_query.values[0]]
+    #desired_range = [1.05*y_query[0], 1.1*y_query[0]]
+    features_vary = features_vary
+    
+    try:
+        genetic_rossmann = generate_cf(query, desired_range, features_vary, permitted_range)
 
-continuous_features_rossmann = df.drop(['Sales'], axis=1).columns.tolist()
+    except Exception:
+        raise ValueError
+        #print('Kein Counterfactual gefunden. Versuchen Sie es mit einem anderen Zielbereich.')
+        
+    return genetic_rossmann, query, y_query
+ 
+    
+def interpret_cf(genetic_rossmann, query, y_query):
+    cf_instance = genetic_rossmann.cf_examples_list[0].final_cfs_df.transpose()
+    original_instance = query.transpose().values
+    cf = cf_instance.values[:-1]
+    dif = cf - original_instance
+    dif = [x for xs in dif for x in xs]
+    dif = list(np.around(np.array(dif),2))
 
-d_rossmann = dice_ml.Data(dataframe=df, continuous_features=continuous_features_rossmann, outcome_name='Sales')
-m_rossmann = dice_ml.Model(model=model, backend="sklearn", model_type='regressor')
+    # top three differences
+    zipped=list(zip(dif,query.columns))
+    top_three = sorted(zipped, key=lambda x: abs(x[0]), reverse=True)[:3]
+    
+    '''
+    response = 'Counterfactual Erklärung: \n' + \
+            'Der Umsatz wird auf ' + str(round(y_query[0],1)) + ' geschätzt. '\
+            'Der Umsatz würde bei ' + str(round(cf_instance.values[-1][0],1)) + \
+            '€ liegen, wenn folgende Änderungen eintreten würden: \n'
+          
+    print(response)
+    for i in range(0,3):
+        print(case_statement(top_three, i, query))
+    '''
+        
+    changes = [case_statement(top_three, i, query) for i in range(0, 3)]
+    
+    response_values = {
+        'sales_actual': round(y_query[0], 1),
+        'sales_counterfactual': round(cf_instance.values[-1][0], 1),
+        'changes': changes
+    }
+    
+    return response_values
 
-# Get explanations
-exp_genetic_rossmann = Dice(d_rossmann, m_rossmann, method="genetic")
-
-# Multiple queries can be given as input at once
-query_instances_rossmann = X_test[1:2] # Sales at 4155
-y_query = y_test[1:2]
-query_instances_rossmann = X_test[3:4] # Sales at 3231
-y_query = y_test[3:4]
-desired_percentage = 1.2
-desired_range = [desired_percentage*y_query.values[0], 2*y_query.values[0]]
-genetic_rossmann = exp_genetic_rossmann.generate_counterfactuals(query_instances_rossmann, total_CFs=1, 
-                      desired_range=desired_range)
-
-genetic_rossmann.visualize_as_dataframe(show_only_changes=False)
-
-print("Counterfactual")
-cf_instance = genetic_rossmann.cf_examples_list[0].final_cfs_df.transpose()
-print(cf_instance)
-print("Instanz aus den Testdaten")
-query = query_instances_rossmann
-print(query.transpose())
-
-print("CF Unterschied")
-instance = query.transpose().values
-cf = cf_instance.values[:-1]
-dif = cf - instance
-dif = [x for xs in dif for x in xs]
-dif = list(np.around(np.array(dif),2))
-print(dif)
-
-"""
-Interpret counterfactual
-"""
-
-# Select 3 most differing values relatively
-
-norm = [1,
-        1,#query.values[0,1],
-        1,#query.values[0,2],
-        1,#query.values[0,3],
-        1,#query.values[0,4],
-        1,#query.values[0,5],
-        1000, # not changeable
-        1000, # not changeable
-        1000, # not changeable
-        1,
-        1,
-        1000, # not changeable
-        1000, # not changeable
-        1, 
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,#query.values[0,19],
-        1,#query.values[0,20],
-        1,#query.values[0,21],     
-        ]
-
-#top_three = sorted(zip(dif, X_test.columns), key=abs, reverse=True)[:3]
-#top_three = sorted(dif, key=abs, reverse=True)[:3]
-
-zipped=list(zip(dif,X_test.columns))
-top_three = sorted(zipped, key=lambda x: abs(x[0]), reverse=True)[:3]
-
-#norm = [a+EPSILON for a in norm]
-#normalize = zip([a/b for a,b in zip(dif,norm)],X_test.columns)
-#top = sorted(zip([a/b for a,b in zip(dif,norm)],X_test.columns), reverse=True)#[:3]
-
-response = "Counterfactual Erklärung: \n" + \
-        "Der Umsatz liegt bei " + str(round(y_query.values[0],1)) + \
-        ". Der Umsatz würde bei " + str(round(cf_instance.values[-1][0],1)) + \
-        " liegen, wenn folgende Änderungen eintreten würden: \n"
-       
-features = X_test.columns # same as query columns
 
 def case_statement(top_features, i, query):
-    if top_features[i][1]== features[0]: # store
-        result = "Änderung zu Store " + str(int(top_features[i][0]+query.values[0][0]))
-    elif top_features[i][1]== features[1] and top_features[i][0] > 0: # customers
-        result = str(int(round(top_features[i][0]))) + " mehr Kunden in dieser Woche"
+    features = query.columns
+    if top_features[i][1]== features[1] and top_features[i][0] > 0: # customers
+        result = str(int(round(top_features[i][0]))) + ' Kunden zu wenig in diesem Monat'
     elif top_features[i][1]== features[1] and top_features[i][0] < 0: # customers
-        result = str(int(round(-top_features[i][0]))) + " weniger Kunden in dieser Woche"
+        result = str(int(round(-top_features[i][0]))) + ' Kunden zu viel in diesem Monat'
     elif top_features[i][1]== features[2] and top_features[i][0] > query.values[0][2]: # open
-        result = 'Mehr Offen'
+        result = 'zu wenig geöffnet'
     elif top_features[i][1]== features[2] and top_features[i][0] < query.values[0][2]: # open
-        result = 'Weniger Offen'
+        result = 'zu oft geöffnet'
     elif top_features[i][1]== features[3] and top_features[i][0] > query.values[0][3]: # promo
-        result = 'Mehr Promo'
+        result = 'zu wenig Promo'
     elif top_features[i][1]== features[3] and top_features[i][0] < query.values[0][3]: # promo
-        result = 'Weniger Promo'
+        result = 'zu viel Promo'
     elif top_features[i][1]== features[4] and top_features[i][0] > 0: # stateholiday
-        result = str(int(round(top_features[i][0]))) + " gesetzliche(r) Feiertag(e) mehr in der Woche"
+        result = str(int(round(top_features[i][0]))) + ' gesetzliche(r) Feiertag(e) zu wenig im Monat'
     elif top_features[i][1]== features[4] and top_features[i][0] < 0: # stateholiday
-        result = str(int(round(-top_features[i][0]))) + " gesetzliche(r) Feiertag(e) mehr in der Woche"
+        result = str(int(round(-top_features[i][0]))) + ' gesetzliche(r) Feiertag(e) zu viel im Monat'
     elif top_features[i][1]== features[5] and top_features[i][0] > 0: # schoolholiday
-        result = str(int(round(top_features[i][0]))) + " schulfreie(r) Tag(e) mehr in dieser Woche"
+        result = str(int(round(top_features[i][0]*30))) + ' schulfreie(r) Tag(e) zu wenig in diesem Monat'
     elif top_features[i][1]== features[5] and top_features[i][0] < 0: # schoolholiday
-        result = str(int(round(-top_features[i][0]))) + " schulfreie(r) Tag(e) weniger in dieser Woche"
+        result = str(int(round(-top_features[i][0]*30))) + ' schulfreie(r) Tag(e) zu viel in diesem Monat'
+    elif top_features[i][1]== features[6] and top_features[i][0] < 0: # schoolholiday
+        result = 'Durchschnittlcher Verkauf pro Kunde um ' + str(int(round(-top_features[i][0]))) + '€ zu hoch'
+    elif top_features[i][1]== features[6] and top_features[i][0] > 0: # schoolholiday
+        result = 'Durchschnittlcher Verkauf pro Kunde um ' + str(int(round(top_features[i][0]))) + '€ zu niedrig'
     elif top_features[i][1]== features[9]: # month
-        result = "Änderung zu Monat " + str(int(top_features[i][0]+query.values[0][9]))
-    elif top_features[i][1]== features[10]: # year
-        result = "Änderung zu Jahr " + str(int(top_features[i][0]+query.values[0][10]))
+        result = 'Änderung zu Monat ' + str(int(top_features[i][0]+query.values[0][9]))
     elif top_features[i][1]== features[13]: # store type
-        result = "Änderung zu Store-Typ " + str(int(top_features[i][0]+query.values[0][13]))
+        result = 'Store-Typ ' + str(int(query.values[0][13])) + ' statt ' + str(int(top_features[i][0]+query.values[0][13]))
     elif top_features[i][1]== features[14]: # assortment
-        result = "Änderung zu Assortment-Typ " + str(int(top_features[i][0]+query.values[0][14]))
+        result = 'Assortment-Typ ' + str(int(query.values[0][14])) + ' statt ' + str(int(top_features[i][0]+query.values[0][14]))
     elif top_features[i][1]== features[15] and top_features[i][0] == 1: # promo2
-        result = 'Teilnahme an Promo2'
-    elif top_features[i][1]== features[15] and top_features[i][0] == 0: # promo2
         result = 'keine Teilnahme an Promo2'
+    elif top_features[i][1]== features[15] and top_features[i][0] == -1: # promo2
+        result = 'Teilnahme an Promo2 besteht'
     elif top_features[i][1]== features[16]: # promointerval
-        result = "Änderung zu Promointervall " + str(int(top_features[i][0]+query.values[0][16]))
+        result = 'Promointervall ' + str(int(query.values[0][16])) + ' statt ' + str(int(top_features[i][0]+query.values[0][16]))
     elif top_features[i][1]== features[19] and top_features[i][0] > 0: # holidays last week
-        result = str(int(round(top_features[i][0]))) + " Ferien- oder Feiertag(e) mehr in der vorherigen Woche"
+        result = str(int(round(top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu wenig im vorherigen Monat'
     elif top_features[i][1]== features[19] and top_features[i][0] < 0: # holidays last week
-        result = str(int(round(-top_features[i][0]))) + " Ferien- oder Feiertag(e) weniger in der vorherigen Woche"
+        result = str(int(round(-top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu viel im vorherigen Monat'
     elif top_features[i][1]== features[20] and top_features[i][0] > 0: # next week
-        result = str(int(round(top_features[i][0]))) + " Ferien- oder Feiertag(e) mehr in der nächsten Woche"
+        result = str(int(round(top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu wenig im nächsten Monat'
     elif top_features[i][1]== features[20] and top_features[i][0] < 0: # next week
-        result = str(int(round(-top_features[i][0]))) + " Ferien- oder Feiertag(e) weniger in der nächsten Woche"
+        result = str(int(round(-top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu viel im nächsten Monat'
     elif top_features[i][1]== features[21] and top_features[i][0] > 0: # this week
-        result = str(int(round(top_features[i][0]))) + " Ferien- oder Feiertag(e) mehr in dieser Woche"
+        result = str(int(round(top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu wenig in diesem Monat'
     elif top_features[i][1]== features[21] and top_features[i][0] < 0: # this week
-        result = str(int(round(-top_features[i][0]))) + " Ferien- oder Feiertag(e) weniger in dieser Woche"
-    elif top_features[i][1]== features[22]: # week of year
-        result = "Änderung zu Woche " + str(int(top_features[i][0]+query.values[0][22]))
+        result = str(int(round(-top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu viel in diesem Monat'
     else:
-        result = 'Invalid case: ' + top_features[i][1]
+        result = 'Fehler bei Feature: ' + top_features[i][1]
     return result
 
-print(response)
-for i in range(0,3):
-    print(case_statement(top_three, i, query))
+
+'''
+Generate CF
+'''
+
+# initiate
+continuous_features_rossmann = df.drop(['Sales'], axis=1).columns.tolist()  
+d_rossmann = dice_ml.Data(dataframe=df, continuous_features=continuous_features_rossmann, outcome_name='Sales')
+m_rossmann = dice_ml.Model(model=model, backend='sklearn', model_type='regressor')
+exp_genetic_rossmann = Dice(d_rossmann, m_rossmann, method='genetic')
+
+# set features to vary
+features_vary = continuous_features_rossmann.copy()
+features_vary.remove('Store')
+features_vary.remove('Year')
+features_vary.remove('SchoolHolidayRatio')
+features_vary.remove('OpenDayRatio')
+
+desired_range=[10000,12000]
+
+try:
+    genetic_rossmann, query, y_query = get_cf(store, month, X_test, y_pred, desired_range, features_vary)
+    response_values = interpret_cf(genetic_rossmann, query, y_query)
+except ValueError:
+    print('Kein Counterfactual gefunden. Versuchen Sie es mit einem anderen Zielbereich.')
+
+
+'''
+*MAX*Counterfactuals in JSON for the frontend
+'''
+# Interpretation der Counterfactuals
+'''
+changes = [case_statement(top_three, i, query) for i in range(0, 3)]
+response_values = {
+    'sales_actual': round(y_query.values[0], 1),
+    'sales_counterfactual': round(cf_instance.values[-1][0], 1),
+    'changes': changes
+}
+'''
+
+# JSON-Datei mit den Werten der Counterfactuals speichern
+with open('counterfactual_explanations.json', 'w') as json_file:
+    json.dump(response_values, json_file)
