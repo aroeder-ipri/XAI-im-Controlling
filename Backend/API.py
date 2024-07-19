@@ -4,7 +4,7 @@ import json
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(root_path="/api")
+app = FastAPI()
 
 # hinzufügen von CORS Middleware , um Anfragen von jeder Quelle zu erlauben
 app.add_middleware(
