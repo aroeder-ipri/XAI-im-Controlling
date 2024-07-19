@@ -22,7 +22,7 @@ FROM python-base as backend-test
 # Copy Poetry to app image
 COPY --from=poetry-base ${POETRY_VENV} ${POETRY_VENV}
 
-WORKDIR = backend
+WORKDIR = Backend
 # Add Poetry to PATH
 ENV PATH="${PATH}:${POETRY_VENV}/bin"
 
