@@ -4,12 +4,12 @@ services:
       context: ./Frontend
     restart: always
 
-  #backend:
-  #  build:
-  #    context: ./backend
-      # ports:
-        #- "8080:8080"
-  #  restart: always
+  backend:
+    build:
+      context: ./backend
+       ports:
+        - "8080:8080"
+    restart: always
 
   nginx:
     image: nginx:alpine
@@ -21,6 +21,6 @@ services:
       - "443:443"
     depends_on:
       - frontend
-    #  - backend
+      - backend
     restart: always
 
