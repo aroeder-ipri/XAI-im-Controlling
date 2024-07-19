@@ -24,6 +24,13 @@ class CounterfactualExplanation(BaseModel):
     sales_counterfactual: float
     changes: List[str]
 
+@app.get("/test")
+def test_api():
+    dict_test = {'test': 'Hallo Controller, hier ist XAI'}
+    return(dict_test)
+
+
+
 @app.get("/feature_importance/", response_model=List[FeatureImportance], tags=["feature_importance"])
 def get_feature_importance():
     try:
