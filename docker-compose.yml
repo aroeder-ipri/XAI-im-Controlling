@@ -23,4 +23,4 @@ services:
       - frontend
       - backend
     restart: always
-
+    #- "8080:8080"
