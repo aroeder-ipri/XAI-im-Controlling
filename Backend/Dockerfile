@@ -35,4 +35,4 @@ RUN poetry check
 # Install Dependencies
 RUN poetry install --no-interaction --no-cache
 
-ENTRYPOINT ["poetry", "run", "fastapi", "run", "backend/main.py", "--port", "8080"]
+ENTRYPOINT ["poetry", "run", "fastapi", "run", "API.py", "--port", "8080"]
