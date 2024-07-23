@@ -24,7 +24,10 @@ class CounterfactualExplanation(BaseModel):
     sales_counterfactual: float
     changes: List[str]
 
-@app.get("/test")
+class TestAPI(BaseModel):
+    test: str
+
+@app.get("/test", response_model=TestAPI, tags=['test_api'])
 def test_api():
     dict_test = {'test': 'Hallo Controller, hier ist XAI'}
     return(dict_test)
