@@ -84,8 +84,8 @@ def save_click_event(click_event: ClickEvent):
     try:
         click_event_doc = {
             "user_id": str(click_event.user_id),
-            "timestamp": click_event.timestamp.isoformat(),
-            "click_time": click_event.click_time
+            #"timestamp": click_event.timestamp.isoformat(),
+            #"click_time": click_event.click_time
         }
         db.save(click_event_doc)
         return {"message": "Click event saved successfully"}
