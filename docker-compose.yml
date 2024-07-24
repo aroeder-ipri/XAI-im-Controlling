@@ -10,6 +10,11 @@ services:
     ports:
      - "8080:8080"
     restart: always
+    depends_on:
+      - couchdb
+      environment:
+        COUCHDB_USER: admin
+        COUCHDB_PASSWORD: password
 
   couchdb:
     build:
