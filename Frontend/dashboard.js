@@ -2,7 +2,9 @@
 
 (() => {
     'use strict';
-
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id')
     // Graphs
     const lineCtx = document.getElementById('lineChart');
     const lineCtx2 = document.getElementById('lineChart2');
@@ -633,4 +635,5 @@ barChart = new Chart(barCtx, {
             // Rufe die Funktion zum Aktualisieren des Graphen mit den vorausgewählten Stores auf
             updateChartWithSelectedStores();
         });
+
 })();

@@ -11,6 +11,20 @@ services:
      - "8080:8080"
     restart: always
 
+  couchdb:
+    build:
+      context: ./CouchDB
+      dockerfile: Dockerfile # Path to your CouchDB Dockerfile
+    ports:
+      - "5984:5984"
+    volumes:
+      - couchdb_data:/opt/couchdb/data
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    restart: always
+
+
   nginx:
     image: nginx:alpine
     volumes:
@@ -23,3 +37,5 @@ services:
       - frontend
       - backend
     restart: always
+volumes:
+  couchdb_data:

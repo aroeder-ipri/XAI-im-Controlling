@@ -8,13 +8,11 @@ async function id_api_call(){
     return address
 }
 function link_with_id(id){
-    window.location.href = "setting.html?id=" + id;
+    window.location.href = "dashboard.html?id=" + id;
 }
 function btn_click(){
-    let id = id_api_call().then(id => {
-        console.log(id);
-        link_with_id(id)
-    });
-
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id')
+    window.location.href = "dashboard.html?id=" + id;
 };
-
