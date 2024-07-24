@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import json
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 import uuid
+from datetime import datetime
+import couchdb
 
 app = FastAPI(root_path="/api")
 
@@ -30,6 +32,14 @@ class TestAPI(BaseModel):
 
 class RandId(BaseModel):
     id: uuid.UUID
+
+class ClickEvent(BaseModel):
+    user_id: uuid.UUID
+    timestamp: datetime
+    click_time: int
+
+couch = couchdb.Server('http://admin:password@couchdb:5984/')
+db = couch['click_events'] if 'click_events' in couch else couch.create('click_events')
 
 @app.get("/test", response_model=TestAPI, tags=['test_api'])
 def test_api():
@@ -68,3 +78,16 @@ def get_counterfactual_explanations():
         return {"error": "File not found"}
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}
+
+@app.post("/clicks", status_code=201)
+def save_click_event(click_event: ClickEvent):
+    try:
+        click_event_doc = {
+            "user_id": str(click_event.user_id),
+            "timestamp": click_event.timestamp.isoformat(),
+            "click_time": click_event.click_time
+        }
+        db.save(click_event_doc)
+        return {"message": "Click event saved successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
