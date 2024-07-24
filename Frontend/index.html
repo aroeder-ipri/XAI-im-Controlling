@@ -1,119 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XAI im Controlling</title>
+  <title>Willkommen bei XAI im Controlling</title>
   <!-- Bootstrap CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
-  <!-- Eigene CSS-Datei -->
-  <link rel="stylesheet" href="dashboard.css">
-  <!-- Eigene JavaScript-Datei -->
-  <script src="dashboard.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      background-color: #F2F2F2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .landing-container {
+      background-color: white;
+      border: 3px solid #74B027;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .landing-container h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .landing-container p {
+      color: #555;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .landing-container .btn {
+      color: #fff;
+      background-color: #74B027;
+      border-color: #74B027;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+    }
+    .landing-container .btn:hover {
+      background-color: #5c9021;
+      border-color: #5c9021;
+    }
+  </style>
 </head>
 <body>
-
-<script type="text/javascript">
-    var apiUrl = 'https://controlling.xaidemo.de/api/test';
-    fetch(apiUrl).then(response => {
-      return response.json();
-    }).then(data => {
-      // Work with JSON data here
-      console.log(data);
-    }).catch(err => {
-      console.log('Error', err)
-    });
-</script>
-
-
-<!-- Modalfenster -->
-<div id="modal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <!-- Bootstrap Tabs -->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-    </ul>
-    <!-- Tab-Inhalte -->
-    <div class="tab-content" id="myTabContent">
-    </div>
-    <br>
-    <!-- Link "Mehr" -->
-    <a id="mehrButton" class="text-muted" style="position: absolute; bottom: 10px; right: 10px;" href="#">mehr</a>
+  <div class="landing-container">
+    <h1>Willkommen bei XAI im Controlling</h1>
+    <p>Entdecken Sie die Möglichkeiten der KI-gestützten Umsatzentwicklung.</p>
+    <a href="dashboard.html" class="btn">Zur Hauptseite</a>
   </div>
-</div>
-
-<!-- Modalfenster 2 -->
-<div id="modal2" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <!-- Nicht gebraucht aktuell
-    <p>Der Umsatz wird auf 109.000 € geschätzt, im Vergleich zum Vormonat mit einem Umsatz von 103.000 €.</p>
-    <p>Geben Sie Ihren erwarteten Umsatz an:</p>
-    <div style="display: flex; align-items: center;">
-      <input type="text" id="zahlInput" style="margin-bottom: 10px; margin-right: 5px;">
-      <span>€</span>
-      <button id="bestaetigenButton" class="btn custom-btn" style="margin-left: 10px;" disabled>Bestätigen</button>
-    </div>-->
-  </div>
-</div>
-
-<div class="container">
-  <!-- Seitenüberschrift -->
-  <h1 class="mt-3">Umsatzentwicklung</h1>
-  <!-- Content -->
-  <div class="row">
-    <!-- Linke Seite - Hauptboxen -->
-    <div class="col-md-8">
-      <div class="content-box1 mt-3">
-        <!-- Hier wird der Graph eingebettet -->
-        <!-- Der erste Linechart -->
-        <canvas id="lineChart" style="display: none;" width="2000" height="600"></canvas>
-        <!-- Der zweite Linechart -->
-        <canvas id="lineChart2" width="2000" height="600"></canvas>
-        <div class="canvas-container">
-          <button id="questionButton" class="position-absolute">?</button>
-        </div>
-      </div>
-      <!-- Hier wird der Graph eingebettet -->
-      <div class="content-box1 mt-3">
-        <canvas id="barChart" width="2000" height="600"></canvas>
-      </div>
-    </div>
-    <!-- Rechte Seite - Nebenboxen -->
-    <div class="col-md-4">
-      <div class="content-box2 mt-3">
-        <h2>Vorhersage</h2>
-        <button type="button" id="anzeigenButton" class="btn custom-btn">anzeigen</button>
-        <button type="button" id="ausblendenButton" class="btn custom-btn">ausblenden</button>
-        <p>Erhalten Sie mehr Informationen, indem Sie in der Vorhersage auf <span class="question-mark">?</span> Klicken.</p>
-      </div>
-      <div class="content-box3 mt-3">
-        <h2>Store ändern</h2>
-        <!-- Hier werden die Checkboxen dynamisch eingefügt -->
-        <div id="storeCheckboxContainer" class="mt-3"></div>
-      </div>
-      <div class="content-box3 mt-3">
-        <h2>Store-Info</h2>
-        <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
-        <span id="currentStore"></span>
-        <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
-        <div id="storeInfo"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
-
 </body>
 </html>
