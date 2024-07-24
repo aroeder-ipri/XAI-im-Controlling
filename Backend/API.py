@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import json
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+import uuid
 
 app = FastAPI(root_path="/api")
 
@@ -27,10 +28,19 @@ class CounterfactualExplanation(BaseModel):
 class TestAPI(BaseModel):
     test: str
 
+class RandId(BaseModel):
+    id: uuid.UUID
+
 @app.get("/test", response_model=TestAPI, tags=['test_api'])
 def test_api():
     dict_test = {'test': 'Hallo Controller, hier ist XAI'}
     return(dict_test)
+
+@app.get("/id", response_model = RandId)
+def create_id():
+    id = uuid.uuid4()
+    dict_id = {'id': id}
+    return dict_id
 
 
 
