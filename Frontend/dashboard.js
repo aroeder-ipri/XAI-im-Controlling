@@ -398,6 +398,19 @@ if (window.matchMedia('(max-width: 768px)').matches) {
                 document.getElementById('modal2').style.display = 'block';
             });
 
+                                    // Funktion zum Leeren des Eingabefelds
+                                    function clearInputField() {
+                                        document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
+                                    }
+                    
+                                    // Funktion zum Entfernen des zusätzlichen Texts
+                                    function removeAdditionalText() {
+                                        const additionalText = document.getElementById('additionalText');
+                                        if (additionalText) {
+                                            additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
+                                        }
+                                    }
+
             // Funktion zum Schließen des zweiten Modalfensters
             function closeModal2() {
                 document.getElementById('modal2').style.display = 'none';
@@ -408,46 +421,6 @@ if (window.matchMedia('(max-width: 768px)').matches) {
             // Eventlistener für den zweiten Close-Button im zweiten Modalfenster
             const closeBtn2 = document.querySelector('#modal2 .close');
             closeBtn2.addEventListener('click', closeModal2);
-
-//AKTUELL NICHT GEBRAUCHT
-            // Event-Listener für den Bestätigen-Button im Modalfenster 2
-            //document.getElementById('bestaetigenButton').addEventListener('click', function() {
-                // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
-                //if (!document.getElementById('additionalText')) {
-                    // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
-                    //const additionalText = document.createElement('p');
-                    //additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
-                    //additionalText.textContent = 'Um den angestrebten Umsatz zu erreichen, müsste eine 10% Rabattaktion bestehen und die Nachfrage aus dem Ausland 15% höher sein.';
-                    
-                    // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
-                    //const modalContent2 = document.querySelector('#modal2 .modal-content');
-                    //modalContent2.appendChild(additionalText);
-                //}
-            //});
-
-            // Funktion zum Leeren des Eingabefelds
-            //function clearInputField() {
-                //document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
-            //}
-
-            // Funktion zum Entfernen des zusätzlichen Texts
-            //function removeAdditionalText() {
-                //const additionalText = document.getElementById('additionalText');
-                //if (additionalText) {
-                    //additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
-                //}
-            //}
-
-            // Überprüfung der Eingabe und Aktivierung des Buttons
-            //document.getElementById('zahlInput').addEventListener('input', function() {
-                //var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
-                //var button = document.getElementById('bestaetigenButton');
-                //if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
-                    //button.disabled = false;
-                //} else {
-                    //button.disabled = true;
-                //}
-            //});
 
 // Funktion zum Erstellen der Tabs basierend auf den ausgewählten Stores
 function createTabs(selectedStores) {
@@ -563,19 +536,82 @@ questionButton.addEventListener('click', function() {
             .then(data => {
                 removeOldParagraphs(); // Entferne alte Paragraphen
     
+                // Variablen zum Speichern der API-Daten
+                let salesActual, salesCounterfactual, changes, formattedChanges;
+    
                 data.forEach(item => {
                     var paragraph = document.createElement('p');
-                    
-                    var salesActual = item.sales_actual;
-                    var salesCounterfactual = item.sales_counterfactual;
-                    var changes = item.changes;
+    
+                    salesActual = item.sales_actual;
+                    salesCounterfactual = item.sales_counterfactual;
+                    changes = item.changes;
                     // Formatiere Absätze
-                    var formattedChanges = changes.map(change => `- ${change}`).join('<br>');
+                    formattedChanges = changes.map(change => `- ${change}`).join('<br>');
     
-                    paragraph.innerHTML = `Der Umsatz liegt bei ${salesActual}€.<br>Der Umsatz würde bei ${salesCounterfactual}€ liegen, wenn folgende Änderungen eintreten würden:<br>${formattedChanges}`;
-    
+                    paragraph.innerHTML = `Der Umsatz wird auf ${salesActual}€ geschätzt.<br>
+                    <br>Geben Sie Ihren erwarteten Umsatz ein:`;
                     modalContent.appendChild(paragraph);
                 });
+    
+                // Überprüfen, ob das Eingabefeld und der Button bereits existieren
+                if (!document.getElementById('inputDiv')) {
+                    // Erstelle das Eingabefeld und den Bestätigen-Button dynamisch
+                    var inputDiv = document.createElement('div');
+                    inputDiv.id = 'inputDiv';
+                    inputDiv.style.display = 'flex';
+                    inputDiv.style.alignItems = 'center';
+                    inputDiv.style.marginTop = '1px'; // optional, um Abstand zu den Textabsätzen zu schaffen
+    
+                    var inputField = document.createElement('input');
+                    inputField.type = 'text';
+                    inputField.id = 'zahlInput';
+                    inputField.style.marginBottom = '10px';
+                    inputField.style.marginRight = '5px';
+    
+                    var spanElement = document.createElement('span');
+                    spanElement.textContent = '€';
+    
+                    var confirmButton = document.createElement('button');
+                    confirmButton.id = 'bestaetigenButton';
+                    confirmButton.className = 'btn custom-btn';
+                    confirmButton.style.marginLeft = '10px';
+                    confirmButton.disabled = true; // initial disabled
+                    confirmButton.textContent = 'Bestätigen';
+    
+                    inputDiv.appendChild(inputField);
+                    inputDiv.appendChild(spanElement);
+                    inputDiv.appendChild(confirmButton);
+    
+                    modalContent.appendChild(inputDiv);
+    
+                    // Füge Event-Listener für das Eingabefeld und den Bestätigen-Button hinzu
+                    confirmButton.addEventListener('click', function() {
+                        // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
+                        if (!document.getElementById('additionalText')) {
+                            // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
+                            const additionalText = document.createElement('p');
+                            additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
+                            additionalText.innerHTML = `<br>Der Umsatz liegt aus folgenden Gründen nicht im gegebenen Bereich:<br>${formattedChanges}`;
+                            
+                            // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
+                            modalContent.appendChild(additionalText);
+                        }
+                    });
+    
+                    // Überprüfung der Eingabe und Aktivierung des Buttons
+                    inputField.addEventListener('input', function() {
+                        var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
+                        var button = document.getElementById('bestaetigenButton');
+                        if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
+                            button.disabled = false;
+                        } else {
+                            button.disabled = true;
+                        }
+                    });
+                } else {
+                    // Stelle sicher, dass das Eingabefeld und der Button immer am Ende bleiben
+                    modalContent.appendChild(document.getElementById('inputDiv'));
+                }
             })
             .catch(error => {
                 console.error('Fehler beim Abrufen der Daten:', error);
