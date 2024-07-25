@@ -14,7 +14,7 @@ function btn_click(){
     let id = id_api_call().then(id => {
         console.log(id);
         send_feedback(id)
-        link_with_id(id);
+        //link_with_id(id);
     });
 
 };
