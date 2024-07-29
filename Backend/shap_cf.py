@@ -74,8 +74,24 @@ if period in ['weekly', 'monthly']:
 
 if 'WeekOfYear' in df.columns:
     df['WeekOfYear'] = df['WeekOfYear'].astype(float).round()
+    
+    
+'''
+# Plot time series for stores
 
-#plt.plot(df.loc[df['Store']==470]['Sales'])
+if period == 'monthly':
+    df['Day'] = 1
+    df['Date'] = pd.to_datetime(df[['Year', 'Month', 'Day']])
+
+plt.plot('Date', 'Sales', data = df.loc[df['Store']==470])
+plt.scatter(datetime.strptime('2015-04-01', '%Y-%m-%d'), y_pred[470-1], c='red')
+
+plt.plot('Date', 'Sales', data = df.loc[df['Store']==1097])
+plt.scatter(datetime.strptime('2015-04-01', '%Y-%m-%d'), y_pred[1097-1], c='red')
+
+df = df.drop(['Day','Date'], axis=1)
+'''
+
 
 '''
 Train XGBoost model without parameter tuning
@@ -83,8 +99,8 @@ Train XGBoost model without parameter tuning
 
 # Split train and test
 split_date = 2015
-train = df.loc[df.Year < split_date].copy()
-test = df.loc[df.Year >= split_date].copy()
+train = df.loc[(df.Year < split_date) & (df.Month < month)].copy()
+test = df.loc[(df.Year >= split_date) & (df.Month == month)].copy()
 
 X_train = train.drop(labels=['Sales'], axis=1)
 y_train = train['Sales']
@@ -169,7 +185,7 @@ def timeout(timeout):
         return wrapper
     return deco
 
-@timeout(10)
+@timeout(60)
 def generate_cf(query, desired_range, features_vary, permitted_range):
     cf = exp_genetic_rossmann.generate_counterfactuals(query, total_CFs=1, 
                       desired_range=desired_range,
@@ -178,9 +194,9 @@ def generate_cf(query, desired_range, features_vary, permitted_range):
     return cf
 
 
-def get_cf(store, month, X_test, y_pred, desired_range, features_vary):
-    query_instances_rossmann = X_test[7*store-8+month:7*store-7+month]
-    y_query = y_pred[7*store-8+month:7*store-7+month]
+def get_cf(store, X_test, y_pred, desired_range, features_vary):
+    query_instances_rossmann = X_test[store-1:store]
+    y_query = y_pred[store-1:store]
     query = query_instances_rossmann
     permitted_range = {'Month': [max(1,query['Month'].values[0]-1),min(12,query['Month'].values[0]+1)],
                        'Holidays_lastmonth':[max(0,query['Holidays_lastmonth'].values[0]-5),min(28,query['Holidays_lastmonth'].values[0]+5)],
@@ -231,7 +247,7 @@ def interpret_cf(genetic_rossmann, query, y_query):
         'changes': changes
     }
     
-    return response_values
+    return response_values, changes
 
 
 def case_statement(top_features, i, query):
@@ -306,11 +322,59 @@ features_vary.remove('Year')
 features_vary.remove('SchoolHolidayRatio')
 features_vary.remove('OpenDayRatio')
 
-desired_range=[10000,12000]
+'''
+# Determine range of CFs
 
+percentages = [0.9,0.92,0.94,0.96,0.98,1.0,1.02,1.04,1.06,1.08,1.1,1.12,1.14,1.16,1.18,1.2]
+percentages = [0.9,0.93,0.96,0.99,1.02,1.05,1.08,1.11,1.14,1.17,1.2]
+percentages = [0.9,0.95,1.0,1.05,1.1,1.15,1.2]
+
+save_cfs = pd.DataFrame(columns=['Store', 'Sales', 'Sales_CF', 'Percentage1', 'Percentage2', 'CF', 'Explanation'])
+
+# Multiple queries can be given as input at once
+query_instances_rossmann = X_test[store-1:store] 
+y_query = y_pred[store-1:store]
+query = query_instances_rossmann
+permitted_range = {"Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
+                   "Holidays_lastmonth":[max(0,query["Holidays_lastmonth"].values[0]-5),min(28,query["Holidays_lastmonth"].values[0]+5)],
+                   "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
+                   "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
+
+for k in range(1,len(percentages)):
+    desired_range = [percentages[k-1]*y_query[0], percentages[k]*y_query[0]]
+    
+    try:
+        genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary)
+        response_values, changes = interpret_cf(genetic_rossmann, query, y_query)
+        
+        # cf
+        cf_instance = genetic_rossmann.cf_examples_list[0].final_cfs_df.transpose()
+         # original
+        instance = query.transpose().values
+        cf = cf_instance.values[:-1]
+        dif = cf - instance
+        dif = [x for xs in dif for x in xs]
+        dif = list(np.around(np.array(dif),2))
+
+        # top three differences
+        zipped = list(zip(dif,X_test.columns))
+        top_three = sorted(zipped, key=lambda x: abs(x[0]), reverse=True)[:3]
+
+        save_cfs.loc[len(save_cfs.index)] = [store, round(y_query[0],1), round(cf_instance.values[-1][0],1), percentages[k-1], percentages[k], str(top_three), str(changes)] 
+        
+    except ValueError:
+        # append no CF
+        save_cfs.loc[len(save_cfs.index)] = [store, round(y_query[0],1), None, percentages[k-1], percentages[k], None, None] 
+        print('No counterfactual found.')
+        continue
+
+save_cfs.to_csv("C:/Users/laram/Downloads/cf_1097_3er.csv", decimal=".")
+'''
+
+desired_range=[10000,12000]
 try:
-    genetic_rossmann, query, y_query = get_cf(store, month, X_test, y_pred, desired_range, features_vary)
-    response_values = interpret_cf(genetic_rossmann, query, y_query)
+    genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary)
+    response_values, changes = interpret_cf(genetic_rossmann, query, y_query)
 except ValueError:
     print('Kein Counterfactual gefunden. Versuchen Sie es mit einem anderen Zielbereich.')
 
@@ -326,8 +390,34 @@ response_values = {
     'sales_counterfactual': round(cf_instance.values[-1][0], 1),
     'changes': changes
 }
-'''
+
 
 # JSON-Datei mit den Werten der Counterfactuals speichern
 with open('counterfactual_explanations.json', 'w') as json_file:
     json.dump(response_values, json_file)
+'''
+
+'''
+JSON for the store description
+
+store_descriptions = [
+    {
+        'Store': 470,
+        'Store Type': 'a',
+        'Assortment': 'extended',
+        'Competition Distance': 50,
+        #'Start of Promotion': 'no promotion'
+    },
+    {
+        'store': 1097,
+        'Store Type': 'b',
+        'Assortment': 'extra',
+        'Competition Distance': 720,
+        #'Start of Promotion': 'no promotion'
+    }
+]
+
+with open('store_descriptions.json', 'w') as json_file:
+    json.dump(store_descriptions, json_file)
+
+'''
