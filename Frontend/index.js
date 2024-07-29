@@ -8,13 +8,13 @@ async function id_api_call(){
     return address
 }
 function link_with_id(id){
-    window.location.href = "setting.html?id=" + id;
+    
 }
 function btn_click(){
     let id = id_api_call().then(id => {
         console.log(id);
         send_feedback(id)
-        link_with_id(id);
+        window.location.href = "setting.html?id=" + id;
     });
 
 };
