@@ -1,12 +1,18 @@
-async function id_api_call(){
-    var apiUrl = 'https://controlling.xaidemo.de/api/id';
-    const address = await fetch(apiUrl)
-    .then((response) => response.json())
-    .then((user) => {
+async function id_api_call() {
+    const apiUrl = 'https://controlling.xaidemo.de/api/id'; // Sicherstellen, dass diese URL korrekt ist
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const user = await response.json();
         return user.id;
-    });
-    return address
+    } catch (error) {
+        console.error('Error in id_api_call:', error);
+        throw error;
+    }
 }
+
 function link_with_id(id){
     
 }
