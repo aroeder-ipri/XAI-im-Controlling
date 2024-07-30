@@ -559,7 +559,7 @@ function createTabs(selectedStores) {
 questionButton.addEventListener('click', function() {
     const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
     const tabContent = document.querySelector(`#${activeTabId}`);
-    fetch('http://127.0.0.1:8000/feature_importance/')
+    fetch('https://controlling.xaidemo.de/api/feature_importance/')
         .then(function(response) {
             if (!response.ok) {
                 throw new Error('Netzwerkantwort war nicht ok');
