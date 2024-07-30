@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Willkommen bei XAI im Controlling</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      background-color: #F2F2F2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .landing-container {
+      background-color: white;
+      border: 3px solid #74B027;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .landing-container h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .landing-container p {
+      color: #555;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .landing-container .btn {
+      color: #fff;
+      background-color: #74B027;
+      border-color: #74B027;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+    }
+    .landing-container .btn:hover {
+      background-color: #5c9021;
+      border-color: #5c9021;
+    }
+  </style>
+  <script>
+    function btn_click(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id')
+    //Post-Request ans Backend
+    window.location.href = "setting3.html?id=" + id;
+};
+  </script>
+</head>
+<body>
+  <div class="landing-container">
+    <h1>Setting 2/3</h1>
+    <p>Upon return to this site, you will be asked for the sales target which has a direct influence on your payment. Your can earn up to $1 for setting difficult, yet accurate goals for your store. However, if you miss your target, there will be no bonus payment. Your bonus payment increases by $0.04 for every 100 units of sales. The bonus payment dependent on the goal you set for your store is described in the blue line in the graph below.
+        If you feel unsure about your decision or if you want additional information, you can always ask your supervisor for advice. With his expertise and experience he can make a very accurate guess about future sales providing you with another forecast of future sales which is very close to the actual sales.  However, for the time and effort required to help you, your supervisor will reduce your bonus payment. Hence, your bonus will be reduced by $0.20 if you ask your supervisor for advice. Your bonus payment dependent on the goal you set after asking for advice is depicted in the gray line in the graph below.</p>
+    <a onclick="btn_click();" class="btn">Ok, I understand</a>
+  </div>
+</body>
+</html>
