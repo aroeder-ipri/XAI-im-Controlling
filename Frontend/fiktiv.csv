@@ -1,37 +1,25 @@
-Store;Umsatz;Wann;Vorhersage;Store-Info
-Ulm;12000;Januar;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;11000;Februar;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;10500;März;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;10000;April;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;9000;Mai;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;9500;Juni;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;11500;Juli;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;12500;August;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;14000;September;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;13700;Oktober;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;14500;November;0;Ulm ist eine Stadt in Baden-Württemberg
-Ulm;15000;Dezember;1;Ulm ist eine Stadt in Baden-Württemberg
-München;11500;Januar;0;München ist die Landeshauptstadt von Bayern
-München;8500;Februar;0;München ist die Landeshauptstadt von Bayern
-München;10000;März;0;München ist die Landeshauptstadt von Bayern
-München;13000;April;0;München ist die Landeshauptstadt von Bayern
-München;14500;Mai;0;München ist die Landeshauptstadt von Bayern
-München;14000;Juni;0;München ist die Landeshauptstadt von Bayern
-München;14800;Juli;0;München ist die Landeshauptstadt von Bayern
-München;15500;August;0;München ist die Landeshauptstadt von Bayern
-München;16000;September;0;München ist die Landeshauptstadt von Bayern
-München;15200;Oktober;0;München ist die Landeshauptstadt von Bayern
-München;13200;November;0;München ist die Landeshauptstadt von Bayern
-München;10800;Dezember;1;München ist die Landeshauptstadt von Bayern
-Stuttgart;11500;Januar;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;9500;Februar;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;14000;März;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;12800;April;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;14500;Mai;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;15000;Juni;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;11500;Juli;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;8500;August;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;10000;September;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;13000;Oktober;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;14500;November;0;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
-Stuttgart;19000;Dezember;1;Stuttgart ist die Landeshauptstadt von Baden-Württemberg
+Store;Sales;Month;forecast;Year;Store Type;Assortment;Competition Distance
+470;9863.7741935484;May;0;2014.0;a;extended;50
+470;9722.4666666667;June;0;2014.0;a;extended;50
+470;10890.0967741935;July;0;2014.0;a;extended;50
+470;11875.5483870968;August;0;2014.0;a;extended;50
+470;14079.6;September;0;2014.0;a;extended;50
+470;12929.9677419355;October;0;2014.0;a;extended;50
+470;10530.1333333333;November;0;2014.0;a;extended;50
+470;12414.0967741935;December;0;2014.0;a;extended;50
+470;9700.6129032258;January;0;2015.0;a;extended;50
+470;9307.3928571429;February;0;2015.0;a;extended;50
+470;10109.5161290323;March;0;2015.0;a;extended;50
+470;10295.1;April;1;2015.0;a;extended;50
+1097;10093.1612903226;May;0;2014.0;b;extra;720
+1097;10580.8;June;0;2014.0;b;extra;720
+1097;9770.2580645161;July;0;2014.0;b;extra;720
+1097;8581.1290322581;August;0;2014.0;b;extra;720
+1097;8853.3333333333;September;0;2014.0;b;extra;720
+1097;9580.4516129032;October;0;2014.0;b;extra;720
+1097;10928.0333333333;November;0;2014.0;b;extra;720
+1097;10948.9677419355;December;0;2014.0;b;extra;720
+1097;9940.4193548387;January;0;2015.0;b;extra;720
+1097;10811.1428571429;February;0;2015.0;b;extra;720
+1097;10299.8387096774;March;0;2015.0;b;extra;720
+1097;10689.6;April;1;2015.0;b;extra;720
