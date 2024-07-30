@@ -107,7 +107,7 @@
 </div>
 <div class="container">
   <div class="row">
-    <button type="button" id="nextButton" class="btn custom-btn">Weiter zu Umfrage</button>
+    <a onclick="btn_click();" id="nextButton" class="btn custom-btn">Further to survey</a>
  </div>
 </div>
 
@@ -120,5 +120,15 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
 
+  <script>
+function btn_click(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id')
+    //Post-Request ans Backend
+    window.location.href = "survey.html?id=" + id;
+};
+  </script>
+  
 </body>
 </html>
