@@ -149,9 +149,10 @@ p {
 
 /* Fragezeichen-Button für Modalfenster */
 #questionButton {
-    position: relative;
-    top: -45px;
-    right: -7px;
+    position: fixed;
+    top: -20vh;
+    right: 2vw;
+    
     background-color: #74B027;
     color: white;
     padding: 0;
@@ -163,7 +164,7 @@ p {
     border-radius: 50%;
     line-height: 30px;
     text-align: center;
-    z-index: 9999;
+    z-index: 9999; /* Stellt sicher, dass der Button über anderen Inhalten liegt */
 }
 
 #questionButton:hover {
@@ -205,3 +206,105 @@ p {
 #nextStoreButton:not([disabled]):hover i {
     color: #74B027; /* Ändere die Farbe beim Überfahren */
 }
+
+#storeHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Um Buttons und Text zu verteilen */
+}
+
+#storeHeader h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+#storeHeader button {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+/* Info-Container-Stile */
+#storeInfoContainer {
+    margin-top: 10px;
+    max-height: 200px; /* Maximale Höhe für den Container */
+    overflow: auto;    /* Scrollbar nur wenn nötig */
+}
+
+#storeInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#storeInfo p {
+    margin: 0;
+}
+
+#storeInfo label {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Slider Wrapper */
+#sliderWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Slider */
+#targetSlider {
+    width: 100%;
+    accent-color: #74B027; /* Setzt die Farbe des Sliders auf Grün */
+}
+
+/* Slider-Wert */
+#sliderValue {
+    font-weight: bold;
+    color: #74B027; /* Grüner Farbton für den Slider-Wert */
+    margin-left: 10px;
+}
+
+/* Button im Modal */
+#setTargetButton {
+    background-color: #74B027; /* Grüner Hintergrund für den Button */
+    color: #fff; /* Weißer Text auf dem Button */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+#setTargetButton:hover {
+    background-color: #5a8c1b; /* Dunklerer Grünton für den Hover-Effekt */
+}
+
+/* Container für die Auszahlung-Anzeige */
+#payoutContainer {
+    margin-top: 20px;
+}
+
+/* Auszahlung-Betrag */
+#payoutAmount {
+    font-size: 16px;
+}
+
+.option-btn {
+    background-color: #74B027;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px;
+    text-align: center;
+    width: 100%; /* Ensure buttons are the same width */
+    display: block; /* Stack buttons vertically */
+  }
+
+  .option-btn:hover {
+    background-color: #5a9b1e;
+  }
