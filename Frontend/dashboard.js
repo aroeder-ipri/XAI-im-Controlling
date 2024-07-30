@@ -9,6 +9,7 @@
     const lineCtx = document.getElementById('lineChart');
     const lineCtx2 = document.getElementById('lineChart2');
     const barCtx = document.getElementById('barChart');
+    const questionButton = document.getElementById('questionButton'); // Add this line to get the question button
     let csvData;
     let csvDataWithCondition;
     let lineChart;
@@ -26,17 +27,26 @@
     }
 
     // Funktion zum Analysieren der CSV-Daten und Extrahieren der Werte mit der Bedingung
-    function parseCSVWithCondition(csv) {
-        const lines = csv.split('\n');
-        const data = {};
+function parseCSVWithCondition(csv) {
+    const lines = csv.split('\n');
+    const data = {};
 
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i];
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line) { // Ignoriere leere Zeilen
             const parts = line.split(';');
-            if (parts.length >= 4 && parts[3].trim() === '0') {
+            
+            // Überprüfe, ob genug Elemente vorhanden sind
+            if (parts.length < 8) {
+                console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
+                continue;
+            }
+
+            // Überprüfe, ob die Bedingung erfüllt ist
+            if (parts[3].trim() === '0') {
                 const store = parts[0].trim();
                 const month = parts[2].trim();
-                const value = parseInt(parts[1]);
+                const value = parseFloat(parts[1].trim()); // Nutze parseFloat für bessere Genauigkeit bei Werten
 
                 if (!data[store]) {
                     data[store] = {};
@@ -45,62 +55,107 @@
                 data[store][month] = value;
             }
         }
-
-        return data;
     }
 
-    // Funktion zum Analysieren der CSV-Daten und Extrahieren aller Werte
-    function parseCSVAll(csv) {
-        const lines = csv.split('\n');
-        const data = {};
+    return data;
+}
 
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i];
+    // Funktion zum Analysieren der CSV-Daten und Extrahieren aller Werte
+function parseCSVAll(csv) {
+    const lines = csv.split('\n');
+    const data = {};
+
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line) { // Ignoriere leere Zeilen
             const parts = line.split(';');
+            
+            // Überprüfe, ob genug Elemente vorhanden sind
+            if (parts.length < 8) {
+                console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
+                continue;
+            }
+
             const store = parts[0].trim();
+            const sales = parseFloat(parts[1].trim()); // Hier wird der Sales-Wert analysiert
             const month = parts[2].trim();
-            const value = parseInt(parts[1]);
+            // Weitere Felder könnten hier analysiert werden, falls nötig
 
             if (!data[store]) {
                 data[store] = {};
             }
 
-            data[store][month] = value;
+            data[store][month] = sales;
         }
-
-        return data;
     }
 
-        // Funktion zum Analysieren der CSV-Daten und Extrahieren der Store-Informationen
-        function parseStoreInfo(csv) {
-            const lines = csv.split('\n');
-            const data = {};
+    return data;
+}
+    
+// Funktion zum Analysieren der CSV-Daten und Extrahieren der Store-Informationen
+function parseStoreInfo(csv) {
+    const lines = csv.split('\n');
+    const data = {};
 
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i];
-                const parts = line.split(';');
-                const store = parts[0].trim();
-                const storeInfo = parts[4].trim(); // Die 5. Spalte in der CSV-Datei enthält Store-Informationen
-                data[store] = storeInfo;
-            }
-
-            return data;
-        }
+    // Gehe durch jede Zeile der CSV-Datei
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
         
+        // Überspringe leere Zeilen
+        if (!line) continue;
+        
+        const parts = line.split(';');
+        
+        // Überprüfe, ob genügend Spalten vorhanden sind
+        if (parts.length < 8) {
+            console.warn(`Zeile ${i + 1} enthält nicht genügend Spalten: ${line}`);
+            continue;
+        }
+
+        const store = parts[0].trim();
+        const storeType = parts[5].trim(); // Die 6. Spalte enthält den Store-Typ
+        const assortment = parts[6].trim(); // Die 7. Spalte enthält das Assortment
+        const competitionDistance = parts[7].trim(); // Die 8. Spalte enthält die Wettbewerbsdistanz
+
+        // Speichere die Store-Informationen im Datenobjekt
+        data[store] = {
+            storeType: storeType,
+            assortment: assortment,
+            competitionDistance: competitionDistance
+        };
+    }
+
+    return data;
+}
+    
 // Funktion zum Aktualisieren der Store-Informationen im HTML
 function updateStoreInfo(selectedStore, storeInfoData) {
     const storeInfoContainer = document.getElementById('storeInfo');
     const currentStoreElement = document.getElementById('currentStore');
     storeInfoContainer.innerHTML = '';
-    
+
     // Aktuellen Store einfügen
     currentStoreElement.textContent = selectedStore;
 
     // Store-Informationen einfügen
     const storeInfo = storeInfoData[selectedStore];
-    const storeInfoDiv = document.createElement('div');
-    storeInfoDiv.textContent = storeInfo;
-    storeInfoContainer.appendChild(storeInfoDiv);
+    if (storeInfo) {
+        const storeInfoDiv = document.createElement('div');
+        storeInfoDiv.innerHTML = `
+            <p><strong>Store Type:</strong>
+            <label><input type="checkbox" ${storeInfo.storeType === 'a' ? 'checked' : ''} disabled> A</label>
+            <label><input type="checkbox" ${storeInfo.storeType === 'b' ? 'checked' : ''} disabled> B</label>
+            <label><input type="checkbox" ${storeInfo.storeType === 'c' ? 'checked' : ''} disabled> C</label></p>
+            <p><strong>Assortment:</strong>
+            <label><input type="checkbox" ${storeInfo.assortment === 'basic' ? 'checked' : ''} disabled> Basic</label>
+            <label><input type="checkbox" ${storeInfo.assortment === 'extra' ? 'checked' : ''} disabled> Extra</label>
+            <label><input type="checkbox" ${storeInfo.assortment === 'extended' ? 'checked' : ''} disabled> Extended</label></p>
+            <p><strong>Distance to next store:</strong> ${storeInfo.competitionDistance}km</p>
+        `;
+        storeInfoContainer.appendChild(storeInfoDiv);
+    } else {
+        storeInfoContainer.textContent = 'Store-Informationen nicht verfügbar';
+    }
 }
 
 // Funktion zum Aktualisieren des angezeigten Stores im Carousel
@@ -147,17 +202,11 @@ function updateButtonActivity() {
     }
 }
 
-    // Event-Listener für den Anzeigen-Button
-    document.getElementById('anzeigenButton').addEventListener('click', function () {
-        vorhersageWert = 1;
-        document.getElementById('vorhersageAnzeigen').textContent = vorhersageWert;
-    });
-
-
-    // Event-Listener für den Ausblenden-Button
-    document.getElementById('ausblendenButton').addEventListener('click', function () {
-        vorhersageWert = 0;
-        document.getElementById('vorhersageAnzeigen').textContent = vorhersageWert;
+// Event-Listener für den Anzeigen-Button
+document.getElementById('anzeigenButton').addEventListener('click', function () {
+    vorhersageWert = 1;
+    document.getElementById('vorhersageAnzeigen').textContent = vorhersageWert;
+    updateChartWithSelectedStores(); // Update the charts when the button is clicked
     });
 
     // Funktion zum Erstellen der Checkboxen basierend auf den Stores aus der CSV-Datei
@@ -267,29 +316,47 @@ function updateButtonActivity() {
             createCheckboxes(stores);
 
             // Line Chart initialisieren
-            lineChart = new Chart(lineCtx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: []
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        },
-                        tooltip: {
-                            boxPadding: 3
-                        }
+lineChart = new Chart(lineCtx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: []
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    font: {
+                        size: 10
                     }
                 }
-            });
+            },
+            tooltip: {
+                boxPadding: 3,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return '$' + tooltipItem.formattedValue;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: false, // Beginnt nicht bei Null, sondern dem festgelegten Minimum
+                min: 8000, // Minimum Wert der Y-Achse
+                max: 15000, // Maximum Wert der Y-Achse
+                ticks: {
+                    stepSize: 1000, // Optional: Schrittgröße der Y-Achsen-Ticks
+                    callback: function(value, index, values) {
+                        return '$' + value;
+                    }
+                }
+            }
+        }
+    }
+});
 
             // Media Query für kleine Bildschirme
             if (window.matchMedia('(max-width: 768px)').matches) {
@@ -318,7 +385,25 @@ lineChart2 = new Chart(lineCtx2, {
                 }
             },
             tooltip: {
-                boxPadding: 3
+                boxPadding: 3,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return '$' + tooltipItem.formattedValue;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: false, // Beginnt nicht bei Null, sondern dem festgelegten Minimum
+                min: 8000, // Minimum Wert der Y-Achse
+                max: 15000, // Maximum Wert der Y-Achse
+                ticks: {
+                    stepSize: 1000, // Optional: Schrittgröße der Y-Achsen-Ticks
+                    callback: function(value, index, values) {
+                        return '$' + value;
+                    }
+                }
             }
         }
     }
@@ -347,26 +432,26 @@ if (window.matchMedia('(max-width: 768px)').matches) {
         button.style.transition = 'top 0.5s, left 0.5s';
 
         // Position des Buttons über dem Linienwert berechnen und setzen
-        const buttonTop = scale.getPixelForValue(lastValue); // Top-Position des Linienwertes
+        //const buttonTop = scale.getPixelForValue(lastValue); // Top-Position des Linienwertes
 
         // Überprüfen der Bildschirmgröße
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        //const viewportWidth = window.innerWidth;
+        //const viewportHeight = window.innerHeight;
 
         // Anpassung der Position basierend auf der Bildschirmgröße
-        let buttonOffsetTop;
+        //let buttonOffsetTop;
 
         // Überprüfen, ob die Bildschirmbreite unter 1200 Pixel liegt
-        if (viewportWidth < 1200) {
-            buttonOffsetTop = 0; // Position unverändert lassen
-        } else {
-            buttonOffsetTop = 0.29 * viewportHeight;
+        //if (viewportWidth < 1200) {
+        //    buttonOffsetTop = 0; // Position unverändert lassen
+        //} else {
+        //    buttonOffsetTop = 0.29 * viewportHeight;
+//
+        //    // Neue Position des Buttons
+        //    const newTop = buttonTop - button.offsetHeight - buttonOffsetTop;
 
-            // Neue Position des Buttons
-            const newTop = buttonTop - button.offsetHeight - buttonOffsetTop;
-
-            button.style.top = newTop + 'px'; // Neue Position nach Animation
-        }
+        //    button.style.top = newTop + 'px'; // Neue Position nach Animation
+        //}
     }
 };
 
@@ -391,6 +476,7 @@ if (window.matchMedia('(max-width: 768px)').matches) {
             document.getElementById('questionButton').addEventListener('click', function() {
                 const modal = document.getElementById('modal');
                 modal.style.display = 'block';
+                showModalWithInfo();
             });
 
             // Funktion zum Öffnen des zweiten Modalfensters
@@ -452,7 +538,7 @@ function createTabs(selectedStores) {
         tabContent.innerHTML = `
             <p id="modal-text">
             <p></p>
-                <p>Nachfolgend ist zu sehen, welche Einflussfaktoren den größten Einfluss auf die Umsatzprognose hatten:</p>
+                <p>Following you can see which factors had the biggest influence on the sales forecast:</p>
                 <p></p>
                 <div class="progress" style="margin-bottom: 15px;">
                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -548,8 +634,8 @@ questionButton.addEventListener('click', function() {
                     // Formatiere Absätze
                     formattedChanges = changes.map(change => `- ${change}`).join('<br>');
     
-                    paragraph.innerHTML = `Der Umsatz wird auf ${salesActual}€ geschätzt.<br>
-                    <br>Geben Sie Ihren erwarteten Umsatz ein:`;
+                    paragraph.innerHTML = `Sales are estimated at ${salesActual}€.<br>
+                    <br>Enter your expected sales:`;
                     modalContent.appendChild(paragraph);
                 });
     
@@ -576,7 +662,7 @@ questionButton.addEventListener('click', function() {
                     confirmButton.className = 'btn custom-btn';
                     confirmButton.style.marginLeft = '10px';
                     confirmButton.disabled = true; // initial disabled
-                    confirmButton.textContent = 'Bestätigen';
+                    confirmButton.textContent = 'confirm';
     
                     inputDiv.appendChild(inputField);
                     inputDiv.appendChild(spanElement);
@@ -591,7 +677,7 @@ questionButton.addEventListener('click', function() {
                             // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
                             const additionalText = document.createElement('p');
                             additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
-                            additionalText.innerHTML = `<br>Der Umsatz liegt aus folgenden Gründen nicht im gegebenen Bereich:<br>${formattedChanges}`;
+                            additionalText.innerHTML = `<br>Sales are not within the given range for the following reasons:<br>${formattedChanges}`;
                             
                             // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
                             modalContent.appendChild(additionalText);
@@ -641,11 +727,11 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
 barChart = new Chart(barCtx, {
     type: 'bar',
     data: {
-        labels: ['2019', '2020', '2021', '2022', '2023'],
+        labels: ['2013', '2014', '2015 (current)'],
         datasets: [{
             label: 'Jahresumsatz',
-            data: [50000, 60000, 75000, 90000, 10000],
-            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'],
+            data: [130456, 130456, 69477],
+            backgroundColor: ['grey'],
             borderColor: 'transparent',
             borderWidth: 1,
             barThickness: 50,
@@ -654,7 +740,12 @@ barChart = new Chart(barCtx, {
     options: {
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value, index, values) {
+                        return '$' + value.toLocaleString(); // Werte als Dollar-Format anzeigen
+                    }
+                }
             }
         },
         plugins: {
@@ -662,11 +753,17 @@ barChart = new Chart(barCtx, {
                 display: false
             },
             tooltip: {
-                boxPadding: 3
+                boxPadding: 3,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return '$' + tooltipItem.raw.toLocaleString(); // Tooltip-Werte als Dollar-Format anzeigen
+                    }
+                }
             }
         }
     }
 });
+
 
             // Rufe die Funktion zum Aktualisieren des Graphen mit den vorausgewählten Stores auf
             updateChartWithSelectedStores();
