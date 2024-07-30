@@ -42,22 +42,30 @@
     </div>
 
     <script>
-        // Funktion zur Generierung einer zufälligen ID
-        function generateUniqueId() {
-            return Math.random().toString(36).substr(2, 9).toUpperCase();
-        }
+        function btn_click() {
+    // Lese die ID aus der URL
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
 
-        // Basis-URL Google Forms
-        const formBaseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url&entry.1441153259=';
+    // Basis-URL Google Forms
+    const formBaseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url&entry.1441153259=';
 
-        // Generiere eindeutige ID
-        const uniqueId = generateUniqueId();
-
+    // Überprüfe, ob die ID vorhanden ist
+    if (id) {
         // Vollständiger Link für iframe
-        const fullLink = formBaseUrl + uniqueId;
+        const fullLink = formBaseUrl + id;
 
-        // src-Wert des iframe-Elements
+        // Setze den src-Wert des iframe-Elements
         document.getElementById('surveyFrame').src = fullLink;
+    } else {
+        console.error('Keine ID in der URL gefunden.');
+    }
+}
+
+// Stelle sicher, dass die Funktion btn_click() aufgerufen wird, wenn die Seite geladen wird
+window.onload = btn_click;
+
     </script>
 </body>
 </html>
