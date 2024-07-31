@@ -279,32 +279,41 @@ document.getElementById('anzeigenButton').addEventListener('click', function () 
     }
 
     // Funktion zum Aktualisieren des Graphen mit CSV-Daten
-    function updateGraphWithCSVData(data, chart) {
-        const labels = Object.keys(data[Object.keys(data)[0]]);
-        const datasets = [];
+function updateGraphWithCSVData(data, chart) {
+    const labels = Object.keys(data[Object.keys(data)[0]]);
+    const datasets = [];
 
-        for (const store in data) {
-            const values = [];
-            for (const label of labels) {
-                values.push(data[store][label] || 0);
-            }
+    let minValue = Infinity;
+    let maxValue = -Infinity;
 
-            datasets.push({
-                label: store,
-                data: values,
-                lineTension: 0,
-                backgroundColor: 'transparent',
-                borderColor: ['grey','grey','grey','grey','grey','grey','grey','grey','grey','grey','grey','red'],
-                borderWidth: 2,
-                pointBackgroundColor: '#ffffff'
-            });
+    for (const store in data) {
+        const values = [];
+        for (const label of labels) {
+            const value = data[store][label] || 0;
+            values.push(value);
+            if (value < minValue) minValue = value;
+            if (value > maxValue) maxValue = value;
         }
 
-        chart.data.labels = labels;
-        chart.data.datasets = datasets;
-        chart.update();
-
+        datasets.push({
+            label: store,
+            data: values,
+            lineTension: 0,
+            backgroundColor: 'transparent',
+            borderColor: ['grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'red'],
+            borderWidth: 2,
+            pointBackgroundColor: '#ffffff'
+        });
     }
+
+    chart.data.labels = labels;
+    chart.data.datasets = datasets;
+
+    chart.options.scales.y.min = minValue - 1000;
+    chart.options.scales.y.max = maxValue + 1000;
+
+    chart.update();
+}
 
     // CSV-Datei laden und Checkboxen erstellen
     loadCSV('fiktiv.csv')
@@ -315,7 +324,7 @@ document.getElementById('anzeigenButton').addEventListener('click', function () 
             const stores = Object.keys(csvData);
             createCheckboxes(stores);
 
-            // Line Chart initialisieren
+// Initialisierung der Line Charts
 lineChart = new Chart(lineCtx, {
     type: 'line',
     data: {
@@ -344,20 +353,19 @@ lineChart = new Chart(lineCtx, {
         },
         scales: {
             y: {
-                beginAtZero: false, // Beginnt nicht bei Null, sondern dem festgelegten Minimum
-                min: 8000, // Minimum Wert der Y-Achse
-                max: 15000, // Maximum Wert der Y-Achse
+                beginAtZero: false,
+                min: 0,
+                max: 0,
                 ticks: {
-                    stepSize: 1000, // Optional: Schrittgröße der Y-Achsen-Ticks
                     callback: function(value, index, values) {
-                        return '$' + value;
+                        return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
                     }
                 }
+
             }
         }
     }
 });
-
             // Media Query für kleine Bildschirme
             if (window.matchMedia('(max-width: 768px)').matches) {
                 // Optionen für kleine Bildschirme anpassen
@@ -395,13 +403,12 @@ lineChart2 = new Chart(lineCtx2, {
         },
         scales: {
             y: {
-                beginAtZero: false, // Beginnt nicht bei Null, sondern dem festgelegten Minimum
-                min: 8000, // Minimum Wert der Y-Achse
-                max: 15000, // Maximum Wert der Y-Achse
+                beginAtZero: false,
+                min: 0,
+                max: 0,
                 ticks: {
-                    stepSize: 1000, // Optional: Schrittgröße der Y-Achsen-Ticks
                     callback: function(value, index, values) {
-                        return '$' + value;
+                        return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
                     }
                 }
             }
@@ -730,7 +737,7 @@ barChart = new Chart(barCtx, {
         labels: ['2013', '2014', '2015 (current)'],
         datasets: [{
             label: 'Jahresumsatz',
-            data: [130456, 130456, 69477],
+            data: [132498, 130456, 69477],
             backgroundColor: ['grey'],
             borderColor: 'transparent',
             borderWidth: 1,
