@@ -1,10 +1,12 @@
+// Globaler Zähler, der über die Aufrufe hinweg erhalten bleibt
 let counter = 0;
 
 function assignGroup() {
     counter++;
     return counter % 2 === 0 ? 'CF' : 'FI';
 }
-// Test the function
+
+// Teste die Funktion
 console.log(assignGroup()); // "FI"
 console.log(assignGroup()); // "CF"
 console.log(assignGroup()); // "FI"
@@ -25,9 +27,6 @@ async function id_api_call() {
     }
 }
 
-function link_with_id(id){
-    
-}
 async function btn_click() {
     let group = assignGroup(); // Benutzer in eine Gruppe einteilen
     try {
