@@ -1,33 +1,17 @@
-Store;Sales;Month;forecast;Year;Store Type;Assortment;Competition Distance
-470;9474.4838709677;Jan 2014;0;2014;a;extended;50
-470;10103.3571428571;Feb 2014;0;2014;a;extended;50
-470;9740.6129032258;Mar 2014;0;2014;a;extended;50
-470;10730.2666666667;Apr 2014;0;2014;a;extended;50
-470;9863.7741935484;May 2014;0;2014.0;a;extended;50
-470;9722.4666666667;June 2014;0;2014.0;a;extended;50
-470;10890.0967741935;July 2014;0;2014.0;a;extended;50
-470;11875.5483870968;Aug 2014;0;2014.0;a;extended;50
-470;14079.6;Sep 2014;0;2014.0;a;extended;50
-470;12929.9677419355;Oct 2014;0;2014.0;a;extended;50
-470;10530.1333333333;Nov 2014;0;2014.0;a;extended;50
-470;12414.0967741935;Dec 2014;0;2014.0;a;extended;50
-470;9700.6129032258;Jan 2015;0;2015.0;a;extended;50
-470;9307.3928571429;Feb 2015;0;2015.0;a;extended;50
-470;10109.5161290323;Mar 2015;0;2015.0;a;extended;50
-470;10182.20;Apr 2015;1;2015.0;a;extended;50
-1097;9027.5806451613;Jan 2014;0;2014;b;extra;720
-1097;9776.2142857143;Feb 2014;0;2014;b;extra;720
-1097;9748.7419354839;Mar 2014;0;2014;b;extra;720
-1097;10074.6666666667;Apr 2014;0;2014;b;extra;720
-1097;10093.1612903226;May 2014;0;2014.0;b;extra;720
-1097;10580.8;June 2014;0;2014.0;b;extra;720
-1097;9770.2580645161;July 2014;0;2014.0;b;extra;720
-1097;8581.1290322581;Aug 2014;0;2014.0;b;extra;720
-1097;8853.3333333333;Sep 2014;0;2014.0;b;extra;720
-1097;9580.4516129032;Oct 2014;0;2014.0;b;extra;720
-1097;10928.0333333333;Nov 2014;0;2014.0;b;extra;720
-1097;10948.9677419355;Dec 2014;0;2014.0;b;extra;720
-1097;9940.4193548387;Jan 2015;0;2015.0;b;extra;720
-1097;10811.1428571429;Feb 2015;0;2015.0;b;extra;720
-1097;10299.8387096774;Mar 2015;0;2015.0;b;extra;720
-1097;9672.5;Apr 2015;1;2015.0;b;extra;720
+Store;Sales;Month;forecast;Year;Store Type;Assortment;Competition Distance;Promotion
+London;9474.48;Jan 2023;0;2014;Convenience Store;extended;50;none
+London;10103.36;Feb 2023;0;2014;Convenience Store;extended;50;none
+London;9740.61;Mar 2023;0;2014;Convenience Store;extended;50;none
+London;10730.27;Apr 2023;0;2014;Convenience Store;extended;50;none
+London;9863.77;May 2023;0;2014.0;Convenience Store;extended;50;none
+London;9722.47;June 2023;0;2014.0;Convenience Store;extended;50;none
+London;10890.10;July 2023;0;2014.0;Convenience Store;extended;50;none
+London;11875.55;Aug 2023;0;2014.0;Convenience Store;extended;50;none
+London;14079.60;Sep 2023;0;2014.0;Convenience Store;extended;50;none
+London;12929.97;Oct 2023;0;2014.0;Convenience Store;extended;50;none
+London;10530.13;Nov 2023;0;2014.0;Convenience Store;extended;50;none
+London;12414.10;Dec 2023;0;2014.0;Convenience Store;extended;50;none
+London;9700.61;Jan 2024;0;2015.0;Convenience Store;extended;50;none
+London;9307.39;Feb 2024;0;2015.0;Convenience Store;extended;50;none
+London;10109.52;Mar 2024;0;2015.0;Convenience Store;extended;50;none
+London;10182.20;Apr 2024;1;2015.0;Convenience Store;extended;50;none
