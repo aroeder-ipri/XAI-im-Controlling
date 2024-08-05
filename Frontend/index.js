@@ -1,16 +1,25 @@
-// Globaler Zähler, der über die Aufrufe hinweg erhalten bleibt
-let counter = 0;
+// Funktionen zum Abrufen und Speichern des Zählers in localStorage
+function getStoredCounter() {
+    let storedCounter = localStorage.getItem('counter');
+    return storedCounter ? parseInt(storedCounter, 10) : 0;
+}
+
+function setStoredCounter(value) {
+    localStorage.setItem('counter', value);
+}
 
 function assignGroup() {
+    let counter = getStoredCounter();
     counter++;
+    setStoredCounter(counter);
     return counter % 2 === 0 ? 'CF' : 'FI';
 }
 
 // Teste die Funktion
-console.log(assignGroup()); // "FI"
-console.log(assignGroup()); // "CF"
-console.log(assignGroup()); // "FI"
-console.log(assignGroup()); // "CF"
+console.log(assignGroup()); // "FI" oder "CF", je nach dem aktuellen Wert von localStorage
+console.log(assignGroup()); // "FI" oder "CF"
+console.log(assignGroup()); // "FI" oder "CF"
+console.log(assignGroup()); // "FI" oder "CF"
 
 async function id_api_call() {
     const apiUrl = 'https://controlling.xaidemo.de/api/id'; // Sicherstellen, dass diese URL korrekt ist
