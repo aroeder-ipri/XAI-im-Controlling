@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Willkommen bei XAI im Controlling</title>
+  <title>XAI in controlling</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
@@ -48,14 +48,14 @@
     #mainButton {
       display: none; /* Initially hide the main button */
     }
-    .feedback {
-      color: red;
+    .success-message {
+      color: green;
       font-size: 1rem;
       margin-top: 10px;
       display: none;
     }
-    .success-message {
-      color: green;
+    #redirectMessage {
+      color: red;
       font-size: 1rem;
       margin-top: 10px;
       display: none;
@@ -64,39 +64,52 @@
   <script>
     function checkAnswer() {
       const answerInput = document.getElementById('answer');
-      const feedback = document.getElementById('feedback');
       const successMessage = document.getElementById('successMessage');
       const button = document.getElementById('mainButton');
-      const correctAnswer = '0.04'; // Set the correct answer here
+      const redirectMessage = document.getElementById('redirectMessage');
+      const correctAnswers = ['1.20', '1.2']; // Set the correct answer here
 
-      if (answerInput.value.trim() === correctAnswer) {
-        feedback.style.display = 'none';
+      if (correctAnswers.includes(answerInput.value.trim())) {
         successMessage.style.display = 'block';
         button.style.display = 'inline-block';
       } else {
-        feedback.style.display = 'block';
         successMessage.style.display = 'none';
+        redirectMessage.style.display = 'block';
+        let countdown = 5;
+        redirectMessage.textContent = `Incorrect answer, you will be redirected in ${countdown} seconds.`;
+        const countdownInterval = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            redirectMessage.textContent = `Incorrect answer, you will be redirected in ${countdown} seconds.`;
+          } else {
+            clearInterval(countdownInterval);
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const id = urlParams.get('id')
+            //Post-Request ans Backend
+            window.location.href = "setting.html?id=" + id;
+          }
+        }, 1000); // Update every second
       }
     }
     function btn_click(){
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get('id')
-    //Post-Request ans Backend
-    window.location.href = "dashboard.html?id=" + id;
-};
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const id = urlParams.get('id')
+      //Post-Request ans Backend
+      window.location.href = "dashboard.html?id=" + id;
+    };
   </script>
 </head>
 <body>
   <div class="landing-container">
     <h1>Comprehension Check</h1>
-    <p>After asking for advice from your supervisor you set a sales target of +600 units. What is your bonus payment if your store reaches this goal in the upcoming year?</p>
-    <input type="text" id="answer" class="form-control" placeholder="Enter your answer - NOTE: use periods for cent amounts (e.g. 0.09)">
+    <p>After asking for advice from your supervisor you set a sales target of $15,000. What is your bonus payment if your store reaches this goal?</p>
+    <input type="text" id="answer" class="form-control" placeholder="Enter your answer - NOTE: use periods for cent amounts (e.g. 0.50)">
     <button class="btn btn-check-answer mt-3" onclick="checkAnswer()">Check Answer</button>
-    <p id="feedback" class="feedback">Incorrect answer, please try again.</p>
     <p id="successMessage" class="success-message">Correct answer! You can now proceed.</p>
-    <a id="mainButton" onclick="btn_click();" class="btn mt-3">Continue to Forecast
-    </a>
+    <p id="redirectMessage" class="feedback">Incorrect answer, you will be redirected in 5 seconds.</p>
+    <a id="mainButton" onclick="btn_click();" class="btn mt-3">Continue to Forecast</a>
   </div>
 </body>
 </html>
