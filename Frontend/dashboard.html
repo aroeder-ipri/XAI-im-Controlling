@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XAI im Controlling</title>
+  <title>XAI in controlling</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Fonts -->
@@ -27,21 +27,14 @@
     });
 </script>
 
-
 <!-- Modalfenster -->
 <div id="modal" class="modal">
   <div class="modal-background"></div>
   <div class="modal-content">
     <span class="close">&times;</span>
-    <!-- Bootstrap Tabs -->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-    </ul>
-    <!-- Tab-Inhalte -->
-    <div class="tab-content" id="myTabContent">
-    </div>
-    <br>
+    <div id="modal1Content"></div>
     <!-- Link "Mehr" -->
-    <a id="mehrButton" class="text-muted" style="position: absolute; bottom: 10px; right: 10px;" href="#">more</a>
+    <a id="mehrButton" class="text-muted" style="position: absolute; bottom: 10px; right: 10px;" hidden href="#">more</a>
   </div>
 </div>
 
@@ -49,32 +42,26 @@
 <div id="modal2" class="modal" style="display: none;">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <!-- Nicht gebraucht aktuell
-    <p>Der Umsatz wird auf 109.000 € geschätzt, im Vergleich zum Vormonat mit einem Umsatz von 103.000 €.</p>
-    <p>Geben Sie Ihren erwarteten Umsatz an:</p>
-    <div style="display: flex; align-items: center;">
-      <input type="text" id="zahlInput" style="margin-bottom: 10px; margin-right: 5px;">
-      <span>€</span>
-      <button id="bestaetigenButton" class="btn custom-btn" style="margin-left: 10px;" disabled>Bestätigen</button>
-    </div>-->
+    <div id="modal2Content"></div>
   </div>
 </div>
-  
+
 <!-- Modalfenster 3 -->
 <div id="modal3" class="modal" style="display: none;">
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Target Setting</h2>
     <p class="hint">You are now able to decide on your store’s sales target for the upcoming year.</p>
+    <p class="estimateSale"></p>
     <p>What target do you want to achieve with your store in the upcoming year?</p>
     <!-- Slider Container -->
     <div class="slider-container">
       <label for="targetSlider">Target Value:</label>
-      <span id="sliderValue">+0</span>
+      <span id="sliderValue"></span>
       <div id="sliderWrapper">
-        <span id="minValue">+0</span>
-        <input type="range" id="targetSlider" min="0" max="2000" step="10" value="0">
-        <span id="maxValue">+2000</span>
+        <span id="minValue">+$8000</span>
+        <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">
+        <span id="maxValue">+$15000</span>
       </div>
     </div>
     <!-- Anzeige der erwarteten Auszahlung -->
@@ -86,6 +73,8 @@
     </div>
     <button id="setTargetButton" class="custom-btn">Continue</button>
     <button id="finalSetTargetButton" class="custom-btn" style="display: none;">Submit</button>
+    <div id="redirectMessage" style="color: #74B027; display:none;"></div>
+
   </div>
 </div>
 
@@ -95,8 +84,8 @@
     <p><strong>You can now send a message to your supervisor and ask for advice.</strong></p>
     <div id="messageOptions">
       <button id="noMessageBtn" class="option-btn">No message (no cost)</button>
-      <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-$0.20)</button>
-      <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-$0.20)</button>
+      <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-$0.30)</button>
+      <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-$0.30)</button>
     </div>
     <p style="font-size: 12px;">*The answer of your supervisor is not dependent on the message you send</p>
   </div>
@@ -110,6 +99,28 @@
     <button id="acknowledgeButton" class="btn custom-btn">Alright, thanks!</button>
   </div>
 </div>
+
+<!-- Modalfenster für Estimate Sales -->
+<div id="modalEstimate" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p><strong>After reading through the information and past sales performance, what do you expect to be your stores sales in the upcoming month?</strong></p>
+        <!-- Slider Container -->
+        <div class="slider-container">
+          <center><span id="sliderValue1">+0</span></center>
+          <div id="sliderWrapper">
+            <span id="minValue">+$8000</span>
+            <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="0">
+            <span id="maxValue">+$15000</span>
+          </div>
+          <p></p>
+          <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later point.</p>
+
+        <button type="button" id="anzeigenButton" class="btn custom-btn">Continue to Forecast</button>
+        </div>
+  </div>
+</div>
+
 
 <div class="container">
   <!-- Seitenüberschrift -->
@@ -137,14 +148,14 @@
     <div class="col-md-4">
       <div class="content-box2 mt-3">
         <h2>Forecast</h2>
-        <button type="button" id="anzeigenButton" class="btn custom-btn">show</button>
-        <button type="button" id="continueButton" class="btn custom-btn">continue to set target</button>
-        <p>Get more information by clicking on <span class="question-mark">?</span> in the forecast.</p>
+        <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
+        <button type="button" id="continueButton" class="btn custom-btn" style="display: none;">continue to set target</button>
+        <p class="task">Please provide your sales estimate for the month of April. You will receive additional information, from an AI to set your targets later.</p>
         <p id="vorhersageAnzeigen" style="display: none;"></p>
       </div>
-      <div class="content-box3 mt-3">
+      <!-- CHANGE STORE mit Checkboxen dynamisch einfügen - AKTUELL NICHT GEBRAUCHT DA NUR 1 Store -->
+      <div class="content-box3 mt-3" hidden>
         <h2>Change store</h2>
-        <!-- Hier werden die Checkboxen dynamisch eingefügt -->
         <div id="storeCheckboxContainer" class="mt-3"></div>
       </div>
       <div class="content-box3 mt-3">
@@ -161,7 +172,7 @@
     </div>
   </div>
 </div>
-<div class="container">
+<div class="container" hidden>
   <div class="row">
     <a onclick="btn_click();" id="nextButton" class="btn custom-btn">Further to survey</a>
   </div>
@@ -177,195 +188,413 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
 
 <script>
-function btn_click(){
+var yourTarget = 8000;
+var actualSales = 10295.10;
+var basePayout = 0;
+var optionCost = 0;
+
+function btn_click() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get('id')
-    //Post-Request ans Backend
-    window.location.href = "survey.html?id=" + id;
-};
+    const id = urlParams.get('id');
+    // Post-Request ans Backend
+    window.location.href = "survey.html?id=" + id
+        + "&YourTarget=" + encodeURIComponent(yourTarget)
+        + "&actualSales=" + encodeURIComponent(actualSales)
+        + "&basePayout=" + encodeURIComponent(basePayout)
+        + "&optionCost=" + encodeURIComponent(optionCost);
+}
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  var modal3 = document.getElementById("modal3");
-  var modal4 = document.getElementById("modal4");
-  var messageExampleModal = document.getElementById("messageExampleModal");
-  var continueButton = document.getElementById("continueButton");
-  var closeButtons = document.querySelectorAll(".close");
-  var targetSlider = document.getElementById("targetSlider");
-  var sliderValue = document.getElementById("sliderValue");
-  var payoutAmount = document.getElementById("payoutAmount");
-  var setTargetButton = document.getElementById("setTargetButton");
-  var finalSetTargetButton = document.getElementById("finalSetTargetButton");
-  var noMessageBtn = document.getElementById("noMessageBtn");
-  var salesExpectationsBtn = document.getElementById("salesExpectationsBtn");
-  var trustForecastBtn = document.getElementById("trustForecastBtn");
-  var acknowledgeButton = document.getElementById("acknowledgeButton");
-  var optionButtons = [noMessageBtn, salesExpectationsBtn, trustForecastBtn];
-  var messageExampleText = document.getElementById("messageExampleText");
+    var modal3 = document.getElementById("modal3");
+    var modal4 = document.getElementById("modal4");
+    var messageExampleModal = document.getElementById("messageExampleModal");
+    var continueButton = document.getElementById("continueButton");
+    var closeButtons = document.querySelectorAll(".close");
+    var targetSlider = document.getElementById("targetSlider");
+    var sliderValue = document.getElementById("sliderValue");
+    var payoutAmount = document.getElementById("payoutAmount");
+    var setTargetButton = document.getElementById("setTargetButton");
+    var finalSetTargetButton = document.getElementById("finalSetTargetButton");
+    var noMessageBtn = document.getElementById("noMessageBtn");
+    var salesExpectationsBtn = document.getElementById("salesExpectationsBtn");
+    var trustForecastBtn = document.getElementById("trustForecastBtn");
+    var acknowledgeButton = document.getElementById("acknowledgeButton");
+    var optionButtons = [noMessageBtn, salesExpectationsBtn, trustForecastBtn];
+    var messageExampleText = document.getElementById("messageExampleText");
+    var estimateButton = document.getElementById("estimateButton");
+    var modalEstimate = document.getElementById("modalEstimate");
+    var targetSlider1 = document.getElementById("targetSlider1");
+    var sliderValue1 = document.getElementById("sliderValue1");
+    var anzeigenButton = document.getElementById("anzeigenButton");
+    var taskParagraph = document.querySelector('p.task');
+    var estimateSale = document.querySelector('p.estimateSale');
+    var selectedOption = 'noMessage';
+    var savedSliderValue = 8000;
 
-  var selectedOption = 'noMessage';
-  var optionCost = 0.00;
-
-  // Zeige Modal3 bei Klick auf den Continue-Button
-  continueButton.onclick = function() {
-    modal3.style.display = "block";
-  }
-
-  // Schließe alle Modale, wenn der Schließen-Button geklickt wird
-  closeButtons.forEach(function(button) {
-    button.onclick = function() {
-      button.closest('.modal').style.display = "none";
+    // Zeige Modal3 bei Klick auf den Continue-Button
+    continueButton.onclick = function() {
+        modal3.style.display = "block";
     }
-  });
 
-  // Initialisiere den Slider und die Auszahlung
-  var initialSliderValue = targetSlider.value;
-  sliderValue.textContent = `+${initialSliderValue}`;
-  updatePayout(initialSliderValue);
-
-  // Event-Listener für Slider-Eingaben
-  targetSlider.oninput = function() {
-    var currentValue = this.value;
-    sliderValue.textContent = `+${currentValue}`;
-    updatePayout(currentValue);
-  };
-
-  // Funktion zur Berechnung und Anzeige der Auszahlung
-  function updatePayout(value) {
-    var basePayout = calculatePayout(value); // Berechne die Basis-Auszahlung
-    var payout = basePayout - optionCost; // Ziehe die Kosten für die ausgewählte Option ab
-    if (optionCost > 0) {
-      payoutAmount.innerHTML = `
-        <div class="calculation">
-        <p class="value">$${basePayout.toFixed(2)} - <span style="color: red;">$${optionCost.toFixed(2)}</span> = $${Math.max(payout, 0).toFixed(2)}</p>
-        </div>
-      `;
-    } else {
-      payoutAmount.innerHTML = `
-        <div class="calculation">
-        <p class="value">$${basePayout.toFixed(2)}</p>
-        </div>
-      `;
-    }
-  }
-
-  // Berechnung der Auszahlung
-  function calculatePayout(value) {
-    var bonusPerUnit = 0.04 / 100; // 0,04 USD für 100 Einheiten
-    return value * bonusPerUnit;
-  }
-
-  // Funktion zum Anzeigen von Modal4
-  function showModal4() {
-    modal4.style.display = "block";
-  }
-
-  // Funktion zum Anzeigen des Nachrichtensbeispiel-Modals
-  function showMessageExample() {
-    var text = `
-      <p>Hello,</p>
-      <p>I appreciate your message and I can see you have already made an educated guess on your sales targets.</p>
-      <p>Even though our AI prediction is expecting an increase in sales of +400 units, I think there is reason to believe that sales can increase up to +1000 units in the upcoming year.</p>
-      <p>Kind Regards,</p>
-      <p>Supervisor</p>
-    `;
-    messageExampleText.innerHTML = text; // Setze HTML-Inhalt
-    messageExampleModal.style.display = "block";
-  }
-
-  // Event-Listener für den Set Target Button
-  setTargetButton.onclick = function() {
-    showModal4();
-  }
-
-  // Funktion zur Auswahl einer Option im Modal4
-  function selectOption(optionId) {
-    selectedOption = optionId;
-    optionButtons.forEach(function(btn) {
-      btn.classList.remove('active');
-    });
-    document.getElementById(optionId + 'Btn').classList.add('active');
-    optionCost = calculateOptionCost(selectedOption);
-    updatePayout(targetSlider.value); // Aktualisiere die Auszahlung nach Auswahl der Option
-  }
-
-  function showHintInModal3(text) {
-    var modal3 = document.getElementById('modal3');
-    var hintElement = modal3.querySelector('.hint');
-    if (hintElement) {
-      hintElement.textContent = text;
-    }
-  }
-
-  // Event-Listener für die Auswahloptionen im Modal4
-  optionButtons.forEach(function(button) {
-    button.addEventListener('click', function() {
-      var optionId = this.id.replace('Btn', '');
-      var exampleText = "";
-      var hintText = "";
-
-      if (optionId === 'noMessage') {
-        modal4.style.display = "none";
-        optionCost = 0.00; // Keine Kosten
-        hintText = "You can now adjust your target level one last time. ";
-      } else {
-        if (optionId === 'salesExpectations') {
-          exampleText = "What are your sales expectations from our store?";
-          hintText = "After asking your supervisor you can now adjust your target level one last time.";
-        } else if (optionId === 'trustForecast') {
-          exampleText = "Do you think I should trust the forecast?";
-          hintText = "After asking your supervisor you can now adjust your target level one last time.";
+    // Schließe alle Modale, wenn der Schließen-Button geklickt wird
+    closeButtons.forEach(function(button) {
+        button.onclick = function() {
+            button.closest('.modal').style.display = "none";
         }
-        modal4.style.display = "none";
-        showMessageExample(exampleText);
-        optionCost = 0.20; // Abzug der Kosten für die ausgewählte Option
+    });
+
+    // Initialisiere den Slider und die Auszahlung
+    var initialSliderValue = targetSlider.value;
+    sliderValue.textContent = `+${initialSliderValue}`;
+    updatePayout(initialSliderValue);
+
+    // Event-Listener für Slider-Eingaben
+    targetSlider.oninput = function() {
+        var currentValue = this.value;
+        sliderValue.textContent = `+${currentValue}`;
+        yourTarget = currentValue;
+        updatePayout(currentValue);
+    };
+
+    // Funktion zur Berechnung und Anzeige der Auszahlung
+    function updatePayout(value) {
+        basePayout = calculatePayout(value); // Berechne und aktualisiere die globale Basis-Auszahlung
+        var payout = basePayout - optionCost; // Ziehe die Kosten für die ausgewählte Option ab
+        if (optionCost > 0) {
+            payoutAmount.innerHTML = `
+                <div class="calculation">
+                <p class="value">$${basePayout.toFixed(2)} - <span style="color: red;">$${optionCost.toFixed(2)}</span> = $${Math.max(payout, 0).toFixed(2)}</p>
+                </div>
+            `;
+        } else {
+            payoutAmount.innerHTML = `
+                <div class="calculation">
+                <p class="value">$${basePayout.toFixed(2)}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Berechnung der Auszahlung
+    function calculatePayout(value) {
+        var bonusPerUnit = 0.10 / 1000; // 0,10 USD für 1000 Einheiten
+        return value * bonusPerUnit;
+    }
+
+    // Funktion zum Anzeigen von Modal4
+    function showModal4() {
+        modal4.style.display = "block";
+    }
+
+    // Funktion zum Anzeigen des Nachrichtensbeispiel-Modals
+    function showMessageExample(text) {
+        var text = `
+            <p>Hello,</p>
+            <p>I appreciate your message and I can see you have already made an educated guess on your sales targets.</p>
+            <p>I feel like the AI is very accurate with it‘s prediction and I don‘t think you can expect sales to exceed $10,000 for the month of April.</p>
+            <p>Kind Regards,</p>
+            <p>Supervisor</p>
+        `;
+        messageExampleText.innerHTML = text; // Setze HTML-Inhalt
+        messageExampleModal.style.display = "block";
+    }
+
+    // Event-Listener für den Set Target Button
+    setTargetButton.onclick = function() {
+        showModal4();
+    }
+
+    // Funktion zur Auswahl einer Option im Modal4
+    function selectOption(optionId) {
+        selectedOption = optionId;
+        optionButtons.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        document.getElementById(optionId + 'Btn').classList.add('active');
+        optionCost = calculateOptionCost(selectedOption); // Berechne und aktualisiere die globale Option-Kosten
+        updatePayout(targetSlider.value); // Aktualisiere die Auszahlung nach Auswahl der Option
+    }
+
+    function showHintInModal3(text) {
+        var modal3 = document.getElementById('modal3');
+        var hintElement = modal3.querySelector('.hint');
+        if (hintElement) {
+            hintElement.textContent = text;
+        }
+    }
+
+    // Event-Listener für die Auswahloptionen im Modal4
+    optionButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var optionId = this.id.replace('Btn', '');
+            var exampleText = "";
+            var hintText = "";
+
+            if (optionId === 'noMessage') {
+                modal4.style.display = "none";
+                optionCost = 0.00; // Keine Kosten
+                hintText = "You can now adjust your target level one last time. ";
+            } else {
+                if (optionId === 'salesExpectations') {
+                    exampleText = "What are your sales expectations from our store?";
+                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                } else if (optionId === 'trustForecast') {
+                    exampleText = "Do you think I should trust the forecast?";
+                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                }
+                modal4.style.display = "none";
+                showMessageExample(exampleText);
+                optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
+            }
+
+            // Zeige den Hinweistext in Modal3
+            showHintInModal3(hintText);
+
+            // Blende den Set Target Button aus und zeige den Final Set Target Button an
+            setTargetButton.style.display = "none";
+            finalSetTargetButton.style.display = "block";
+
+            updatePayout(targetSlider.value); // Aktualisiere die Auszahlung
+        });
+    });
+
+    function calculateOptionCost(option) {
+    if (option === 'noMessage') {
+        return 0.00;
+    } else if (option === 'salesExpectations' || option === 'trustForecast') {
+        return 0.30;
+    }
+    return 0.00;
+}
+
+      // Event-Listener für den Final Set Target Button
+      finalSetTargetButton.onclick = function() {
+          // Blende den Final Set Target Button aus
+          finalSetTargetButton.style.display = "none";
+          // Mache den Continue-Button nicht mehr klickbar
+          continueButton.style.pointerEvents = "none";
+          continueButton.style.opacity = "0.5";
+          
+          // Zeige die Redirect Message
+          const redirectMessage = document.getElementById('redirectMessage');
+          let countdown = 5;
+          redirectMessage.style.display = 'block';
+          redirectMessage.textContent =`Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
+          
+          const countdownInterval = setInterval(() => {
+              countdown--;
+              if (countdown > 0) {
+                  redirectMessage.textContent =`Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
+              } else {
+                  clearInterval(countdownInterval);
+                  // Hier wird die btn_click Funktion nach Ablauf des Countdowns aufgerufen
+                  btn_click();
+              }
+          }, 1000); // Update every second
+      };
+
+      // Event-Listener für den "Alright, thanks!" Button
+      acknowledgeButton.onclick = function() {
+          // Schließe das Nachrichtensbeispiel-Modal
+          messageExampleModal.style.display = "none";
+          // Berechne und aktualisiere die Auszahlung
+          var currentValue = targetSlider.value;
+          updatePayout(currentValue);
+          // Zeige Modal3 wieder an
+          modal3.style.display = "block";
+      };
+
+      // Berechnung der Kosten für die Auswahloptionen
+      function calculateOptionCost(option) {
+          switch(option) {
+              case 'salesExpectations':
+              case 'trustForecast':
+                  return 0.30;
+              default:
+                  return 0.00;
+          }
       }
 
-      // Zeige den Hinweistext in Modal3
-      showHintInModal3(hintText);
+      // Zeige ModalEstimate bei Klick auf den Estimate-Button
+      estimateButton.onclick = function() {
+          modalEstimate.style.display = "block";
+      }
 
-      // Blende den Set Target Button aus und zeige den Final Set Target Button an
-      setTargetButton.style.display = "none";
-      finalSetTargetButton.style.display = "block";
+      // Initialisiere den Slider und die Auszahlung
+      var initialSliderValue1 = targetSlider1.value;
+      sliderValue1.textContent = `+$${initialSliderValue1}`;
 
-      updatePayout(targetSlider.value); // Aktualisiere die Auszahlung
-    });
+      // Event-Listener für Slider-Eingaben
+      targetSlider1.oninput = function() {
+          var currentValue1 = this.value;
+          sliderValue1.textContent = `+$${currentValue1}`;
+          savedSliderValue = currentValue1; // Speichern des aktuellen Werts
+      };
+
+      anzeigenButton.onclick = function() {
+          modalEstimate.style.display = "none";
+          continueButton.style.display = "block";
+          estimateButton.style.display = "none";
+          taskParagraph.innerHTML = 'Get more information by clicking on <span class="question-mark">?</span> in the forecast.'; // Ändert den HTML-Inhalt des <p> Elements
+          // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
+          estimateSale.innerHTML = `Your estimated sales were $${savedSliderValue}.`;
+      }
+
+      const modal = document.getElementById("modal");
+      const modal2 = document.getElementById("modal2");
+      const questionButton = document.getElementById("questionButton");
+      const mehrButton = document.getElementById("mehrButton");
+
+      // Funktion zum Laden von JSON-Daten
+      async function loadJSON(url) {
+          const response = await fetch(url);
+          if (!response.ok) {
+              throw new Error("Netzwerkantwort war nicht ok.");
+          }
+          return await response.json();
+      }
+
+      // Funktion zum Öffnen des ersten Modals und Laden der JSON-Daten
+      async function openModal1() {
+          try {
+              // Stelle sicher, dass der Modal-Container vorhanden ist
+              const modal1Content = document.getElementById("modal1Content");
+              if (!modal1Content) {
+                  console.error("Das Element 'modal1Content' wurde nicht gefunden.");
+                  return;
+              }
+
+              // Lade die JSON-Daten
+              const response = await fetch("/Backend/shap_feature_importance.json");
+              if (!response.ok) {
+                  throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
+              }
+              const data = await response.json();
+
+              // Protokolliere die Daten in der Konsole zur Überprüfung
+              console.log("Geladene Daten:", data);
+
+              // Extrahiere die ersten beiden Werte und Namen
+              const firstTwoItems = data.slice(0, 3);
+              
+              // Protokolliere die extrahierten Items zur Überprüfung
+              console.log("Extrahierte Items:", firstTwoItems);
+
+              // Generiere den HTML-Code für die Progress Bars
+              const progressBarsHTML = firstTwoItems.map(item => {
+                  const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
+                  return `
+                      <div class="progress-container" style="margin-bottom: 15px;">
+                          <p><strong>${item.col_name}</strong> (${percentage}%)</p>
+                          <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentage}%;"></div>
+                          </div>
+                      </div>
+                  `;
+              }).join('');
+
+              // Protokolliere den HTML-Code für die Progress Bars
+              console.log("Generierter HTML-Code für Progress Bars:", progressBarsHTML);
+
+              // HTML-Inhalt des Modals anpassen
+              modal1Content.innerHTML = `
+                  <p>Following you can see which factors had the biggest influence:</p>
+                  ${progressBarsHTML}
+              `;
+
+              // Modal anzeigen
+              const modal = document.getElementById("modal");
+              if (!modal) {
+                  console.error("Das Modal-Element wurde nicht gefunden.");
+                  return;
+              }
+              modal.style.display = "block";
+              
+          } catch (error) {
+              console.error("Fehler:", error);
+          }
+      }
+
+      async function openModal2() {
+          try {
+              // Lade die JSON-Daten
+              const data = await loadJSON("/Backend/cf_470.json");
+              
+              // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
+              let closestData = null;
+              let closestDifference = Infinity;
+
+              data.forEach(item => {
+                  const difference = Math.abs(item.Sales_CF - savedSliderValue);
+                  if (difference < closestDifference) {
+                      closestDifference = difference;
+                      closestData = item;
+                  }
+              });
+
+              // Prüfe, ob wir eine passende Datenreihe gefunden haben
+              if (closestData) {
+                  const modal2Content = document.getElementById("modal2Content");
+                  
+                  // Extrahiere die Issues
+                  const issues = closestData.Explanation.Issues;
+
+                  // Formatiere die Issues als HTML-Liste
+                  const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
+
+                  modal2Content.innerHTML = `
+                      <p>The AI estimates the sales at <strong>$${closestData.Sales.toFixed(2)}</strong></p>
+                      <p>Your estimated sales were <strong>$${savedSliderValue}</strong></p>
+                      <p>Sales are not within your forecast for the following reasons:</p>
+                      <ul style="color: #555;">
+                          ${issuesList}
+                      </ul>
+                  `;
+                  modal2.style.display = "block";
+              } else {
+                  console.error("Keine passende Datenreihe gefunden.");
+              }
+          } catch (error) {
+              console.error("Fehler beim Laden der JSON-Daten:", error);
+          }
+      }
+
+      // Funktion zum Bestimmen, welches Modal geöffnet werden soll
+      function determineAndOpenModal() {
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const id = urlParams.get('id');
+
+          // Überprüfe, ob eine ID vorhanden ist und ob sie gültig ist
+          if (!id) {
+              console.warn("Keine ID in der URL gefunden. Öffne Modal 1.");
+              openModal2();
+              return;
+          }
+
+          if (id.startsWith("FI")) {
+              openModal1();
+          } else if (id.startsWith("CF")) {
+              openModal2();
+          } else {
+              console.error("Ungültige ID in der URL. Öffne Modal 1.");
+              openModal2();
+          }
+      }
+
+      // Event Listener für den "Mehr"-Button im ersten Modal
+      mehrButton.addEventListener("click", function(event) {
+          event.preventDefault();
+          modal.style.display = "none";
+          openModal2();
+      });
+
+      // Event Listener für den "questionButton"
+      questionButton.addEventListener("click", function() {
+          determineAndOpenModal();
+      });
   });
-
-    // Event-Listener für den Final Set Target Button
-    finalSetTargetButton.onclick = function() {
-    // Blende den Final Set Target Button aus
-    finalSetTargetButton.style.display = "none";
-    // Schließe Modal3
-    modal3.style.display = "none";
-    // Mache den Continue-Button nicht mehr klickbar
-    continueButton.style.pointerEvents = "none";
-    continueButton.style.opacity = "0.5";
-  };
-
-  // Event-Listener für den "Alright, thanks!" Button
-  acknowledgeButton.onclick = function() {
-    // Schließe das Nachrichtensbeispiel-Modal
-    messageExampleModal.style.display = "none";
-    // Berechne und aktualisiere die Auszahlung
-    var currentValue = targetSlider.value;
-    updatePayout(currentValue);
-    // Zeige Modal3 wieder an
-    modal3.style.display = "block";
-  };
-
-  // Berechnung der Kosten für die Auswahloptionen
-  function calculateOptionCost(option) {
-    switch(option) {
-      case 'salesExpectations':
-      case 'trustForecast':
-        return 0.20;
-      default:
-        return 0.00;
-    }
-  }
-});
 </script>
-  
 </body>
 </html>
