@@ -24,7 +24,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 33%;
+    height: 68.6%;
 }
 
 /* Stil für die Seitenüberschrift */
@@ -46,10 +46,29 @@ p {
 }
 
 #storeInfo {
-    max-height: 80px; /* Maximal zulässige Höhe der div */
-    overflow-y: auto; /* Vertikales Scrollen aktivieren, wenn der Inhalt die Höhe überschreitet */
+    max-height: none; /* Keine maximale Höhe festlegen */
+    overflow: visible; /* Kein Scrollen aktivieren, der Inhalt wird immer vollständig angezeigt */
     padding: 10px; /* Innenabstand für die Inhalte */
     word-wrap: break-word; /* Automatisches Umbruch von langen Wörtern */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Info-Container-Stile */
+#storeInfoContainer {
+    margin-top: 10px;
+    max-height: none; /* Keine maximale Höhe festlegen */
+    overflow: visible; /* Kein Scrollen aktivieren */
+}
+
+#storeInfo p {
+    margin: 0;
+}
+
+#storeInfo label {
+    display: inline-block;
+    margin-right: 10px;
 }
 
 
@@ -76,7 +95,7 @@ p {
         height: 30%;
     }
     .content-box3 {
-        height: 30%;
+        height: 60%;
     }
 }
 
@@ -225,28 +244,6 @@ p {
     cursor: pointer;
 }
 
-/* Info-Container-Stile */
-#storeInfoContainer {
-    margin-top: 10px;
-    max-height: 200px; /* Maximale Höhe für den Container */
-    overflow: auto;    /* Scrollbar nur wenn nötig */
-}
-
-#storeInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#storeInfo p {
-    margin: 0;
-}
-
-#storeInfo label {
-    display: inline-block;
-    margin-right: 10px;
-}
-
 /* Slider Wrapper */
 #sliderWrapper {
     display: flex;
@@ -262,6 +259,19 @@ p {
 
 /* Slider-Wert */
 #sliderValue {
+    font-weight: bold;
+    color: #74B027; /* Grüner Farbton für den Slider-Wert */
+    margin-left: 10px;
+}
+
+/* Slider1 */
+#targetSlider1 {
+    width: 100%;
+    accent-color: #74B027; /* Setzt die Farbe des Sliders auf Grün */
+}
+
+/* Slider-Wert1 */
+#sliderValue1 {
     font-weight: bold;
     color: #74B027; /* Grüner Farbton für den Slider-Wert */
     margin-left: 10px;
@@ -308,3 +318,4 @@ p {
   .option-btn:hover {
     background-color: #5a9b1e;
   }
+
