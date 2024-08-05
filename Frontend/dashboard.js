@@ -26,7 +26,7 @@
         return data;
     }
 
-    // Funktion zum Analysieren der CSV-Daten und Extrahieren der Werte mit der Bedingung
+// Funktion zum Analysieren der CSV-Daten und Extrahieren der Werte mit der Bedingung
 function parseCSVWithCondition(csv) {
     const lines = csv.split('\n');
     const data = {};
@@ -60,7 +60,7 @@ function parseCSVWithCondition(csv) {
     return data;
 }
 
-    // Funktion zum Analysieren der CSV-Daten und Extrahieren aller Werte
+// Funktion zum Analysieren der CSV-Daten und Extrahieren aller Werte
 function parseCSVAll(csv) {
     const lines = csv.split('\n');
     const data = {};
@@ -91,7 +91,7 @@ function parseCSVAll(csv) {
 
     return data;
 }
-    
+
 // Funktion zum Analysieren der CSV-Daten und Extrahieren der Store-Informationen
 function parseStoreInfo(csv) {
     const lines = csv.split('\n');
@@ -116,18 +116,20 @@ function parseStoreInfo(csv) {
         const storeType = parts[5].trim(); // Die 6. Spalte enthält den Store-Typ
         const assortment = parts[6].trim(); // Die 7. Spalte enthält das Assortment
         const competitionDistance = parts[7].trim(); // Die 8. Spalte enthält die Wettbewerbsdistanz
+        const promo = parts[8].trim(); // Die 9. Spalte enthält promo
 
         // Speichere die Store-Informationen im Datenobjekt
         data[store] = {
             storeType: storeType,
             assortment: assortment,
-            competitionDistance: competitionDistance
+            competitionDistance: competitionDistance,
+            promo: promo
         };
     }
 
     return data;
 }
-    
+        
 // Funktion zum Aktualisieren der Store-Informationen im HTML
 function updateStoreInfo(selectedStore, storeInfoData) {
     const storeInfoContainer = document.getElementById('storeInfo');
@@ -142,16 +144,26 @@ function updateStoreInfo(selectedStore, storeInfoData) {
     if (storeInfo) {
         const storeInfoDiv = document.createElement('div');
         storeInfoDiv.innerHTML = `
-            <p><strong>Store Type:</strong>
-            <label><input type="checkbox" ${storeInfo.storeType === 'a' ? 'checked' : ''} disabled> A</label>
-            <label><input type="checkbox" ${storeInfo.storeType === 'b' ? 'checked' : ''} disabled> B</label>
-            <label><input type="checkbox" ${storeInfo.storeType === 'c' ? 'checked' : ''} disabled> C</label></p>
-            <p><strong>Assortment:</strong>
-            <label><input type="checkbox" ${storeInfo.assortment === 'basic' ? 'checked' : ''} disabled> Basic</label>
-            <label><input type="checkbox" ${storeInfo.assortment === 'extra' ? 'checked' : ''} disabled> Extra</label>
-            <label><input type="checkbox" ${storeInfo.assortment === 'extended' ? 'checked' : ''} disabled> Extended</label></p>
-            <p><strong>Distance to next store:</strong> ${storeInfo.competitionDistance}km</p>
-        `;
+  <p><strong>Store Type:</strong></p>
+  <p>
+    ${storeInfo.storeType}
+  </p>
+  <br><p><strong>Assortment:</strong></p>
+  <p>
+    <label><input type="checkbox" ${storeInfo.assortment === 'basic' ? 'checked' : ''} disabled> Basic</label>
+    <label><input type="checkbox" ${storeInfo.assortment === 'extra' ? 'checked' : ''} disabled> Extra</label>
+    <label><input type="checkbox" ${storeInfo.assortment === 'extended' ? 'checked' : ''} disabled> Extended</label>
+  </p>
+  <br><p><strong>Distance to next store:</strong></p>
+  <p>
+  ${storeInfo.competitionDistance}km
+  </p>
+  <br><p><strong>Promotion:</strong></p>
+  <p>
+  ${storeInfo.promo}
+  </p>
+`;
+
         storeInfoContainer.appendChild(storeInfoDiv);
     } else {
         storeInfoContainer.textContent = 'Store-Informationen nicht verfügbar';
@@ -192,8 +204,8 @@ function updateButtonActivity() {
     const prevButton = document.getElementById('prevStoreButton');
     const nextButton = document.getElementById('nextStoreButton');
 
-    // Wenn weniger als zwei Stores ausgewählt sind, deaktiviere die Schaltflächen
-    if (stores.length === 1) {
+    // SCHALTFLÄCHEN AKTUELL DEAKTIVIERT
+    if (stores.length < 99) {
         prevButton.disabled = true;
         nextButton.disabled = true;
     } else {
@@ -309,8 +321,8 @@ function updateGraphWithCSVData(data, chart) {
     chart.data.labels = labels;
     chart.data.datasets = datasets;
 
-    chart.options.scales.y.min = minValue - 1000;
-    chart.options.scales.y.max = maxValue + 1000;
+chart.options.scales.y.min = Math.floor((minValue - 1000) / 100) * 100;
+chart.options.scales.y.max = Math.ceil((maxValue + 1000) / 100) * 100;
 
     chart.update();
 }
@@ -334,7 +346,7 @@ lineChart = new Chart(lineCtx, {
     options: {
         plugins: {
             legend: {
-                display: true,
+                display: false,
                 position: 'top',
                 labels: {
                     font: {
@@ -366,6 +378,7 @@ lineChart = new Chart(lineCtx, {
         }
     }
 });
+
             // Media Query für kleine Bildschirme
             if (window.matchMedia('(max-width: 768px)').matches) {
                 // Optionen für kleine Bildschirme anpassen
@@ -384,7 +397,7 @@ lineChart2 = new Chart(lineCtx2, {
     options: {
         plugins: {
             legend: {
-                display: true,
+                display: false,
                 position: 'top',
                 labels: {
                     font: {
@@ -463,278 +476,278 @@ if (window.matchMedia('(max-width: 768px)').matches) {
 };
 
             // Funktion zum Anzeigen des benutzerdefinierten Modalfensters mit Informationen
-            function showModalWithInfo(infoText) {
-                const modal = document.getElementById('modal');
-                const modalText = document.getElementById('modal-text');
-                modalText.textContent = infoText;
-                modal.style.display = 'block';
-            }
+// function showModalWithInfo(infoText) {
+//     const modal = document.getElementById('modal');
+//     const modalText = document.getElementById('modal-text');
+//     modalText.textContent = infoText;
+//     modal.style.display = 'block';
+// }
 
-            // Funktion zum Schließen des Modalfensters
-            function closeModal() {
-                document.getElementById('modal').style.display = 'none';
-            }
+// Funktion zum Schließen des Modalfensters
+// function closeModal() {
+//     document.getElementById('modal').style.display = 'none';
+// }
 
-            // Eventlistener für den Close-Button im Modalfenster
-            const closeBtn = document.querySelector('#modal .close');
-            closeBtn.addEventListener('click', closeModal);
+// Eventlistener für den Close-Button im Modalfenster
+// const closeBtn = document.querySelector('#modal .close');
+// closeBtn.addEventListener('click', closeModal);
 
-            // Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
-            document.getElementById('questionButton').addEventListener('click', function() {
-                const modal = document.getElementById('modal');
-                modal.style.display = 'block';
-                showModalWithInfo();
-            });
+// Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
+// document.getElementById('questionButton').addEventListener('click', function() {
+//     const modal = document.getElementById('modal');
+//     modal.style.display = 'block';
+//     showModalWithInfo();
+// });
 
-            // Funktion zum Öffnen des zweiten Modalfensters
-            document.getElementById('mehrButton').addEventListener('click', function() {
-                document.getElementById('modal2').style.display = 'block';
-            });
+// Funktion zum Öffnen des zweiten Modalfensters
+// document.getElementById('mehrButton').addEventListener('click', function() {
+//     document.getElementById('modal2').style.display = 'block';
+// });
 
-                                    // Funktion zum Leeren des Eingabefelds
-                                    function clearInputField() {
-                                        document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
-                                    }
-                    
-                                    // Funktion zum Entfernen des zusätzlichen Texts
-                                    function removeAdditionalText() {
-                                        const additionalText = document.getElementById('additionalText');
-                                        if (additionalText) {
-                                            additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
-                                        }
-                                    }
+// Funktion zum Leeren des Eingabefelds
+// function clearInputField() {
+//     document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
+// }
 
-            // Funktion zum Schließen des zweiten Modalfensters
-            function closeModal2() {
-                document.getElementById('modal2').style.display = 'none';
-                clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
-                removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
-            }
+// Funktion zum Entfernen des zusätzlichen Texts
+// function removeAdditionalText() {
+//     const additionalText = document.getElementById('additionalText');
+//     if (additionalText) {
+//         additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
+//     }
+// }
 
-            // Eventlistener für den zweiten Close-Button im zweiten Modalfenster
-            const closeBtn2 = document.querySelector('#modal2 .close');
-            closeBtn2.addEventListener('click', closeModal2);
+// Funktion zum Schließen des zweiten Modalfensters
+// function closeModal2() {
+//     document.getElementById('modal2').style.display = 'none';
+//     clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
+//     removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
+// }
+
+// Eventlistener für den zweiten Close-Button im zweiten Modalfenster
+// const closeBtn2 = document.querySelector('#modal2 .close');
+// closeBtn2.addEventListener('click', closeModal2);
 
 // Funktion zum Erstellen der Tabs basierend auf den ausgewählten Stores
-function createTabs(selectedStores) {
-    const tabContainer = document.getElementById('myTab');
-    const tabContentContainer = document.getElementById('myTabContent');
-    const questionButton = document.getElementById('questionButton');
-    tabContainer.innerHTML = '';
-    tabContentContainer.innerHTML = '';
+// function createTabs(selectedStores) {
+//     const tabContainer = document.getElementById('myTab');
+//     const tabContentContainer = document.getElementById('myTabContent');
+//     const questionButton = document.getElementById('questionButton');
+//     tabContainer.innerHTML = '';
+//     tabContentContainer.innerHTML = '';
 
-    selectedStores.forEach(store => {
-        // Tab-Link erstellen
-        const tabLink = document.createElement('button');
-        tabLink.classList.add('nav-link');
-        tabLink.setAttribute('id', `${store}-tab`);
-        tabLink.setAttribute('data-bs-toggle', 'tab');
-        tabLink.setAttribute('data-bs-target', `#${store}`);
-        tabLink.setAttribute('type', 'button');
-        tabLink.setAttribute('role', 'tab');
-        tabLink.setAttribute('aria-controls', store);
-        tabLink.setAttribute('aria-selected', 'false');
-        tabLink.textContent = store;
+//     selectedStores.forEach(store => {
+//         // Tab-Link erstellen
+//         const tabLink = document.createElement('button');
+//         tabLink.classList.add('nav-link');
+//         tabLink.setAttribute('id', `${store}-tab`);
+//         tabLink.setAttribute('data-bs-toggle', 'tab');
+//         tabLink.setAttribute('data-bs-target', `#${store}`);
+//         tabLink.setAttribute('type', 'button');
+//         tabLink.setAttribute('role', 'tab');
+//         tabLink.setAttribute('aria-controls', store);
+//         tabLink.setAttribute('aria-selected', 'false');
+//         tabLink.textContent = store;
 
-        // Tab-Inhalt erstellen
-        const tabContent = document.createElement('div');
-        tabContent.classList.add('tab-pane', 'fade');
-        tabContent.setAttribute('id', store);
-        tabContent.setAttribute('role', 'tabpanel');
-        tabContent.setAttribute('aria-labelledby', `${store}-tab`);
-        tabContent.innerHTML = `
-            <p id="modal-text">
-            <p></p>
-                <p>Following you can see which factors had the biggest influence on the sales forecast:</p>
-                <p></p>
-                <div class="progress" style="margin-bottom: 15px;">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                </div>
-                <div class="data-container"></div>
-            </p>
-        `;
+//         // Tab-Inhalt erstellen
+//         const tabContent = document.createElement('div');
+//         tabContent.classList.add('tab-pane', 'fade');
+//         tabContent.setAttribute('id', store);
+//         tabContent.setAttribute('role', 'tabpanel');
+//         tabContent.setAttribute('aria-labelledby', `${store}-tab`);
+//         tabContent.innerHTML = `
+//             <p id="modal-text">
+//             <p></p>
+//                 <p>Following you can see which factors had the biggest influence on the sales forecast:</p>
+//                 <p></p>
+//                 <div class="progress" style="margin-bottom: 15px;">
+//                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+//                 </div>
+//                 <div class="progress">
+//                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+//                 </div>
+//                 <div class="data-container"></div>
+//             </p>
+//         `;
 
-        // Tab-Link und Tab-Inhalt dem Container hinzufügen
-        tabContainer.appendChild(tabLink);
-        tabContentContainer.appendChild(tabContent);
-    });
+//         // Tab-Link und Tab-Inhalt dem Container hinzufügen
+//         tabContainer.appendChild(tabLink);
+//         tabContentContainer.appendChild(tabContent);
+//     });
 
-// Event-Listener für den questionButton, um Daten zu laden
-questionButton.addEventListener('click', function() {
-    const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
-    const tabContent = document.querySelector(`#${activeTabId}`);
-    fetch('https://controlling.xaidemo.de/frontend/feature_importance/')
-        .then(function(response) {
-            if (!response.ok) {
-                throw new Error('Netzwerkantwort war nicht ok');
-            }
-            return response.json();
-        })
-        .then(function(data) {
-            const progressContainers = tabContent.querySelectorAll('.progress');
-            const dataContainer = tabContent.querySelector('.data-container');
+//     // Event-Listener für den questionButton, um Daten zu laden
+//     questionButton.addEventListener('click', function() {
+//         const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
+//         const tabContent = document.querySelector(`#${activeTabId}`);
+//         fetch('http://127.0.0.1:8000/feature_importance/')
+//             .then(function(response) {
+//                 if (!response.ok) {
+//                     throw new Error('Netzwerkantwort war nicht ok');
+//                 }
+//                 return response.json();
+//             })
+//             .then(function(data) {
+//                 const progressContainers = tabContent.querySelectorAll('.progress');
+//                 const dataContainer = tabContent.querySelector('.data-container');
 
-            dataContainer.innerHTML = '';
-            progressContainers.forEach(container => {
-                const label = container.previousElementSibling;
-                if (label && label.tagName === "P") {
-                    label.remove();
-                }
-            });
+//                 dataContainer.innerHTML = '';
+//                 progressContainers.forEach(container => {
+//                     const label = container.previousElementSibling;
+//                     if (label && label.tagName === "P") {
+//                         label.remove();
+//                     }
+//                 });
 
-            // Beschränke die Verarbeitung auf die ersten zwei Einträge der API-Antwort
-            const itemsToProcess = data.slice(0, 2);
-            itemsToProcess.forEach((item, index) => {
-                if (progressContainers[index]) {
-                    // Erstelle und füge neue Beschriftung hinzu
-                    const progressLabel = document.createElement('p');
-                    progressLabel.textContent = "- " + item.col_name;
-                    progressContainers[index].parentNode.insertBefore(progressLabel, progressContainers[index]);
+//                 // Beschränke die Verarbeitung auf die ersten zwei Einträge der API-Antwort
+//                 const itemsToProcess = data.slice(0, 2);
+//                 itemsToProcess.forEach((item, index) => {
+//                     if (progressContainers[index]) {
+//                         // Erstelle und füge neue Beschriftung hinzu
+//                         const progressLabel = document.createElement('p');
+//                         progressLabel.textContent = "- " + item.col_name;
+//                         progressContainers[index].parentNode.insertBefore(progressLabel, progressContainers[index]);
 
-                    // Aktualisiere Progress Bar
-                    const progressBar = progressContainers[index].querySelector('.progress-bar');
-                    const value = item.percentage_importance;
-                    progressBar.setAttribute('aria-valuenow', value);
-                    progressBar.style.width = `${value}%`;
-                    progressBar.textContent = `${value}%`;
-                }
-            });
+//                         // Aktualisiere Progress Bar
+//                         const progressBar = progressContainers[index].querySelector('.progress-bar');
+//                         const value = item.percentage_importance;
+//                         progressBar.setAttribute('aria-valuenow', value);
+//                         progressBar.style.width = `${value}%`;
+//                         progressBar.textContent = `${value}%`;
+//                     }
+//                 });
 
-        })
-        .catch(function(error) {
-            console.error('Fehler beim Abrufen der Daten:', error);
-            dataContainer.innerHTML = `<p>Fehler beim Laden der Daten</p>`;
-        });
-    
-    });
+//             })
+//             .catch(function(error) {
+//                 console.error('Fehler beim Abrufen der Daten:', error);
+//                 dataContainer.innerHTML = `<p>Fehler beim Laden der Daten</p>`;
+//             });
+        
+//     });
 
-    questionButton.addEventListener('click', function() {
-        var modalContent = document.querySelector('#modal2 .modal-content');
-    
-        // Funktion zum Entfernen alter Paragraphen
-        function removeOldParagraphs() {
-            // Entferne alle alten Paragraphen
-            var paragraphs = modalContent.querySelectorAll('p');
-            paragraphs.forEach(paragraph => {
-                paragraph.remove();
-            });
-        }
-    
-        // Lade die Daten von der API
-        fetch('http://127.0.0.1:8000/counterfactual_explanations/')
-            .then(response => response.json())
-            .then(data => {
-                removeOldParagraphs(); // Entferne alte Paragraphen
-    
-                // Variablen zum Speichern der API-Daten
-                let salesActual, salesCounterfactual, changes, formattedChanges;
-    
-                data.forEach(item => {
-                    var paragraph = document.createElement('p');
-    
-                    salesActual = item.sales_actual;
-                    salesCounterfactual = item.sales_counterfactual;
-                    changes = item.changes;
-                    // Formatiere Absätze
-                    formattedChanges = changes.map(change => `- ${change}`).join('<br>');
-    
-                    paragraph.innerHTML = `Sales are estimated at ${salesActual}€.<br>
-                    <br>Enter your expected sales:`;
-                    modalContent.appendChild(paragraph);
-                });
-    
-                // Überprüfen, ob das Eingabefeld und der Button bereits existieren
-                if (!document.getElementById('inputDiv')) {
-                    // Erstelle das Eingabefeld und den Bestätigen-Button dynamisch
-                    var inputDiv = document.createElement('div');
-                    inputDiv.id = 'inputDiv';
-                    inputDiv.style.display = 'flex';
-                    inputDiv.style.alignItems = 'center';
-                    inputDiv.style.marginTop = '1px'; // optional, um Abstand zu den Textabsätzen zu schaffen
-    
-                    var inputField = document.createElement('input');
-                    inputField.type = 'text';
-                    inputField.id = 'zahlInput';
-                    inputField.style.marginBottom = '10px';
-                    inputField.style.marginRight = '5px';
-    
-                    var spanElement = document.createElement('span');
-                    spanElement.textContent = '€';
-    
-                    var confirmButton = document.createElement('button');
-                    confirmButton.id = 'bestaetigenButton';
-                    confirmButton.className = 'btn custom-btn';
-                    confirmButton.style.marginLeft = '10px';
-                    confirmButton.disabled = true; // initial disabled
-                    confirmButton.textContent = 'confirm';
-    
-                    inputDiv.appendChild(inputField);
-                    inputDiv.appendChild(spanElement);
-                    inputDiv.appendChild(confirmButton);
-    
-                    modalContent.appendChild(inputDiv);
-    
-                    // Füge Event-Listener für das Eingabefeld und den Bestätigen-Button hinzu
-                    confirmButton.addEventListener('click', function() {
-                        // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
-                        if (!document.getElementById('additionalText')) {
-                            // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
-                            const additionalText = document.createElement('p');
-                            additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
-                            additionalText.innerHTML = `<br>Sales are not within the given range for the following reasons:<br>${formattedChanges}`;
+//     questionButton.addEventListener('click', function() {
+//         var modalContent = document.querySelector('#modal2 .modal-content');
+
+//         // Funktion zum Entfernen alter Paragraphen
+//         function removeOldParagraphs() {
+//             // Entferne alle alten Paragraphen
+//             var paragraphs = modalContent.querySelectorAll('p');
+//             paragraphs.forEach(paragraph => {
+//                 paragraph.remove();
+//             });
+//         }
+
+//         // Lade die Daten von der API
+//         fetch('http://127.0.0.1:8000/counterfactual_explanations/')
+//             .then(response => response.json())
+//             .then(data => {
+//                 removeOldParagraphs(); // Entferne alte Paragraphen
+
+//                 // Variablen zum Speichern der API-Daten
+//                 let salesActual, salesCounterfactual, changes, formattedChanges;
+
+//                 data.forEach(item => {
+//                     var paragraph = document.createElement('p');
+
+//                     salesActual = item.sales_actual;
+//                     salesCounterfactual = item.sales_counterfactual;
+//                     changes = item.changes;
+//                     // Formatiere Absätze
+//                     formattedChanges = changes.map(change => `- ${change}`).join('<br>');
+
+//                     paragraph.innerHTML = `Sales are estimated at ${salesActual}€.<br>
+//                     <br>Enter your expected sales:`;
+//                     modalContent.appendChild(paragraph);
+//                 });
+
+//                 // Überprüfen, ob das Eingabefeld und der Button bereits existieren
+//                 if (!document.getElementById('inputDiv')) {
+//                     // Erstelle das Eingabefeld und den Bestätigen-Button dynamisch
+//                     var inputDiv = document.createElement('div');
+//                     inputDiv.id = 'inputDiv';
+//                     inputDiv.style.display = 'flex';
+//                     inputDiv.style.alignItems = 'center';
+//                     inputDiv.style.marginTop = '1px'; // optional, um Abstand zu den Textabsätzen zu schaffen
+
+//                     var inputField = document.createElement('input');
+//                     inputField.type = 'text';
+//                     inputField.id = 'zahlInput';
+//                     inputField.style.marginBottom = '10px';
+//                     inputField.style.marginRight = '5px';
+
+//                     var spanElement = document.createElement('span');
+//                     spanElement.textContent = '€';
+
+//                     var confirmButton = document.createElement('button');
+//                     confirmButton.id = 'bestaetigenButton';
+//                     confirmButton.className = 'btn custom-btn';
+//                     confirmButton.style.marginLeft = '10px';
+//                     confirmButton.disabled = true; // initial disabled
+//                     confirmButton.textContent = 'confirm';
+
+//                     inputDiv.appendChild(inputField);
+//                     inputDiv.appendChild(spanElement);
+//                     inputDiv.appendChild(confirmButton);
+
+//                     modalContent.appendChild(inputDiv);
+
+//                     // Füge Event-Listener für das Eingabefeld und den Bestätigen-Button hinzu
+//                     confirmButton.addEventListener('click', function() {
+//                         // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
+//                         if (!document.getElementById('additionalText')) {
+//                             // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
+//                             const additionalText = document.createElement('p');
+//                             additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
+//                             additionalText.innerHTML = `<br>Sales are not within the given range for the following reasons:<br>${formattedChanges}`;
                             
-                            // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
-                            modalContent.appendChild(additionalText);
-                        }
-                    });
-    
-                    // Überprüfung der Eingabe und Aktivierung des Buttons
-                    inputField.addEventListener('input', function() {
-                        var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
-                        var button = document.getElementById('bestaetigenButton');
-                        if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
-                            button.disabled = false;
-                        } else {
-                            button.disabled = true;
-                        }
-                    });
-                } else {
-                    // Stelle sicher, dass das Eingabefeld und der Button immer am Ende bleiben
-                    modalContent.appendChild(document.getElementById('inputDiv'));
-                }
-            })
-            .catch(error => {
-                console.error('Fehler beim Abrufen der Daten:', error);
-            });
-    });
+//                             // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
+//                             modalContent.appendChild(additionalText);
+//                         }
+//                     });
 
-    // Den ersten Tab als aktiv markieren
-    const firstTab = tabContainer.firstElementChild;
-    const firstTabContent = tabContentContainer.firstElementChild;
-    firstTab.classList.add('active');
-    firstTab.setAttribute('aria-selected', 'true');
-    firstTabContent.classList.add('show', 'active');
-}
+//                     // Überprüfung der Eingabe und Aktivierung des Buttons
+//                     inputField.addEventListener('input', function() {
+//                         var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
+//                         var button = document.getElementById('bestaetigenButton');
+//                         if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
+//                             button.disabled = false;
+//                         } else {
+//                             button.disabled = true;
+//                         }
+//                     });
+//                 } else {
+//                     // Stelle sicher, dass das Eingabefeld und der Button immer am Ende bleiben
+//                     modalContent.appendChild(document.getElementById('inputDiv'));
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error('Fehler beim Abrufen der Daten:', error);
+//             });
+//     });
+
+//     // Den ersten Tab als aktiv markieren
+//     const firstTab = tabContainer.firstElementChild;
+//     const firstTabContent = tabContentContainer.firstElementChild;
+//     firstTab.classList.add('active');
+//     firstTab.setAttribute('aria-selected', 'true');
+//     firstTabContent.classList.add('show', 'active');
+// }
 
 // Funktion zum Aktualisieren der Tabs basierend auf den ausgewählten Stores
-function updateTabs() {
-    const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-    createTabs(selectedStores);
-}
+// function updateTabs() {
+//     const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+//     createTabs(selectedStores);
+// }
 
 // Event-Listener für Änderungen in den Checkboxen
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', updateTabs);
-});
+// document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+//     checkbox.addEventListener('change', updateTabs);
+// });
 
 // Balkendiagramm initialisieren
 barChart = new Chart(barCtx, {
     type: 'bar',
     data: {
-        labels: ['2013', '2014', '2015 (current)'],
+        labels: ['2022', '2023', '2024 (current)'],
         datasets: [{
             label: 'Jahresumsatz',
             data: [132498, 130456, 69477],
