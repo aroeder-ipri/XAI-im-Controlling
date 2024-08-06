@@ -59,9 +59,9 @@
       <label for="targetSlider">Target Value:</label>
       <span id="sliderValue"></span>
       <div id="sliderWrapper">
-        <span id="minValue">+$8000</span>
+        <span id="minValue">$8000</span>
         <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">
-        <span id="maxValue">+$15000</span>
+        <span id="maxValue">$15000</span>
       </div>
     </div>
     <!-- Anzeige der erwarteten Auszahlung -->
@@ -109,9 +109,9 @@
         <div class="slider-container">
           <center><span id="sliderValue1">+0</span></center>
           <div id="sliderWrapper">
-            <span id="minValue">+$8000</span>
+            <span id="minValue">$8000</span>
             <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="0">
-            <span id="maxValue">+$15000</span>
+            <span id="maxValue">$15000</span>
           </div>
           <p></p>
           <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later point.</p>
@@ -246,13 +246,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Initialisiere den Slider und die Auszahlung
     var initialSliderValue = targetSlider.value;
-    sliderValue.textContent = `+${initialSliderValue}`;
+    sliderValue.textContent = `$${initialSliderValue}`;
     updatePayout(initialSliderValue);
 
     // Event-Listener für Slider-Eingaben
     targetSlider.oninput = function() {
         var currentValue = this.value;
-        sliderValue.textContent = `+${currentValue}`;
+        sliderValue.textContent = `$${currentValue}`;
         yourTarget = currentValue;
         updatePayout(currentValue);
     };
@@ -423,12 +423,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
       // Initialisiere den Slider und die Auszahlung
       var initialSliderValue1 = targetSlider1.value;
-      sliderValue1.textContent = `+$${initialSliderValue1}`;
+      sliderValue1.textContent = `$${initialSliderValue1}`;
 
       // Event-Listener für Slider-Eingaben
       targetSlider1.oninput = function() {
           var currentValue1 = this.value;
-          sliderValue1.textContent = `+$${currentValue1}`;
+          sliderValue1.textContent = `$${currentValue1}`;
           savedSliderValue = currentValue1; // Speichern des aktuellen Werts
       };
 
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
               }
 
               // Lade die JSON-Daten
-              const response = await fetch("/shap_feature_importance.json");
+              const response = await fetch("/Backend/shap_feature_importance.json");
               if (!response.ok) {
                   throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
               }
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       async function openModal2() {
           try {
               // Lade die JSON-Daten
-              const data = await loadJSON("/cf_470.json");
+              const data = await loadJSON("/Backend/cf_470.json");
               
               // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
               let closestData = null;
@@ -593,6 +593,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       // Event Listener für den "questionButton"
       questionButton.addEventListener("click", function() {
           determineAndOpenModal();
+          questionButton.style.display = "none";
       });
   });
 </script>
