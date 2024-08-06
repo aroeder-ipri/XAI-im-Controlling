@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
               }
 
               // Lade die JSON-Daten
-              const response = await fetch("/Backend/shap_feature_importance.json");
+              const response = await fetch("/shap_feature_importance.json");
               if (!response.ok) {
                   throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
               }
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       async function openModal2() {
           try {
               // Lade die JSON-Daten
-              const data = await loadJSON("/Backend/cf_470.json");
+              const data = await loadJSON("/cf_470.json");
               
               // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
               let closestData = null;
