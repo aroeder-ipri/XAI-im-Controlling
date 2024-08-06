@@ -99,7 +99,9 @@ Train XGBoost model without parameter tuning
 
 # Split train and test
 split_date = 2015
-train = df.loc[(df.Year < split_date) & (df.Month < month)].copy()
+
+# year not 2015 and month not greater 4
+train = df.loc[(df.Year != split_date) | (df.Month < month)].copy()
 test = df.loc[(df.Year >= split_date) & (df.Month == month)].copy()
 
 X_train = train.drop(labels=['Sales'], axis=1)
@@ -194,14 +196,14 @@ def generate_cf(query, desired_range, features_vary, permitted_range):
     return cf
 
 
-def get_cf(store, X_test, y_pred, desired_range, features_vary):
+def get_cf(store, X_test, y_pred, desired_range, features_vary, permitted_range):
     query_instances_rossmann = X_test[store-1:store]
     y_query = y_pred[store-1:store]
     query = query_instances_rossmann
-    permitted_range = {'Month': [max(1,query['Month'].values[0]-1),min(12,query['Month'].values[0]+1)],
-                       'Holidays_lastmonth':[max(0,query['Holidays_lastmonth'].values[0]-5),min(28,query['Holidays_lastmonth'].values[0]+5)],
-                       'Holidays_nextmonth':[max(0,query['Holidays_nextmonth'].values[0]-5),min(28,query['Holidays_nextmonth'].values[0]+5)],
-                       'Holidays_thismonth':[max(0,query['Holidays_thismonth'].values[0]-5),min(28,query['Holidays_thismonth'].values[0]+5)]}
+    #permitted_range = {'Month': [max(1,query['Month'].values[0]-1),min(12,query['Month'].values[0]+1)],
+    #                   'Holidays_lastmonth':[max(0,query['Holidays_lastmonth'].values[0]-5),min(28,query['Holidays_lastmonth'].values[0]+5)],
+    #                   'Holidays_nextmonth':[max(0,query['Holidays_nextmonth'].values[0]-5),min(28,query['Holidays_nextmonth'].values[0]+5)],
+    #                   'Holidays_thismonth':[max(0,query['Holidays_thismonth'].values[0]-5),min(28,query['Holidays_thismonth'].values[0]+5)]}
     #desired_range = [desired_percentage*y_query.values[0], 5*y_query.values[0]]
     #desired_range = [1.05*y_query[0], 1.1*y_query[0]]
     features_vary = features_vary
@@ -253,57 +255,62 @@ def interpret_cf(genetic_rossmann, query, y_query):
 def case_statement(top_features, i, query):
     features = query.columns
     if top_features[i][1]== features[1] and top_features[i][0] > 0: # customers
-        result = str(int(round(top_features[i][0]))) + ' Kunden zu wenig in diesem Monat'
+        result = str(int(round(top_features[i][0]))) + ' customers too few in April'
     elif top_features[i][1]== features[1] and top_features[i][0] < 0: # customers
-        result = str(int(round(-top_features[i][0]))) + ' Kunden zu viel in diesem Monat'
+        result = str(int(round(-top_features[i][0]))) + ' customers too many in April'
     elif top_features[i][1]== features[2] and top_features[i][0] > query.values[0][2]: # open
-        result = 'zu wenig geöffnet'
+        result = 'too few days opened in April'
     elif top_features[i][1]== features[2] and top_features[i][0] < query.values[0][2]: # open
-        result = 'zu oft geöffnet'
+        result = 'too many days opened in April'
     elif top_features[i][1]== features[3] and top_features[i][0] > query.values[0][3]: # promo
-        result = 'zu wenig Promo'
+        result = 'too few daily promotions in April'
     elif top_features[i][1]== features[3] and top_features[i][0] < query.values[0][3]: # promo
-        result = 'zu viel Promo'
+        result = 'too many daily promotions in April'
     elif top_features[i][1]== features[4] and top_features[i][0] > 0: # stateholiday
-        result = str(int(round(top_features[i][0]))) + ' gesetzliche(r) Feiertag(e) zu wenig im Monat'
+        result = str(int(round(top_features[i][0]))) + ' state holidays too few in April'
     elif top_features[i][1]== features[4] and top_features[i][0] < 0: # stateholiday
-        result = str(int(round(-top_features[i][0]))) + ' gesetzliche(r) Feiertag(e) zu viel im Monat'
+        result = str(int(round(-top_features[i][0]))) + ' state holidays too many in April'
     elif top_features[i][1]== features[5] and top_features[i][0] > 0: # schoolholiday
-        result = str(int(round(top_features[i][0]*30))) + ' schulfreie(r) Tag(e) zu wenig in diesem Monat'
+        result = str(int(round(top_features[i][0]*30))) + ' school holidays too few in April'
     elif top_features[i][1]== features[5] and top_features[i][0] < 0: # schoolholiday
-        result = str(int(round(-top_features[i][0]*30))) + ' schulfreie(r) Tag(e) zu viel in diesem Monat'
+        result = str(int(round(-top_features[i][0]*30))) + ' school holidays too few in April'
     elif top_features[i][1]== features[6] and top_features[i][0] < 0: # schoolholiday
-        result = 'Durchschnittlcher Verkauf pro Kunde um ' + str(int(round(-top_features[i][0]))) + '€ zu hoch'
+        result = 'average sales per customer ' + str(int(round(-top_features[i][0]))) + '€ too high in April'
     elif top_features[i][1]== features[6] and top_features[i][0] > 0: # schoolholiday
-        result = 'Durchschnittlcher Verkauf pro Kunde um ' + str(int(round(top_features[i][0]))) + '€ zu niedrig'
+        result = 'average sales per customer ' + str(int(round(top_features[i][0]))) + '€ too low in April'
     elif top_features[i][1]== features[9]: # month
-        result = 'Änderung zu Monat ' + str(int(top_features[i][0]+query.values[0][9]))
+        result = 'month is April instead of ' + str(int(top_features[i][0]+query.values[0][9]))
     elif top_features[i][1]== features[13]: # store type
-        result = 'Store-Typ ' + str(int(query.values[0][13])) + ' statt ' + str(int(top_features[i][0]+query.values[0][13]))
+        result = 'store type is ' + str(int(query.values[0][13])) + ' instead of ' + str(int(top_features[i][0]+query.values[0][13]))
     elif top_features[i][1]== features[14]: # assortment
-        result = 'Assortment-Typ ' + str(int(query.values[0][14])) + ' statt ' + str(int(top_features[i][0]+query.values[0][14]))
+        result = 'assortment type is ' + str(int(query.values[0][14])) + ' instead of ' + str(int(top_features[i][0]+query.values[0][14]))
     elif top_features[i][1]== features[15] and top_features[i][0] == 1: # promo2
-        result = 'keine Teilnahme an Promo2'
+        result = 'store does not participate in ongoing promotion'
     elif top_features[i][1]== features[15] and top_features[i][0] == -1: # promo2
-        result = 'Teilnahme an Promo2 besteht'
+        result = 'store participates in ongoing promotion'
     elif top_features[i][1]== features[16]: # promointerval
-        result = 'Promointervall ' + str(int(query.values[0][16])) + ' statt ' + str(int(top_features[i][0]+query.values[0][16]))
+        result = 'ongoing promotion interval is ' + str(int(query.values[0][16])) + ' instead of ' + str(int(top_features[i][0]+query.values[0][16]))
     elif top_features[i][1]== features[19] and top_features[i][0] > 0: # holidays last week
-        result = str(int(round(top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu wenig im vorherigen Monat'
+        result = str(int(round(top_features[i][0]))) + ' school or state holidays too few in March'
     elif top_features[i][1]== features[19] and top_features[i][0] < 0: # holidays last week
-        result = str(int(round(-top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu viel im vorherigen Monat'
+        result = str(int(round(-top_features[i][0]))) + ' school or state holidays too many in March'
     elif top_features[i][1]== features[20] and top_features[i][0] > 0: # next week
-        result = str(int(round(top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu wenig im nächsten Monat'
+        result = str(int(round(top_features[i][0]))) + ' school or state holidays too few in May'
     elif top_features[i][1]== features[20] and top_features[i][0] < 0: # next week
-        result = str(int(round(-top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu viel im nächsten Monat'
+        result = str(int(round(-top_features[i][0]))) + ' school or state holidays too many in May'
     elif top_features[i][1]== features[21] and top_features[i][0] > 0: # this week
-        result = str(int(round(top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu wenig in diesem Monat'
+        result = str(int(round(top_features[i][0]))) + ' school or state holidays too few in April'
     elif top_features[i][1]== features[21] and top_features[i][0] < 0: # this week
-        result = str(int(round(-top_features[i][0]))) + ' Ferien- oder Feiertag(e) zu viel in diesem Monat'
+        result = str(int(round(-top_features[i][0]))) + ' school or state holidays too many in April'
     else:
-        result = 'Fehler bei Feature: ' + top_features[i][1]
+        result = 'error for feature: ' + top_features[i][1]
     return result
 
+
+# store types
+# 1 - city center, 2 - commercial area, 3 - suburbs, 4 - rural
+# assortment types
+# 1 - basic, 2 - extra, 3 - extended
 
 '''
 Generate CF
@@ -322,12 +329,12 @@ features_vary.remove('Year')
 features_vary.remove('SchoolHolidayRatio')
 features_vary.remove('OpenDayRatio')
 
-'''
+
 # Determine range of CFs
 
 percentages = [0.9,0.92,0.94,0.96,0.98,1.0,1.02,1.04,1.06,1.08,1.1,1.12,1.14,1.16,1.18,1.2]
-percentages = [0.9,0.93,0.96,0.99,1.02,1.05,1.08,1.11,1.14,1.17,1.2]
-percentages = [0.9,0.95,1.0,1.05,1.1,1.15,1.2]
+#percentages = [0.9,0.93,0.96,0.99,1.02,1.05,1.08,1.11,1.14,1.17,1.2]
+#percentages = [0.9,0.95,1.0,1.05,1.1,1.15,1.2]
 
 save_cfs = pd.DataFrame(columns=['Store', 'Sales', 'Sales_CF', 'Percentage1', 'Percentage2', 'CF', 'Explanation'])
 
@@ -335,16 +342,33 @@ save_cfs = pd.DataFrame(columns=['Store', 'Sales', 'Sales_CF', 'Percentage1', 'P
 query_instances_rossmann = X_test[store-1:store] 
 y_query = y_pred[store-1:store]
 query = query_instances_rossmann
-permitted_range = {"Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
-                   "Holidays_lastmonth":[max(0,query["Holidays_lastmonth"].values[0]-5),min(28,query["Holidays_lastmonth"].values[0]+5)],
-                   "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
-                   "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
+#permitted_range = {"Customers": [query["Customers"],query[]]
+ #                  "Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
+  #                 "Holidays_lastmonth":[max(0,query["Holidays_lastmonth"].values[0]-5),min(28,query["Holidays_lastmonth"].values[0]+5)],
+   #                "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
+    #               "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
 
 for k in range(1,len(percentages)):
+    if percentages[k] <= 1.0:
+        permitted_range = {"Customers": [0,query["Customers"].values[0]],
+                           "Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
+                           "Holidays_lastmonth":[max(0,query["Holidays_lastmonth"].values[0]-5),min(28,query["Holidays_lastmonth"].values[0]+5)],
+                           "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
+                           "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
+
+    else:
+        permitted_range = {"Customers": [query["Customers"].values[0],3*query["Customers"].values[0]],
+                           "Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
+                           "Holidays_lastmonth":[max(0,query["Holidays_lastmonth"].values[0]-5),min(28,query["Holidays_lastmonth"].values[0]+5)],
+                           "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
+                           "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
+
+    
+    
     desired_range = [percentages[k-1]*y_query[0], percentages[k]*y_query[0]]
     
     try:
-        genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary)
+        genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary, permitted_range)
         response_values, changes = interpret_cf(genetic_rossmann, query, y_query)
         
         # cf
@@ -368,15 +392,15 @@ for k in range(1,len(percentages)):
         print('No counterfactual found.')
         continue
 
-save_cfs.to_csv("C:/Users/laram/Downloads/cf_1097_3er.csv", decimal=".")
-'''
+save_cfs.to_csv("C:/Users/laram/Downloads/cf_470_2er_.csv", decimal=".")
+
 
 desired_range=[10000,12000]
 try:
     genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary)
     response_values, changes = interpret_cf(genetic_rossmann, query, y_query)
 except ValueError:
-    print('Kein Counterfactual gefunden. Versuchen Sie es mit einem anderen Zielbereich.')
+    print('No counterfactual found. Try another target range.')
 
 
 '''
