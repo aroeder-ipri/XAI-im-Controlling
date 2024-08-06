@@ -1,18 +1,8 @@
-// Funktionen zum Abrufen und Speichern des Zählers in localStorage
-function getStoredCounter() {
-    let storedCounter = localStorage.getItem('counter');
-    return storedCounter ? parseInt(storedCounter, 10) : 0;
-}
-
-function setStoredCounter(value) {
-    localStorage.setItem('counter', value);
-}
-
+// Funktion zur zufälligen Zuweisung der Gruppe
 function assignGroup() {
-    let counter = getStoredCounter();
-    counter++;
-    setStoredCounter(counter);
-    return counter % 2 === 0 ? 'CF' : 'FI';
+    const groups = ['CF', 'FI'];
+    const randomIndex = Math.floor(Math.random() * groups.length);
+    return groups[randomIndex];
 }
 
 // Teste die Funktion
