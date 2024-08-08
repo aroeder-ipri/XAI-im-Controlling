@@ -50,7 +50,7 @@ async function send_feedback(id, group) {
             })
         });
         const content = await rawResponse.json();
-        //console.log(content)
+        console.log(content)
     } catch (error) {
         console.error("Error sending feedback:", error);
     }
