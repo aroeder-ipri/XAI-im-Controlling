@@ -5,12 +5,6 @@ function assignGroup() {
     return groups[randomIndex];
 }
 
-// Teste die Funktion
-console.log(assignGroup()); // "FI" oder "CF", je nach dem aktuellen Wert von localStorage
-console.log(assignGroup()); // "FI" oder "CF"
-console.log(assignGroup()); // "FI" oder "CF"
-console.log(assignGroup()); // "FI" oder "CF"
-
 async function id_api_call() {
     const apiUrl = 'https://controlling.xaidemo.de/api/id'; // Sicherstellen, dass diese URL korrekt ist
     try {
@@ -51,7 +45,7 @@ async function send_feedback(id, group) {
             body: JSON.stringify({
                 user_id: id,
                 group: group, // Die Gruppenzuordnung hinzufügen
-                //timestamp: btn_click_time,
+                timestamp: btn_click_time,
                 //click_time: click_event.click_time
             })
         });
