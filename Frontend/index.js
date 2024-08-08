@@ -49,8 +49,13 @@ async function send_feedback(id, group) {
                 //click_time: click_event.click_time
             })
         });
+        
+        if (!rawResponse.ok) {
+            throw new Error(`HTTP error! Status: ${rawResponse.status}`);
+        }
+
         const content = await rawResponse.json();
-        console.log(content)
+        console.log(content);
     } catch (error) {
         console.error("Error sending feedback:", error);
     }
