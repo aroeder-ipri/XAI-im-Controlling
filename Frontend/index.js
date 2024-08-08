@@ -68,5 +68,13 @@ async function send_feedback(id, group) {
         } else {
             console.error("No response received");
         }
+
+        // Überprüfe auf spezifische CORS-Fehler
+        if (error instanceof TypeError && error.message === 'Failed to fetch') {
+            console.error("This might be a CORS issue or a network problem.");
+        }
     }
 }
+
+// Aufruf der Funktion zum Testen
+send_feedback('test-id', 'test-group');
