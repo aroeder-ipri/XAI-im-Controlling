@@ -278,8 +278,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Berechnung der Auszahlung
     function calculatePayout(value) {
-        var bonusPerUnit = 0.10 / 1000; // 0,10 USD für 1000 Einheiten
-        return value * bonusPerUnit;
+        var bonusPerUnit = 0.20 / 1000; // 0,20 USD für 1000 Sales
+        return (value * bonusPerUnit) - 1.20;
     }
 
     // Funktion zum Anzeigen von Modal4
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
               }
 
               // Lade die JSON-Daten
-              const response = await fetch("/shap_feature_importance.json");
+              const response = await fetch("/Backend/shap_feature_importance.json");
               if (!response.ok) {
                   throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
               }
@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                   const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
                   return `
                       <div class="progress-container" style="margin-bottom: 15px;">
-                          <p><strong>${item.col_name}</strong> (${percentage}%)</p>
+                          <p><strong>${item.col_name}</strong></p>
                           <div class="progress">
                               <div class="progress-bar" role="progressbar" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentage}%;"></div>
                           </div>
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       async function openModal2() {
           try {
               // Lade die JSON-Daten
-              const data = await loadJSON("/cf_470.json");
+              const data = await loadJSON("/Backend/cf_470.json");
               
               // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
               let closestData = null;
@@ -544,9 +544,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                   const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
 
                   modal2Content.innerHTML = `
-                      <p>The AI estimates the sales at <strong>$${closestData.Sales.toFixed(2)}</strong></p>
-                      <p>Your estimated sales were <strong>$${savedSliderValue}</strong></p>
-                      <p>Sales are not within your forecast for the following reasons:</p>
+                      <p>The AI estimates <strong>$${closestData.Sales.toFixed(2)}</strong> instead of <strong>$${savedSliderValue}</strong> for the following reasons:</p>
                       <ul style="color: #555;">
                           ${issuesList}
                       </ul>
