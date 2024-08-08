@@ -156,11 +156,11 @@ function updateStoreInfo(selectedStore, storeInfoData) {
   </p>
   <br><p><strong>Distance to next store:</strong></p>
   <p>
-  ${storeInfo.competitionDistance}km
+  ${storeInfo.competitionDistance} mi
   </p>
-  <br><p><strong>Promotion:</strong></p>
+  <br><p><strong>Promotions within the last month:</strong></p>
   <p>
-  ${storeInfo.promo}
+  ${storeInfo.promo} days
   </p>
 `;
 
