@@ -2,160 +2,160 @@
     {
         "Store": 470.0,
         "Sales": 10182.2001953125,
-        "Sales_CF": 9337.7,
+        "Sales_CF": 9071.4,
         "Percentage1": 0.9,
         "Percentage2": 0.93,
         "CF": "",
         "Explanation": {
             "Factors": [
-                {"Value": -665.43, "Factor": "Customers"},
-                {"Value": 6.74, "Factor": "AvgSalesPerCustomer"},
-                {"Value": 2.8, "Factor": "StoreType"}
+                {"Value": -665, "Factor": "Customers"},
+                {"Value": -2.0, "Factor": "Assortment"},
+                {"Value": 5.0, "Factor": "Holidays_thismonth"}
             ],
             "Issues": [
-                "665 customers too many this month",
-                "Average sale per customer $7 too low",
-                "Store type 1 instead of 3"
+                "665 customers too many in April",
+                "assortment type is extended instead of basic",
+                "5 school or state holidays too few in April"
             ]
         }
     },
     {
         "Store": 470.0,
         "Sales": 10182.2001953125,
-        "Sales_CF": 9824.1,
+        "Sales_CF": 9971.4,
+        "Percentage1": 0.9,
+        "Percentage2": 0.93,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {"Value": -14.73, "Factor": "Customers"},
+                {"Value": -2.0, "Factor": "Assortment"},
+                {"Value": 2.0, "Factor": "Holidays_thismonth"}
+            ],
+            "Issues": [
+                "15 customers too many in April",
+                "assortment type is extended instead of basic",
+                "2 school or state holidays too few in April"
+            ]
+        }
+    },
+    {
+        "Store": 470.0,
+        "Sales": 10182.2001953125,
+        "Sales_CF": 10046.4,
         "Percentage1": 0.96,
         "Percentage2": 0.98,
         "CF": "",
         "Explanation": {
             "Factors": [
-                {"Value": 100.67, "Factor": "Customers"},
-                {"Value": 4.1, "Factor": "Holidays_lastmonth"},
-                {"Value": 2.6, "Factor": "PromoInterval"}
+                {"Value": -1.5, "Factor": "Holidays_lastmonth"},
+                {"Value": -0.27, "Factor": "SchoolHoliday"},
+                {"Value": -0.03, "Factor": "Customers"}
             ],
             "Issues": [
-                "101 customers too few this month",
-                "4 vacation days or public holiday(s) too few in the previous month",
-                "Promo interval 0 instead of 2"
+                "2 school or state holidays too many in March",
+                "8 school holidays too few in April",
+                "1 customer too many in April"
             ]
         }
     },
     {
         "Store": 470.0,
         "Sales": 10182.2001953125,
-        "Sales_CF": 10102.2,
+        "Sales_CF": 10411.2,
         "Percentage1": 0.98,
         "Percentage2": 1.0,
         "CF": "",
         "Explanation": {
             "Factors": [
-                {"Value": -2.0, "Factor": "Assortment"},
-                {"Value": -1.5, "Factor": "Holidays_lastmonth"},
-                {"Value": -0.17, "Factor": "SchoolHoliday"}
+                {"Value": 746.77, "Factor": "Customers"},
+                {"Value": 4.0, "Factor": "Holidays_thismonth"},
+                {"Value": -3.62, "Factor": "AvgSalesPerCustomer"}
             ],
             "Issues": [
-                "Assortment type 3 instead of 1",
-                "2 vacation days or public holiday(s) too many in the previous month",
-                "5 school-free day(s) too many this month"
+                "747 customers too few in April",
+                "4 school or state holidays too few in April",
+                "average sales per customers $3.62 too high in April"
             ]
         }
     },
     {
         "Store": 470.0,
         "Sales": 10182.2001953125,
-        "Sales_CF": 10538.8,
+        "Sales_CF": 10499.5,
         "Percentage1": 1.02,
         "Percentage2": 1.04,
         "CF": "",
         "Explanation": {
             "Factors": [
-                {"Value": -2.0, "Factor": "Assortment"},
-                {"Value": -1.5, "Factor": "Holidays_lastmonth"},
-                {"Value": -0.8, "Factor": "Open"}
+                {"Value": 832.37, "Factor": "Customers"},
+                {"Value": 4.7, "Factor": "Holidays_lastmonth"},
+                {"Value": 4.6, "Factor": "Holidays_nextmonth"}
             ],
             "Issues": [
-                "Assortment type 3 instead of 1",
-                "2 vacation days or public holiday(s) too many in the previous month",
-                "Opened too often"
+                "832 customers too few in April",
+                "5 school or state holidays too few in March",
+                "5 school or state holidays too few in May"
             ]
         }
     },
     {
         "Store": 470.0,
         "Sales": 10182.2001953125,
-        "Sales_CF": 10913.0,
+        "Sales_CF": 10866.2,
         "Percentage1": 1.06,
         "Percentage2": 1.08,
         "CF": "",
         "Explanation": {
             "Factors": [
-                {"Value": -484.43, "Factor": "Customers"},
-                {"Value": 5.01, "Factor": "AvgSalesPerCustomer"},
-                {"Value": -2.0, "Factor": "Holidays_thismonth"}
+                {"Value": 425.47, "Factor": "Customers"},
+                {"Value": 3.1, "Factor": "Holidays_lastmonth"},
+                {"Value": 3.1, "Factor": "Holidays_nextmonth"}
             ],
             "Issues": [
-                "484 customers too many this month",
-                "Average sale per customer $5 too low",
-                "2 vacation days or public holiday(s) too many this month"
+                "425 customers too few in April",
+                "3 school or state holidays too few in March",
+                "3 school or state holidays too few in May"
             ]
         }
     },
     {
         "Store": 470.0,
         "Sales": 10182.2001953125,
-        "Sales_CF": 11164.8,
+        "Sales_CF": 11648.2,
         "Percentage1": 1.08,
         "Percentage2": 1.11,
         "CF": "",
         "Explanation": {
             "Factors": [
-                {"Value": -427.03, "Factor": "Customers"},
-                {"Value": 5.58, "Factor": "AvgSalesPerCustomer"},
-                {"Value": 3.2, "Factor": "Holidays_nextmonth"}
+                {"Value": 1120.07, "Factor": "Customers"},
+                {"Value": -3.19, "Factor": "AvgSalesPerCustomer"},
+                {"Value": 2.2, "Factor": "StoreType"}
             ],
             "Issues": [
-                "427 customers too many this month",
-                "Average sale per customer $6 too low",
-                "3 vacation days or public holiday(s) too few in the next month"
+                "1120 customers too few in April",
+                "average sales per customers $3.19 too high in April",
+                "store type is city center instead of suburb"
             ]
         }
     },
     {
         "Store": 470.0,
         "Sales": 10182.2001953125,
-        "Sales_CF": 11261.9,
+        "Sales_CF": 11733.8,
         "Percentage1": 1.1,
         "Percentage2": 1.12,
         "CF": "",
         "Explanation": {
             "Factors": [
-                {"Value": 577.47, "Factor": "Customers"},
-                {"Value": 5.0, "Factor": "Holidays_thismonth"},
-                {"Value": 3.0, "Factor": "Holidays_lastmonth"}
+                {"Value": 246.47, "Factor": "Customers"},
+                {"Value": 2.9, "Factor": "PromoInterval"},
+                {"Value": 1.3, "Factor": "Holidays_lastmonth"}
             ],
             "Issues": [
-                "577 customers too few this month",
-                "5 vacation days or public holiday(s) too few this month",
-                "3 vacation days or public holiday(s) too few in the previous month"
-            ]
-        }
-    },
-    {
-        "Store": 470.0,
-        "Sales": 10182.2001953125,
-        "Sales_CF": 12105.8,
-        "Percentage1": 1.18,
-        "Percentage2": 1.2,
-        "CF": "",
-        "Explanation": {
-            "Factors": [
-                {"Value": -181.73, "Factor": "Customers"},
-                {"Value": 4.4, "Factor": "Holidays_lastmonth"},
-                {"Value": 3.33, "Factor": "AvgSalesPerCustomer"}
-            ],
-            "Issues": [
-                "182 customers too many this month",
-                "4 vacation days or public holiday(s) too few in the previous month",
-                "Average sale per customer $3 too low"
+                "246 customers too few in April",
+                "ongoing promotion interval starts in winter instead of summer",
+                "1 school or state holidays too few in March"
             ]
         }
     }
