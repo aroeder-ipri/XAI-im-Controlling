@@ -42,51 +42,61 @@
     </div>
 
     <script>
-    // Lese die Parameter aus der URL
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get('id');
-    const yourTarget = parseFloat(urlParams.get('YourTarget'));
-    const actualSales = parseFloat(urlParams.get('actualSales'));
-    const basePayout = parseFloat(urlParams.get('basePayout'));
-    const optionCost = parseFloat(urlParams.get('optionCost'));
-    const goalReached = yourTarget <= actualSales ? "yes" : "no";
-    const totalPayment = basePayout - optionCost;
-    const roundedBasePayout = basePayout.toFixed(2);
-    const roundedTotalPayment = totalPayment.toFixed(2);
-
-    // Basis-URL Google Forms
-    const formBaseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url';
-
-    // Überprüfe, ob die ID und die anderen Werte vorhanden sind
-    if (id && yourTarget && actualSales && basePayout && optionCost) {
-        // Erstelle die vollständige URL für Google Forms
-        const fullLink = `${formBaseUrl}&entry.1441153259=${id}`
-            + `&entry.1448300849=$${encodeURIComponent(yourTarget)}`
-            + `&entry.481258740=$${encodeURIComponent(actualSales)}`
-            + `&entry.200243194=${encodeURIComponent(goalReached)}`
-            + `&entry.1116053065=$${encodeURIComponent(roundedBasePayout)}`
-            + `&entry.1818724406=$${encodeURIComponent(optionCost)}`
-            + `&entry.474963382=$${encodeURIComponent(roundedTotalPayment)}`;
-
-        // Setze den src-Wert des iframe-Elements
-        document.getElementById('surveyFrame').src = fullLink;
-    } else {
-        console.error('Fehlende Parameter in der URL.');
-    }
-
-// Stelle sicher, dass die Funktion btn_click() aufgerufen wird, wenn die Seite geladen wird
-window.onload = btn_click;
-
-//https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url
-//&entry.1441153259=ID
-//&entry.1448300849=Your+target
-//&entry.481258740=Actual+sales
-//&entry.200243194=Did+you+successfully+reach+your+goal
-//&entry.1116053065=Potential+bonus
-//&entry.1818724406=Supervisor+advice
-//&entry.474963382=Total+payment
-
+        // Lese die Parameter aus der URL
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+        const yourTarget = parseFloat(urlParams.get('YourTarget'));
+        const actualSales = parseFloat(urlParams.get('actualSales'));
+        const basePayout = parseFloat(urlParams.get('basePayout'));
+        const optionCost = parseFloat(urlParams.get('optionCost'));
+        const goalReached = yourTarget <= actualSales ? "yes" : "no";
+        
+        // Berechne totalPayment basierend auf goalReached
+        let totalPayment;
+        if (goalReached === "yes") {
+            totalPayment = basePayout - optionCost;
+        } else {
+            totalPayment = 0;
+        }
+        
+        const roundedBasePayout = basePayout.toFixed(2);
+        const roundedTotalPayment = totalPayment.toFixed(2);
+    
+        // Basis-URL Google Forms
+        const formBaseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url';
+    
+        function generateFormLink() {
+            // Überprüfe, ob die ID und die anderen Werte vorhanden sind
+            if (id !== null && !isNaN(yourTarget) && !isNaN(actualSales) && !isNaN(basePayout) && !isNaN(optionCost)) {
+                // Erstelle die vollständige URL für Google Forms
+                const fullLink = `${formBaseUrl}&entry.1441153259=${id}`
+                    + `&entry.1448300849=$${encodeURIComponent(yourTarget)}`
+                    + `&entry.481258740=$${encodeURIComponent(actualSales)}`
+                    + `&entry.200243194=${encodeURIComponent(goalReached)}`
+                    + `&entry.1116053065=$${encodeURIComponent(roundedBasePayout)}`
+                    + `&entry.1818724406=$${encodeURIComponent(optionCost)}`
+                    + `&entry.474963382=$${encodeURIComponent(roundedTotalPayment)}`;
+    
+                // Setze den src-Wert des iframe-Elements
+                document.getElementById('surveyFrame').src = fullLink;
+            } else {
+                console.error('Fehlende Parameter in der URL.');
+            }
+        }
+    
+        // Stelle sicher, dass der Code beim Laden der Seite ausgeführt wird
+        window.onload = generateFormLink;
+    
+        // https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url
+        // &entry.1441153259=ID
+        // &entry.1448300849=Your+target
+        // &entry.481258740=Actual+sales
+        // &entry.200243194=Did+you+successfully+reach+your+goal
+        // &entry.1116053065=Potential+bonus
+        // &entry.1818724406=Supervisor+advice
+        // &entry.474963382=Total+payment
+    
     </script>
 </body>
 </html>
