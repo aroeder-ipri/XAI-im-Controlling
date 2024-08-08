@@ -35,8 +35,10 @@ async function btn_click() {
 
 async function send_feedback(id, group) {
     let btn_click_time = Date.now();
+    let rawResponse; // rawResponse außerhalb des try-Blocks definieren
+
     try {
-        const rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
+        rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -44,25 +46,28 @@ async function send_feedback(id, group) {
             },
             body: JSON.stringify({
                 user_id: id,
-                group: group, // Die Gruppenzuordnung hinzufügen
+                group: group,
                 timestamp: btn_click_time
                 //click_time: click_event.click_time
             })
         });
 
-        // Überprüfen, ob die Antwort erfolgreich war
         if (!rawResponse.ok) {
             throw new Error(`HTTP error! Status: ${rawResponse.status}`);
         }
 
-        // Versuchen, die Antwort als JSON zu parsen
         const content = await rawResponse.json();
         console.log(content);
     } catch (error) {
         console.error("Error sending feedback:", error);
 
-        // Zusätzliche Fehlerdetails anzeigen
-        console.error("Response status:", rawResponse ? rawResponse.status : 'No response');
-        console.error("Response text:", rawResponse ? await rawResponse.text() : 'No response text');
+        // Zusätzliche Fehlerdetails anzeigen, falls rawResponse existiert
+        if (rawResponse) {
+            console.error("Response status:", rawResponse.status);
+            const responseText = await rawResponse.text();
+            console.error("Response text:", responseText);
+        } else {
+            console.error("No response received");
+        }
     }
 }
