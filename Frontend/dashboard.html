@@ -616,11 +616,11 @@ questionButton.addEventListener("click", async function() {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            if (!questionButton.ok) {
+                throw new Error(`HTTP error! Status: ${questionButton.status}`);
             }
 
-            console.log("Response saved successfully");
+            console.log("questionButton click saved successfully");
         } catch (error) {
             console.error("Error sending question response:", error);
         }
