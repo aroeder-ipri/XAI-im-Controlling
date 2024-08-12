@@ -84,25 +84,20 @@ def get_counterfactual_explanations():
 @app.post("/clicks", status_code=201)
 def save_click_event(click_event: ClickEvent):
     try:
-        user_id = str(click_event.user_id)
-        # Suche nach dem Dokument mit der user_id
-        docs = db.view('_design/your_design_doc/_view/by_user_id', key=user_id)
-
-        if docs:
-            doc_id = docs[0].id
-            # Hol das aktuelle Dokument
-            current_doc = db[doc_id]
-            # Update das Dokument
-            current_doc.update({
-                "group": click_event.group,
+        doc_id = f"{click_event.user_id}-{click_event.timestamp.isoformat()}"
+        existing_doc = db.get(doc_id)
+        
+        if existing_doc:
+            # Dokument existiert bereits, aktualisiere es
+            existing_doc.update({
                 "questionButton": click_event.questionButton,
-                "timestamp": click_event.timestamp.isoformat()
             })
-            db.save(current_doc)
+            db.save(existing_doc)
         else:
-            # Wenn das Dokument nicht gefunden wird, erstelle ein neues
+            # Dokument existiert noch nicht, erstelle es neu
             click_event_doc = {
-                "user_id": user_id,
+                "_id": doc_id,
+                "user_id": str(click_event.user_id),
                 "group": click_event.group,
                 "questionButton": click_event.questionButton,
                 "timestamp": click_event.timestamp.isoformat()
