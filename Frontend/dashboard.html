@@ -592,38 +592,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
       });
 
       // Event Listener für den "questionButton"
-      questionButton.addEventListener("click", function() {
-          determineAndOpenModal();
-          questionButton.style.display = "none";
-          send_feedback(questionButton);
-          
-      });
+questionButton.addEventListener("click", async function() {
+    determineAndOpenModal();
+    questionButton.style.display = "none";
 
-      async function send_feedback(questionButton) {
-    try {
-        const rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                user_id: uuid, // Nur die reine UUID senden
-                group: group,
-                timestamp: Date.now(),
-                questionButton: "yes"
-            })
-        });
+    // Holen der gespeicherten UUID und Gruppe
+    let uuid = localStorage.getItem("user_uuid");
+    let group = localStorage.getItem("user_group");
 
-        if (!rawResponse.ok) {
-            throw new Error(`HTTP error! Status: ${rawResponse.status}`);
+    if (uuid && group) { // Prüfe, ob UUID und Gruppe vorhanden sind
+        try {
+            const response = await fetch("https://controlling.xaidemo.de/api/questions", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: uuid,
+                    group: group,
+                    questionButton: "yes",
+                    timestamp: new Date().toISOString()
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            console.log("Response saved successfully");
+        } catch (error) {
+            console.error("Error sending question response:", error);
         }
-
-        await rawResponse.json();
-    } catch (error) {
-        console.error("Error sending feedback:", error);
+    } else {
+        console.error("User UUID or group not found in localStorage.");
     }
-}
+});
+
   });
 </script>
 </body>
