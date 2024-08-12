@@ -140,29 +140,49 @@ function updateStoreInfo(selectedStore, storeInfoData) {
     currentStoreElement.textContent = selectedStore;
 
     // Store-Informationen einfügen
-    const storeInfo = storeInfoData[selectedStore];
-    if (storeInfo) {
-        const storeInfoDiv = document.createElement('div');
-        storeInfoDiv.innerHTML = `
-  <p><strong>Store Type:</strong></p>
-  <p>
-    ${storeInfo.storeType}
-  </p>
-  <br><p><strong>Assortment:</strong></p>
-  <p>
-    <label><input type="checkbox" ${storeInfo.assortment === 'basic' ? 'checked' : ''} disabled> Basic</label>
-    <label><input type="checkbox" ${storeInfo.assortment === 'extra' ? 'checked' : ''} disabled> Extra</label>
-    <label><input type="checkbox" ${storeInfo.assortment === 'extended' ? 'checked' : ''} disabled> Extended</label>
-  </p>
-  <br><p><strong>Distance to next store:</strong></p>
-  <p>
-  ${storeInfo.competitionDistance} mi
-  </p>
-  <br><p><strong>Promotions within the last month:</strong></p>
-  <p>
-  ${storeInfo.promo} days
-  </p>
-`;
+const storeInfo = storeInfoData[selectedStore];
+if (storeInfo) {
+    const storeInfoDiv = document.createElement('div');
+
+ // Stile für das Container-Div hinzufügen
+ storeInfoDiv.style.display = 'flex';
+ storeInfoDiv.style.alignItems = 'flex-start'; // Anpassung für vertikale Ausrichtung oben
+ storeInfoDiv.style.gap = '50px'; // Abstand zwischen den Gruppen
+ storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
+ storeInfoDiv.style.overflow = 'hidden'; // Verhindert das Überlaufen des Inhalts
+
+    // Stile für das Container-Div hinzufügen
+    storeInfoDiv.style.display = 'flex';
+    storeInfoDiv.style.flexDirection = 'column'; // Inhalte untereinander anordnen
+    storeInfoDiv.style.gap = '20px'; // Abstand zwischen den Gruppen
+    storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
+
+    storeInfoDiv.innerHTML = `
+        <div style="display: flex; gap: 50px; max-width: 100%;">
+            <div style="flex: 1; overflow-wrap: break-word; max-width: 100%;">
+                <p><strong>Store Type:</strong></p>
+                <label><input type="checkbox" ${storeInfo.storeType === 'City Center' ? 'checked' : ''} disabled> City Center</label><br>
+                <label><input type="checkbox" ${storeInfo.storeType === 'Commercial Area' ? 'checked' : ''} disabled> Commercial Area</label>
+                <label><input type="checkbox" ${storeInfo.storeType === 'Suburbs' ? 'checked' : ''} disabled> Suburbs</label><br>
+                <label><input type="checkbox" ${storeInfo.storeType === 'Rural' ? 'checked' : ''} disabled> Rural</label><br>
+            </div>
+            <div style="flex: 1; overflow-wrap: break-word; max-width: 100%;">
+                <p><strong>Assortment:</strong></p>
+                <label><input type="checkbox" ${storeInfo.assortment === 'basic' ? 'checked' : ''} disabled> Basic</label><br>
+                <label><input type="checkbox" ${storeInfo.assortment === 'extra' ? 'checked' : ''} disabled> Extra</label><br>
+                <label><input type="checkbox" ${storeInfo.assortment === 'extended' ? 'checked' : ''} disabled> Extended</label><br>
+            </div>
+        </div>
+        <div style="overflow-wrap: break-word; max-width: 100%;">
+            <p><strong>Distance to next store:</strong></p>
+            <p>${storeInfo.competitionDistance} mi</p>
+        </div>
+        <div style="overflow-wrap: break-word; max-width: 100%;">
+            <p><strong>Days with promotions in the last month:</strong></p>
+            <p>${storeInfo.promo} days</p>
+        </div>
+    `;
+
 
         storeInfoContainer.appendChild(storeInfoDiv);
     } else {
