@@ -37,7 +37,7 @@ class ClickEvent(BaseModel):
     user_id: uuid.UUID
     group: str
     questionButton: str
-    timestamp: datetime
+    #timestamp: datetime
     #click_time: int
 
 couch = couchdb.Server('http://admin:password@couchdb:5984/')
@@ -84,23 +84,14 @@ def get_counterfactual_explanations():
 @app.post("/clicks", status_code=201)
 def save_click_event(click_event: ClickEvent):
     try:
-        doc_id = f"{click_event.user_id}-{click_event.timestamp.isoformat()}"
-        existing_doc = db.get(doc_id)
-        
-        if existing_doc:
-            # Dokument existiert bereits, lösche es
-            db.delete(existing_doc)
-        
-        # Erstelle ein neues Dokument
         click_event_doc = {
-            "_id": doc_id,
             "user_id": str(click_event.user_id),
             "group": click_event.group,
             "questionButton": click_event.questionButton,
-            "timestamp": click_event.timestamp.isoformat()
+            #"timestamp": click_event.timestamp.isoformat(),
+            #"click_time": click_event.click_time
         }
         db.save(click_event_doc)
-
-        return {"message": "Click event processed successfully"}
+        return {"message": "Click event saved successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
