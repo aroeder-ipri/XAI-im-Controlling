@@ -608,6 +608,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                user_id: uuid, // Nur die reine UUID senden
+                group: group,
+                timestamp: Date.now(),
                 questionButton: "yes"
             })
         });
