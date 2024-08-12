@@ -1,102 +1,602 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Survey</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        body {
-            background-color: #F2F2F2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .survey-container {
-            background-color: white;
-            border: 3px solid #74B027;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 800px;
-            width: 100%;
-        }
-        .survey-container h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .survey-container iframe {
-            width: 100%;
-            border: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XAI in controlling</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
+  <!-- Eigene CSS-Datei -->
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- Eigene JavaScript-Datei -->
+  <script src="dashboard.js" defer></script>
 </head>
 <body>
-    <div class="survey-container">
-        <h1>Survey</h1>
-        <iframe id="surveyFrame" src="" width="930" height="630" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-    </div>
 
-    <script>
-        // Lese die Parameter aus der URL
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const id = urlParams.get('id');
-        const yourTarget = parseFloat(urlParams.get('YourTarget'));
-        const actualSales = parseFloat(urlParams.get('actualSales'));
-        const basePayout = parseFloat(urlParams.get('basePayout'));
-        const optionCost = parseFloat(urlParams.get('optionCost'));
-        const goalReached = yourTarget <= actualSales ? "yes" : "no";
-        
-        // Berechne totalPayment basierend auf goalReached
-        let totalPayment;
-        if (goalReached === "yes") {
-            totalPayment = basePayout - optionCost;
+<script type="text/javascript">
+    var apiUrl = 'https://controlling.xaidemo.de/api/test';
+    fetch(apiUrl).then(response => {
+      return response.json();
+    }).then(data => {
+      // Work with JSON data here
+      console.log(data);
+    }).catch(err => {
+      console.log('Error', err)
+    });
+</script>
+
+<!-- Modalfenster -->
+<div id="modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="modal1Content"></div>
+    <!-- Link "Mehr" -->
+    <a id="mehrButton" class="text-muted" style="position: absolute; bottom: 10px; right: 10px;" hidden href="#">more</a>
+  </div>
+</div>
+
+<!-- Modalfenster 2 -->
+<div id="modal2" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="modal2Content"></div>
+  </div>
+</div>
+
+<!-- Modalfenster 3 -->
+<div id="modal3" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Target Setting</h2>
+    <p class="hint">You are now able to decide on your store’s sales target for the upcoming year.</p>
+    <p class="estimateSale"></p>
+    <p>What target do you want to achieve with your store in the upcoming year?</p>
+    <!-- Slider Container -->
+    <div class="slider-container">
+      <label for="targetSlider">Target Value:</label>
+      <span id="sliderValue"></span>
+      <div id="sliderWrapper">
+        <span id="minValue">$8000</span>
+        <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">
+        <span id="maxValue">$15000</span>
+      </div>
+    </div>
+    <!-- Anzeige der erwarteten Auszahlung -->
+    <div id="payoutContainer" class="calculation">
+      <p class="label">Expected payout for reaching the target:</p>
+      <p id="payoutAmount" class="value">$0.00</p>
+      <p>Payout for failing to reach the target:</p>
+      <p>$0</p>
+    </div>
+    <button id="setTargetButton" class="custom-btn">Continue</button>
+    <button id="finalSetTargetButton" class="custom-btn" style="display: none;">Submit</button>
+    <div id="redirectMessage" style="color: #74B027; display:none;"></div>
+
+  </div>
+</div>
+
+<!-- Modalfenster 4 -->
+<div id="modal4" class="modal">
+  <div class="modal-content">
+    <p><strong>You can now send a message to your supervisor and ask for advice.</strong></p>
+    <div id="messageOptions">
+      <button id="noMessageBtn" class="option-btn">No message (no cost)</button>
+      <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-$0.30)</button>
+      <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-$0.30)</button>
+    </div>
+    <p style="font-size: 12px;">*The answer of your supervisor is not dependent on the message you send</p>
+  </div>
+</div>
+
+<!-- Modalfenster für Nachrichtenbeispiele -->
+<div id="messageExampleModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <p><strong>Here is the answer of your supervisor:</strong></p>
+    <p id="messageExampleText"></p>
+    <button id="acknowledgeButton" class="btn custom-btn">Alright, thanks!</button>
+  </div>
+</div>
+
+<!-- Modalfenster für Estimate Sales -->
+<div id="modalEstimate" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p><strong>After reading through the information and past sales performance, what do you expect to be your stores sales in the upcoming month?</strong></p>
+        <!-- Slider Container -->
+        <div class="slider-container">
+          <center><span id="sliderValue1">+0</span></center>
+          <div id="sliderWrapper">
+            <span id="minValue">$8000</span>
+            <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="0">
+            <span id="maxValue">$15000</span>
+          </div>
+          <p></p>
+          <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later point.</p>
+
+        <button type="button" id="anzeigenButton" class="btn custom-btn">Continue to Forecast</button>
+        </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <!-- Seitenüberschrift -->
+  <h1 class="mt-3">Sales development</h1>
+  <!-- Content -->
+  <div class="row">
+    <!-- Linke Seite - Hauptboxen -->
+    <div class="col-md-8">
+      <div class="content-box1 mt-3">
+        <!-- Hier wird der Graph eingebettet -->
+        <!-- Der erste Linechart -->
+        <canvas id="lineChart" style="display: none;" width="2000" height="650"></canvas>
+        <!-- Der zweite Linechart -->
+        <canvas id="lineChart2" width="2000" height="650"></canvas>
+        <div class="canvas-container">
+          <button id="questionButton" class="position-absolute">?</button>
+        </div>
+      </div>
+      <!-- Hier wird der Graph eingebettet -->
+      <div class="content-box1 mt-3">
+        <canvas id="barChart" width="2000" height="600"></canvas>
+      </div>
+    </div>
+    <!-- Rechte Seite - Nebenboxen -->
+    <div class="col-md-4">
+      <div class="content-box2 mt-3">
+        <h2>Forecast</h2>
+        <p class="AIestimate" style="display: none;">The AI estimates <span style="color: red;"><strong>$10182.20</strong></span> for the Month of April.</p>
+        <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
+        <button type="button" id="continueButton" class="btn custom-btn" style="display: none;">continue to set target</button>
+        <p class="task">Please provide your sales estimate for the month of April. You will receive additional information, from an AI to set your targets later.</p>
+        <p id="vorhersageAnzeigen" style="display: none;"></p>
+      </div>
+      <!-- CHANGE STORE mit Checkboxen dynamisch einfügen - AKTUELL NICHT GEBRAUCHT DA NUR 1 Store -->
+      <div class="content-box3 mt-3" hidden>
+        <h2>Change store</h2>
+        <div id="storeCheckboxContainer" class="mt-3"></div>
+      </div>
+      <div class="content-box3 mt-3">
+        <div id="storeHeader">
+          <h2>Store Info</h2>
+          <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
+          <span id="currentStore"></span>
+          <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div id="storeInfoContainer">
+          <div id="storeInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container" hidden>
+  <div class="row">
+    <a onclick="btn_click();" id="nextButton" class="btn custom-btn">Further to survey</a>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
+
+<script>
+var yourTarget = 8000;
+var actualSales = 10300;
+var basePayout = 0;
+var optionCost = 0;
+
+function btn_click() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+    // Post-Request ans Backend
+    window.location.href = "survey.html?id=" + id
+        + "&YourTarget=" + encodeURIComponent(yourTarget)
+        + "&actualSales=" + encodeURIComponent(actualSales)
+        + "&basePayout=" + encodeURIComponent(basePayout)
+        + "&optionCost=" + encodeURIComponent(optionCost);
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    var modal3 = document.getElementById("modal3");
+    var modal4 = document.getElementById("modal4");
+    var messageExampleModal = document.getElementById("messageExampleModal");
+    var continueButton = document.getElementById("continueButton");
+    var closeButtons = document.querySelectorAll(".close");
+    var targetSlider = document.getElementById("targetSlider");
+    var sliderValue = document.getElementById("sliderValue");
+    var payoutAmount = document.getElementById("payoutAmount");
+    var setTargetButton = document.getElementById("setTargetButton");
+    var finalSetTargetButton = document.getElementById("finalSetTargetButton");
+    var noMessageBtn = document.getElementById("noMessageBtn");
+    var salesExpectationsBtn = document.getElementById("salesExpectationsBtn");
+    var trustForecastBtn = document.getElementById("trustForecastBtn");
+    var acknowledgeButton = document.getElementById("acknowledgeButton");
+    var optionButtons = [noMessageBtn, salesExpectationsBtn, trustForecastBtn];
+    var messageExampleText = document.getElementById("messageExampleText");
+    var estimateButton = document.getElementById("estimateButton");
+    var modalEstimate = document.getElementById("modalEstimate");
+    var targetSlider1 = document.getElementById("targetSlider1");
+    var sliderValue1 = document.getElementById("sliderValue1");
+    var anzeigenButton = document.getElementById("anzeigenButton");
+    var taskParagraph = document.querySelector('p.task');
+    var estimateSale = document.querySelector('p.estimateSale');
+    var selectedOption = 'noMessage';
+    var savedSliderValue = 8000;
+    var AIestimate = document.querySelector('p.AIestimate');
+    
+    // Zeige Modal3 bei Klick auf den Continue-Button
+    continueButton.onclick = function() {
+        modal3.style.display = "block";
+    }
+
+    // Schließe alle Modale, wenn der Schließen-Button geklickt wird
+    closeButtons.forEach(function(button) {
+        button.onclick = function() {
+            button.closest('.modal').style.display = "none";
+        }
+    });
+
+    // Initialisiere den Slider und die Auszahlung
+    var initialSliderValue = targetSlider.value;
+    sliderValue.textContent = `$${initialSliderValue}`;
+    updatePayout(initialSliderValue);
+
+    // Event-Listener für Slider-Eingaben
+    targetSlider.oninput = function() {
+        var currentValue = this.value;
+        sliderValue.textContent = `$${currentValue}`;
+        yourTarget = currentValue;
+        updatePayout(currentValue);
+    };
+
+    // Funktion zur Berechnung und Anzeige der Auszahlung
+    function updatePayout(value) {
+        basePayout = calculatePayout(value); // Berechne und aktualisiere die globale Basis-Auszahlung
+        var payout = basePayout - optionCost; // Ziehe die Kosten für die ausgewählte Option ab
+        if (optionCost > 0) {
+            payoutAmount.innerHTML = `
+                <div class="calculation">
+                <p class="value">$${basePayout.toFixed(2)} - <span style="color: red;">$${optionCost.toFixed(2)}</span> = $${Math.max(payout, 0).toFixed(2)}</p>
+                </div>
+            `;
         } else {
-            totalPayment = 0;
+            payoutAmount.innerHTML = `
+                <div class="calculation">
+                <p class="value">$${basePayout.toFixed(2)}</p>
+                </div>
+            `;
         }
-        
-        const roundedBasePayout = basePayout.toFixed(2);
-        const roundedTotalPayment = totalPayment.toFixed(2);
-    
-        // Basis-URL Google Forms
-        const formBaseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url';
-    
-        function generateFormLink() {
-            // Überprüfe, ob die ID und die anderen Werte vorhanden sind
-            if (id !== null && !isNaN(yourTarget) && !isNaN(actualSales) && !isNaN(basePayout) && !isNaN(optionCost)) {
-                // Erstelle die vollständige URL für Google Forms
-                const fullLink = `${formBaseUrl}&entry.1441153259=${id}`
-                    + `&entry.1448300849=$${encodeURIComponent(yourTarget)}`
-                    + `&entry.481258740=$${encodeURIComponent(actualSales)}`
-                    + `&entry.200243194=${encodeURIComponent(goalReached)}`
-                    + `&entry.1116053065=$${encodeURIComponent(roundedBasePayout)}`
-                    + `&entry.1818724406=$${encodeURIComponent(optionCost)}`
-                    + `&entry.474963382=$${encodeURIComponent(roundedTotalPayment)}`;
-    
-                // Setze den src-Wert des iframe-Elements
-                document.getElementById('surveyFrame').src = fullLink;
+    }
+
+    // Berechnung der Auszahlung
+    function calculatePayout(value) {
+        var bonusPerUnit = 0.20 / 1000; // 0,20 USD für 1000 Sales
+        return (value * bonusPerUnit) - 1.20;
+    }
+
+    // Funktion zum Anzeigen von Modal4
+    function showModal4() {
+        modal4.style.display = "block";
+    }
+
+    // Funktion zum Anzeigen des Nachrichtensbeispiel-Modals
+    function showMessageExample(text) {
+        var text = `
+            <p>Hello,</p>
+            <p>I appreciate your message and I can see you have already made an educated guess on your sales targets.</p>
+            <p>I feel like the AI is very accurate with it‘s prediction and I don‘t think you can expect sales to exceed $10,300 for the month of April.</p>
+            <p>Kind Regards,</p>
+            <p>Supervisor</p>
+        `;
+        messageExampleText.innerHTML = text; // Setze HTML-Inhalt
+        messageExampleModal.style.display = "block";
+    }
+
+    // Event-Listener für den Set Target Button
+    setTargetButton.onclick = function() {
+        showModal4();
+    }
+
+    // Funktion zur Auswahl einer Option im Modal4
+    function selectOption(optionId) {
+        selectedOption = optionId;
+        optionButtons.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        document.getElementById(optionId + 'Btn').classList.add('active');
+        optionCost = calculateOptionCost(selectedOption); // Berechne und aktualisiere die globale Option-Kosten
+        updatePayout(targetSlider.value); // Aktualisiere die Auszahlung nach Auswahl der Option
+    }
+
+    function showHintInModal3(text) {
+        var modal3 = document.getElementById('modal3');
+        var hintElement = modal3.querySelector('.hint');
+        if (hintElement) {
+            hintElement.textContent = text;
+        }
+    }
+
+    // Event-Listener für die Auswahloptionen im Modal4
+    optionButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var optionId = this.id.replace('Btn', '');
+            var exampleText = "";
+            var hintText = "";
+
+            if (optionId === 'noMessage') {
+                modal4.style.display = "none";
+                optionCost = 0.00; // Keine Kosten
+                hintText = "You can now adjust your target level one last time. ";
             } else {
-                console.error('Fehlende Parameter in der URL.');
+                if (optionId === 'salesExpectations') {
+                    exampleText = "What are your sales expectations from our store?";
+                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                } else if (optionId === 'trustForecast') {
+                    exampleText = "Do you think I should trust the forecast?";
+                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                }
+                modal4.style.display = "none";
+                showMessageExample(exampleText);
+                optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
             }
-        }
-    
-        // Stelle sicher, dass der Code beim Laden der Seite ausgeführt wird
-        window.onload = generateFormLink;
-    
-        // https://docs.google.com/forms/d/e/1FAIpQLSdcTDcCvzpOAuC-W7HaXdqoD87N5DHUbKue9BInkKM9kP658g/viewform?usp=pp_url
-        // &entry.1441153259=ID
-        // &entry.1448300849=Your+target
-        // &entry.481258740=Actual+sales
-        // &entry.200243194=Did+you+successfully+reach+your+goal
-        // &entry.1116053065=Potential+bonus
-        // &entry.1818724406=Supervisor+advice
-        // &entry.474963382=Total+payment
-    
-    </script>
+
+            // Zeige den Hinweistext in Modal3
+            showHintInModal3(hintText);
+
+            // Blende den Set Target Button aus und zeige den Final Set Target Button an
+            setTargetButton.style.display = "none";
+            finalSetTargetButton.style.display = "block";
+
+            updatePayout(targetSlider.value); // Aktualisiere die Auszahlung
+        });
+    });
+
+    function calculateOptionCost(option) {
+    if (option === 'noMessage') {
+        return 0.00;
+    } else if (option === 'salesExpectations' || option === 'trustForecast') {
+        return 0.30;
+    }
+    return 0.00;
+}
+
+      // Event-Listener für den Final Set Target Button
+      finalSetTargetButton.onclick = function() {
+          // Blende den Final Set Target Button aus
+          finalSetTargetButton.style.display = "none";
+          // Mache den Continue-Button nicht mehr klickbar
+          continueButton.style.pointerEvents = "none";
+          continueButton.style.opacity = "0.5";
+          
+          // Zeige die Redirect Message
+          const redirectMessage = document.getElementById('redirectMessage');
+          let countdown = 5;
+          redirectMessage.style.display = 'block';
+          redirectMessage.textContent =`Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
+          
+          const countdownInterval = setInterval(() => {
+              countdown--;
+              if (countdown > 0) {
+                  redirectMessage.textContent =`Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
+              } else {
+                  clearInterval(countdownInterval);
+                  // Hier wird die btn_click Funktion nach Ablauf des Countdowns aufgerufen
+                  btn_click();
+              }
+          }, 1000); // Update every second
+      };
+
+      // Event-Listener für den "Alright, thanks!" Button
+      acknowledgeButton.onclick = function() {
+          // Schließe das Nachrichtensbeispiel-Modal
+          messageExampleModal.style.display = "none";
+          // Berechne und aktualisiere die Auszahlung
+          var currentValue = targetSlider.value;
+          updatePayout(currentValue);
+          // Zeige Modal3 wieder an
+          modal3.style.display = "block";
+      };
+
+      // Berechnung der Kosten für die Auswahloptionen
+      function calculateOptionCost(option) {
+          switch(option) {
+              case 'salesExpectations':
+              case 'trustForecast':
+                  return 0.30;
+              default:
+                  return 0.00;
+          }
+      }
+
+      // Zeige ModalEstimate bei Klick auf den Estimate-Button
+      estimateButton.onclick = function() {
+          modalEstimate.style.display = "block";
+      }
+
+      // Initialisiere den Slider und die Auszahlung
+      var initialSliderValue1 = targetSlider1.value;
+      sliderValue1.textContent = `$${initialSliderValue1}`;
+
+      // Event-Listener für Slider-Eingaben
+      targetSlider1.oninput = function() {
+          var currentValue1 = this.value;
+          sliderValue1.textContent = `$${currentValue1}`;
+          savedSliderValue = currentValue1; // Speichern des aktuellen Werts
+      };
+
+      anzeigenButton.onclick = function() {
+          modalEstimate.style.display = "none";
+          continueButton.style.display = "block";
+          estimateButton.style.display = "none";
+          AIestimate.style.display = "block";
+          taskParagraph.innerHTML = 'Get more information by clicking on <span class="question-mark">?</span> in the forecast.'; // Ändert den HTML-Inhalt des <p> Elements
+          // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
+          estimateSale.innerHTML = `Your estimated sales were $${savedSliderValue}.`;
+      }
+
+      const modal = document.getElementById("modal");
+      const modal2 = document.getElementById("modal2");
+      const questionButton = document.getElementById("questionButton");
+      const mehrButton = document.getElementById("mehrButton");
+
+      // Funktion zum Laden von JSON-Daten
+      async function loadJSON(url) {
+          const response = await fetch(url);
+          if (!response.ok) {
+              throw new Error("Netzwerkantwort war nicht ok.");
+          }
+          return await response.json();
+      }
+
+      // Funktion zum Öffnen des ersten Modals und Laden der JSON-Daten
+      async function openModal1() {
+          try {
+              // Stelle sicher, dass der Modal-Container vorhanden ist
+              const modal1Content = document.getElementById("modal1Content");
+              if (!modal1Content) {
+                  console.error("Das Element 'modal1Content' wurde nicht gefunden.");
+                  return;
+              }
+
+              // Lade die JSON-Daten
+              const response = await fetch("/shap_feature_importance.json");
+              if (!response.ok) {
+                  throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
+              }
+              const data = await response.json();
+
+              // Protokolliere die Daten in der Konsole zur Überprüfung
+              console.log("Geladene Daten:", data);
+
+              // Extrahiere die ersten beiden Werte und Namen
+              const firstTwoItems = data.slice(0, 3);
+              
+              // Protokolliere die extrahierten Items zur Überprüfung
+              console.log("Extrahierte Items:", firstTwoItems);
+
+              // Generiere den HTML-Code für die Progress Bars
+              const progressBarsHTML = firstTwoItems.map(item => {
+                  const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
+                  return `
+                      <div class="progress-container" style="margin-bottom: 15px;">
+                          <p><strong>${item.col_name}</strong></p>
+                          <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentage}%;"></div>
+                          </div>
+                      </div>
+                  `;
+              }).join('');
+
+              // Protokolliere den HTML-Code für die Progress Bars
+              console.log("Generierter HTML-Code für Progress Bars:", progressBarsHTML);
+
+              // HTML-Inhalt des Modals anpassen
+              modal1Content.innerHTML = `
+                  <p>Following you can see which factors had the biggest influence:</p>
+                  ${progressBarsHTML}
+              `;
+
+              // Modal anzeigen
+              const modal = document.getElementById("modal");
+              if (!modal) {
+                  console.error("Das Modal-Element wurde nicht gefunden.");
+                  return;
+              }
+              modal.style.display = "block";
+              
+          } catch (error) {
+              console.error("Fehler:", error);
+          }
+      }
+
+      async function openModal2() {
+          try {
+              // Lade die JSON-Daten
+              const data = await loadJSON("/cf_470.json");
+              
+              // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
+              let closestData = null;
+              let closestDifference = Infinity;
+
+              data.forEach(item => {
+                  const difference = Math.abs(item.Sales_CF - savedSliderValue);
+                  if (difference < closestDifference) {
+                      closestDifference = difference;
+                      closestData = item;
+                  }
+              });
+
+              // Prüfe, ob wir eine passende Datenreihe gefunden haben
+              if (closestData) {
+                  const modal2Content = document.getElementById("modal2Content");
+                  
+                  // Extrahiere die Issues
+                  const issues = closestData.Explanation.Issues;
+
+                  // Formatiere die Issues als HTML-Liste
+                  const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
+
+                  modal2Content.innerHTML = `
+                      <p>The AI estimates <strong>$${closestData.Sales.toFixed(2)}</strong> instead of <strong>$${savedSliderValue}</strong> for the following reasons:</p>
+                      <ul style="color: #555;">
+                          ${issuesList}
+                      </ul>
+                  `;
+                  modal2.style.display = "block";
+              } else {
+                  console.error("Keine passende Datenreihe gefunden.");
+              }
+          } catch (error) {
+              console.error("Fehler beim Laden der JSON-Daten:", error);
+          }
+      }
+
+      // Funktion zum Bestimmen, welches Modal geöffnet werden soll
+      function determineAndOpenModal() {
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const id = urlParams.get('id');
+
+          // Überprüfe, ob eine ID vorhanden ist und ob sie gültig ist
+          if (!id) {
+              console.warn("Keine ID in der URL gefunden. Öffne Modal 1.");
+              openModal2();
+              return;
+          }
+
+          if (id.startsWith("FI")) {
+              openModal1();
+          } else if (id.startsWith("CF")) {
+              openModal2();
+          } else {
+              console.error("Ungültige ID in der URL. Öffne Modal 1.");
+              openModal2();
+          }
+      }
+
+      // Event Listener für den "Mehr"-Button im ersten Modal
+      mehrButton.addEventListener("click", function(event) {
+          event.preventDefault();
+          modal.style.display = "none";
+          openModal2();
+      });
+
+      // Event Listener für den "questionButton"
+      questionButton.addEventListener("click", function() {
+          determineAndOpenModal();
+          questionButton.style.display = "none";
+      });
+  });
+</script>
 </body>
 </html>
