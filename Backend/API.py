@@ -88,21 +88,18 @@ def save_click_event(click_event: ClickEvent):
         existing_doc = db.get(doc_id)
         
         if existing_doc:
-            # Dokument existiert bereits, aktualisiere es
-            existing_doc.update({
-                "questionButton": click_event.questionButton,
-            })
-            db.save(existing_doc)
-        else:
-            # Dokument existiert noch nicht, erstelle es neu
-            click_event_doc = {
-                "_id": doc_id,
-                "user_id": str(click_event.user_id),
-                "group": click_event.group,
-                "questionButton": click_event.questionButton,
-                "timestamp": click_event.timestamp.isoformat()
-            }
-            db.save(click_event_doc)
+            # Dokument existiert bereits, lösche es
+            db.delete(existing_doc)
+        
+        # Erstelle ein neues Dokument
+        click_event_doc = {
+            "_id": doc_id,
+            "user_id": str(click_event.user_id),
+            "group": click_event.group,
+            "questionButton": click_event.questionButton,
+            "timestamp": click_event.timestamp.isoformat()
+        }
+        db.save(click_event_doc)
 
         return {"message": "Click event processed successfully"}
     except Exception as e:
