@@ -25,6 +25,11 @@ async function btn_click() {
     try {
         let uuid = await id_api_call(); // Hol dir die reine UUID
         let id = `${group}-${uuid}`; // Kombiniere die UUID mit dem Gruppenvorsatz für andere Zwecke
+
+        // Speichere die UUID und Gruppe in localStorage
+        localStorage.setItem("user_uuid", uuid);
+        localStorage.setItem("user_group", group);
+        
         send_feedback(uuid, group); // Nur die reine UUID an die API senden
         window.location.href = "setting.html?id=" + id; // Präfix weiterhin für die URL verwenden
     } catch (error) {
