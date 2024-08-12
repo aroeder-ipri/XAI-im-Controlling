@@ -6,7 +6,7 @@ function assignGroup() {
 }
 
 async function id_api_call() {
-    const apiUrl = 'https://controlling.xaidemo.de/api/id'; // Sicherstellen, dass diese URL korrekt ist
+    const apiUrl = 'https://controlling.xaidemo.de/api/id'; //Sicherstellen, dass diese URL korrekt ist
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
