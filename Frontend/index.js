@@ -49,7 +49,7 @@ async function send_feedback(uuid, group) {
                 user_id: uuid, // Nur die reine UUID senden
                 group: group,
                 questionButton: "no",
-                timestamp: Date.now()
+                //timestamp: Date.now()
             })
         });
 
