@@ -23,31 +23,27 @@ async function id_api_call() {
 async function btn_click() {
     let group = assignGroup(); // Benutzer in eine Gruppe einteilen
     try {
-        let id = await id_api_call();
-        id = `${group}-${id}`; // ID mit Gruppenvorsilbe versehen
-        console.log(id);
-        send_feedback(id, group);
-        window.location.href = "setting.html?id=" + id;
+        let uuid = await id_api_call(); // Hol dir die reine UUID
+        let id = `${group}-${uuid}`; // Kombiniere die UUID mit dem Gruppenvorsatz für andere Zwecke
+        send_feedback(uuid, group); // Nur die reine UUID an die API senden
+        window.location.href = "setting.html?id=" + id; // Präfix weiterhin für die URL verwenden
     } catch (error) {
         console.error('Error in btn_click:', error);
     }
 }
 
-async function send_feedback(id, group) {
-    let btn_click_time = Date.now();
-    let rawResponse; // rawResponse außerhalb des try-Blocks definieren
-
+async function send_feedback(uuid, group) {
     try {
-        rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
+        const rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                user_id: id,
+                user_id: uuid, // Nur die reine UUID senden
                 group: group,
-                timestamp: btn_click_time,
+                timestamp: Date.now(),
             })
         });
 
@@ -55,26 +51,8 @@ async function send_feedback(id, group) {
             throw new Error(`HTTP error! Status: ${rawResponse.status}`);
         }
 
-        const content = await rawResponse.json();
-        console.log(content);
+        await rawResponse.json();
     } catch (error) {
         console.error("Error sending feedback:", error);
-
-        // Zusätzliche Fehlerdetails anzeigen, falls rawResponse existiert
-        if (rawResponse) {
-            console.error("Response status:", rawResponse.status);
-            const responseText = await rawResponse.text();
-            console.error("Response text:", responseText);
-        } else {
-            console.error("No response received");
-        }
-
-        // Überprüfe auf spezifische CORS-Fehler
-        if (error instanceof TypeError && error.message === 'Failed to fetch') {
-            console.error("This might be a CORS issue or a network problem.");
-        }
     }
 }
-
-// Aufruf der Funktion zum Testen
-send_feedback('test-id', 'test-group');
