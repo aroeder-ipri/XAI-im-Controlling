@@ -35,7 +35,8 @@ class RandId(BaseModel):
 
 class ClickEvent(BaseModel):
     user_id: uuid.UUID
-    #timestamp: datetime
+    group: group
+    timestamp: datetime
     #click_time: int
 
 couch = couchdb.Server('http://admin:password@couchdb:5984/')
