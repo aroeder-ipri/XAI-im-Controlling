@@ -84,14 +84,31 @@ def get_counterfactual_explanations():
 @app.post("/clicks", status_code=201)
 def save_click_event(click_event: ClickEvent):
     try:
-        click_event_doc = {
-            "user_id": str(click_event.user_id),
-            "group": click_event.group,
-            "questionButton": click_event.questionButton,
-            "timestamp": click_event.timestamp.isoformat(),
-            #"click_time": click_event.click_time
-        }
-        db.save(click_event_doc)
-        return {"message": "Click event saved successfully"}
+        user_id = str(click_event.user_id)
+        # Suche nach dem Dokument mit der user_id
+        docs = db.view('_design/your_design_doc/_view/by_user_id', key=user_id)
+
+        if docs:
+            doc_id = docs[0].id
+            # Hol das aktuelle Dokument
+            current_doc = db[doc_id]
+            # Update das Dokument
+            current_doc.update({
+                "group": click_event.group,
+                "questionButton": click_event.questionButton,
+                "timestamp": click_event.timestamp.isoformat()
+            })
+            db.save(current_doc)
+        else:
+            # Wenn das Dokument nicht gefunden wird, erstelle ein neues
+            click_event_doc = {
+                "user_id": user_id,
+                "group": click_event.group,
+                "questionButton": click_event.questionButton,
+                "timestamp": click_event.timestamp.isoformat()
+            }
+            db.save(click_event_doc)
+
+        return {"message": "Click event processed successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
