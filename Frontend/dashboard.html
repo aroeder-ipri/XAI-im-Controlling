@@ -616,11 +616,11 @@ questionButton.addEventListener("click", async function() {
                 })
             });
 
-            if (!questionButton.ok) {
-                throw new Error(`HTTP error! Status: ${questionButton.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            console.log("questionButton click saved successfully");
+            console.log("Question button click saved successfully");
         } catch (error) {
             console.error("Error sending question response:", error);
         }
@@ -628,7 +628,6 @@ questionButton.addEventListener("click", async function() {
         console.error("User UUID or group not found in localStorage.");
     }
 });
-
   });
 </script>
 </body>
