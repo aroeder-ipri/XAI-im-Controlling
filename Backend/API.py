@@ -86,8 +86,8 @@ def save_click_event(click_event: ClickEvent):
     try:
         click_event_doc = {
             "user_id": str(click_event.user_id),
-            "group": response.group,
-            "questionButton": response.questionButton,
+            "group": click_event.group,
+            "questionButton": click_event.questionButton,
             "timestamp": click_event.timestamp.isoformat(),
             #"click_time": click_event.click_time
         }
