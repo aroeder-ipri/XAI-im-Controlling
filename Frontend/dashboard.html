@@ -602,7 +602,7 @@ questionButton.addEventListener("click", async function() {
 
     if (uuid && group) { // Prüfe, ob UUID und Gruppe vorhanden sind
         try {
-            const response = await fetch("https://controlling.xaidemo.de/api/questions", {
+            const response = await fetch("https://controlling.xaidemo.de/api/clicks", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
