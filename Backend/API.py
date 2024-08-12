@@ -35,7 +35,7 @@ class RandId(BaseModel):
 
 class ClickEvent(BaseModel):
     user_id: uuid.UUID
-    group: group
+    #group: group
     timestamp: datetime
     #click_time: int
 
@@ -85,7 +85,7 @@ def save_click_event(click_event: ClickEvent):
     try:
         click_event_doc = {
             "user_id": str(click_event.user_id),
-            #"timestamp": click_event.timestamp.isoformat(),
+            "timestamp": click_event.timestamp.isoformat(),
             #"click_time": click_event.click_time
         }
         db.save(click_event_doc)
