@@ -114,6 +114,10 @@ p {
 
 /* Modalfensterinhalt */
 .modal-content {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #F2F2F2;
     margin: 15% auto;
     padding: 20px;
@@ -319,3 +323,6 @@ p {
     background-color: #5a9b1e;
   }
 
+  .AIestimate, .task, .btn {
+    margin: 2px 0; /* Adjust the value as needed */
+}
