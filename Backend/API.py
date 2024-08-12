@@ -36,9 +36,9 @@ class RandId(BaseModel):
 class ClickEvent(BaseModel):
     user_id: uuid.UUID
     group: str
+    questionButton: str
     timestamp: datetime
     #click_time: int
-    questionButton: str
 
 couch = couchdb.Server('http://admin:password@couchdb:5984/')
 db = couch['click_events'] if 'click_events' in couch else couch.create('click_events')
@@ -86,10 +86,10 @@ def save_click_event(click_event: ClickEvent):
     try:
         click_event_doc = {
             "user_id": str(click_event.user_id),
-            "group": str(click_event.group),
+            "group": response.group,
+            "questionButton": response.questionButton,
             "timestamp": click_event.timestamp.isoformat(),
             #"click_time": click_event.click_time
-            "questionButton": str(click_event.questionButton)
         }
         db.save(click_event_doc)
         return {"message": "Click event saved successfully"}
