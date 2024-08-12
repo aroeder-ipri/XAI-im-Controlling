@@ -595,7 +595,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
       questionButton.addEventListener("click", function() {
           determineAndOpenModal();
           questionButton.style.display = "none";
+          send_feedback(questionButton);
+          
       });
+
+      async function send_feedback(questionButton) {
+    try {
+        const rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                questionButton: "yes"
+            })
+        });
+
+        if (!rawResponse.ok) {
+            throw new Error(`HTTP error! Status: ${rawResponse.status}`);
+        }
+
+        await rawResponse.json();
+    } catch (error) {
+        console.error("Error sending feedback:", error);
+    }
+}
   });
 </script>
 </body>
