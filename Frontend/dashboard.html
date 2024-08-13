@@ -151,7 +151,10 @@
         <p class="AIestimate" style="display: none;">The AI estimates <span style="color: red;"><strong>$10182.20</strong></span> for the Month of April.</p>
         <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
         <button type="button" id="continueButton" class="btn custom-btn" style="display: none;">continue to set target</button>
-        <p class="task">Please provide your sales estimate for the month of April. You will receive additional information, from an AI to set your targets later.</p>
+        <p class="task"><span style="font-size: 0.83rem;">
+            <strong>Please provide your sales estimate for the month of April.</strong></span>
+            <span style="font-size: 0.74rem;">You will receive additional information from an AI to set your targets after you provide your sales estimate for the month of April.</span>
+          </p>
         <p id="vorhersageAnzeigen" style="display: none;"></p>
       </div>
       <!-- CHANGE STORE mit Checkboxen dynamisch einfügen - AKTUELL NICHT GEBRAUCHT DA NUR 1 Store -->
@@ -294,7 +297,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         var text = `
             <p>Hello,</p>
             <p>I appreciate your message and I can see you have already made an educated guess on your sales targets.</p>
-            <p>I feel like the AI is very accurate with it‘s prediction and I don‘t think you can expect sales to exceed $10,300 for the month of April.</p>
+            <p>I feel like the AI is very accurate with its prediction and I don‘t think you can expect sales to exceed $10,300 for the month of April.</p>
             <p>Kind Regards,</p>
             <p>Supervisor</p>
         `;
