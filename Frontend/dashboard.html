@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XAI in controlling</title>
-  <!-- Bootstrap CSS-->
+  <!-- Bootstrap CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
@@ -56,13 +56,15 @@
     <p>What target do you want to achieve with your store in the upcoming year?</p>
     <!-- Slider Container -->
     <div class="slider-container">
-      <label for="targetSlider">Target Value:</label>
-      <span id="sliderValue"></span>
-      <div id="sliderWrapper">
-        <span id="minValue">$8000</span>
-        <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">
-        <span id="maxValue">$15000</span>
-      </div>
+        <label for="targetSlider">Target Value:</label>
+        <span id="sliderValue"></span>
+        <div id="sliderWrapper">
+            <span id="minValue">$8000</span>
+            <button type="button" id="decreaseButton2" class="slider-button">-</button>
+            <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">
+            <button type="button" id="increaseButton2" class="slider-button">+</button>
+            <span id="maxValue">$15000</span>
+        </div>
     </div>
     <!-- Anzeige der erwarteten Auszahlung -->
     <div id="payoutContainer" class="calculation">
@@ -102,23 +104,23 @@
 
 <!-- Modalfenster für Estimate Sales -->
 <div id="modalEstimate" class="modal" style="display: none;">
-  <div class="modal-content">
+<div class="modal-content">
     <span class="close">&times;</span>
     <p><strong>After reading through the information and past sales performance, what do you expect to be your stores sales in the upcoming month?</strong></p>
         <!-- Slider Container -->
         <div class="slider-container">
-          <center><span id="sliderValue1">+0</span></center>
-          <div id="sliderWrapper">
-            <span id="minValue">$8000</span>
-            <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="0">
-            <span id="maxValue">$15000</span>
-          </div>
-          <p></p>
-          <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later point.</p>
-
-        <button type="button" id="anzeigenButton" class="btn custom-btn">Continue to Forecast</button>
+            <center><span id="sliderValue1">+0</span></center>
+            <div id="sliderWrapper">
+                <span id="minValue">$8000</span>
+                <button type="button" id="decreaseButton" class="slider-button">-</button>
+                <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="8000">
+                <button type="button" id="increaseButton" class="slider-button">+</button>
+                <span id="maxValue">$15000</span>
+            </div>
+            <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later point.</p>
+            <button type="button" id="anzeigenButton" class="btn custom-btn">Continue to Forecast</button>
         </div>
-  </div>
+</div>
 </div>
 
 
@@ -236,6 +238,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var selectedOption = 'noMessage';
     var savedSliderValue = 8000;
     var AIestimate = document.querySelector('p.AIestimate');
+    var decreaseButton = document.getElementById('decreaseButton');
+    var increaseButton = document.getElementById('increaseButton');
+    var decreaseButton2 = document.getElementById('decreaseButton2');
+    var increaseButton2 = document.getElementById('increaseButton2');
     
     // Zeige Modal3 bei Klick auf den Continue-Button
     continueButton.onclick = function() {
@@ -251,16 +257,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Initialisiere den Slider und die Auszahlung
     var initialSliderValue = targetSlider.value;
-    sliderValue.textContent = `$${initialSliderValue}`;
-    updatePayout(initialSliderValue);
+sliderValue.textContent = `$${initialSliderValue}`;
+updatePayout(initialSliderValue);
 
-    // Event-Listener für Slider-Eingaben
-    targetSlider.oninput = function() {
-        var currentValue = this.value;
+// Event-Listener für Slider-Eingaben
+targetSlider.oninput = function() {
+    var currentValue = this.value;
+    sliderValue.textContent = `$${currentValue}`;
+    yourTarget = currentValue; // Speichern des aktuellen Werts
+    updatePayout(currentValue);
+};
+
+// Event-Listener für den Minus-Button
+decreaseButton2.onclick = function() {
+    var currentValue = parseInt(targetSlider.value);
+    if (currentValue > parseInt(targetSlider.min)) {
+        targetSlider.value = currentValue - parseInt(targetSlider.step);
+        currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
         sliderValue.textContent = `$${currentValue}`;
-        yourTarget = currentValue;
+        yourTarget = currentValue; // Speichern des aktuellen Werts
         updatePayout(currentValue);
-    };
+    }
+};
+
+// Event-Listener für den Plus-Button
+increaseButton2.onclick = function() {
+    var currentValue = parseInt(targetSlider.value);
+    if (currentValue < parseInt(targetSlider.max)) {
+        targetSlider.value = currentValue + parseInt(targetSlider.step);
+        currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
+        sliderValue.textContent = `$${currentValue}`;
+        yourTarget = currentValue; // Speichern des aktuellen Werts
+        updatePayout(currentValue);
+    }
+};
 
     // Funktion zur Berechnung und Anzeige der Auszahlung
     function updatePayout(value) {
@@ -429,6 +459,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
       // Initialisiere den Slider und die Auszahlung
       var initialSliderValue1 = targetSlider1.value;
       sliderValue1.textContent = `$${initialSliderValue1}`;
+
+      // Event-Listener für den Minus-Button
+decreaseButton.onclick = function() {
+    var currentValue1 = parseInt(targetSlider1.value);
+    if (currentValue1 > parseInt(targetSlider1.min)) {
+        targetSlider1.value = currentValue1 - parseInt(targetSlider1.step);
+        sliderValue1.textContent = `$${targetSlider1.value}`;
+        savedSliderValue = targetSlider1.value;
+    }
+};
+
+// Event-Listener für den Plus-Button
+increaseButton.onclick = function() {
+    var currentValue1 = parseInt(targetSlider1.value);
+    if (currentValue1 < parseInt(targetSlider1.max)) {
+        targetSlider1.value = currentValue1 + parseInt(targetSlider1.step);
+        sliderValue1.textContent = `$${targetSlider1.value}`;
+        savedSliderValue = targetSlider1.value;
+    }
+};
 
       // Event-Listener für Slider-Eingaben
       targetSlider1.oninput = function() {
@@ -631,7 +681,33 @@ questionButton.addEventListener("click", async function() {
         console.error("User UUID or group not found in localStorage.");
     }
 });
+
+// Funktion zum Mischen eines Arrays
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Das parent Element für die Buttons
+  const messageOptions = document.getElementById('messageOptions');
+
+  // Die Buttons sammeln und in ein Array konvertieren
+  const buttons = Array.from(messageOptions.getElementsByTagName('button'));
+
+  // Die Reihenfolge der Buttons randomisieren
+  const shuffledButtons = shuffle(buttons);
+
+  // Alte Buttons entfernen
+  messageOptions.innerHTML = '';
+
+  // Die neu sortierten Buttons hinzufügen
+  shuffledButtons.forEach(button => {
+    messageOptions.appendChild(button);
   });
+});
 </script>
 </body>
 </html>
