@@ -326,3 +326,17 @@ p {
   .AIestimate, .task, .btn {
     margin: 2px 0; /* Adjust the value as needed */
 }
+
+.slider-button {
+    background-color: #74B027;
+    color: white;
+    border: none;
+    padding: 2px 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.slider-button:hover {
+    background-color: #5a9b1e; /* Leicht dunklerer Farbton bei Hover */
+}
