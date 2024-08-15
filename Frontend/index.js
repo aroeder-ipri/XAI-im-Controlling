@@ -48,8 +48,10 @@ async function send_feedback(uuid, group) {
             body: JSON.stringify({
                 user_id: uuid, // Nur die reine UUID senden
                 group: group,
-                questionButton: "no",
-                timestamp: Date.now()
+                questionButton: "n.n.",
+                start: Date.now(),
+                end: "n.n.",
+                advice: "n.n."
             })
         });
 
