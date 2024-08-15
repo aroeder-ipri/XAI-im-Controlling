@@ -50,7 +50,7 @@ async function send_feedback(uuid, group) {
                 group: group,
                 questionButton: "n.n.",
                 start: Date.now(),
-                end: "n.n.",
+                end: null,
                 advice: "n.n."
             })
         });
