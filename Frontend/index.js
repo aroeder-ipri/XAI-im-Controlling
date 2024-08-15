@@ -1,4 +1,4 @@
-// Funktion zur zufälligen Zuweisung der Gruppe
+//Funktion zur zufälligen Zuweisung der Gruppe
 function assignGroup() {
     const groups = ['CF', 'FI'];
     const randomIndex = Math.floor(Math.random() * groups.length);
