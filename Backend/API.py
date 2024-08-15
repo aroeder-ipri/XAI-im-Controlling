@@ -88,7 +88,7 @@ def save_click_event(click_event: ClickEvent):
             "user_id": str(click_event.user_id),
             "group": click_event.group,
             "questionButton": click_event.questionButton,
-            "timestamp": click_event.start.isoformat(),
+            "timestamp": click_event.timestamp.isoformat(),
             #"end": click_event.end.isoformat(),
             #"advice": click_event.advice,
             #"click_time": click_event.click_time
