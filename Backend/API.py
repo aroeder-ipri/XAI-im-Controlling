@@ -38,8 +38,8 @@ class ClickEvent(BaseModel):
     group: str
     questionButton: str
     start: datetime
-    end: datetime
-    advice: str
+    #end: datetime
+    #advice: str
     #click_time: int
 
 couch = couchdb.Server('http://admin:password@couchdb:5984/')
@@ -89,8 +89,8 @@ def save_click_event(click_event: ClickEvent):
             "group": click_event.group,
             "questionButton": click_event.questionButton,
             "start": click_event.start.isoformat(),
-            "end": click_event.end.isoformat(),
-            "advice": click_event.advice,
+            #"end": click_event.end.isoformat(),
+            #"advice": click_event.advice,
             #"click_time": click_event.click_time
         }
         db.save(click_event_doc)
