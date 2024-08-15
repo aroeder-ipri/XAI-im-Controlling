@@ -49,8 +49,8 @@ async function send_feedback(uuid, group) {
                 user_id: uuid, // Nur die reine UUID senden
                 group: group,
                 questionButton: "n.n.",
-                start: Date.now(),
-                end: Date.now(),
+                start: new Date().toISOString()
+                end: new Date().toISOString()
                 advice: "n.n."
             })
         });
