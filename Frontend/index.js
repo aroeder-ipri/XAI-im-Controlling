@@ -49,7 +49,7 @@ async function send_feedback(uuid, group) {
                 user_id: uuid,
                 group: group,
                 questionButton: "n.n.",
-                start: new Date().toISOString(),
+                timestamp: new Date().toISOString(),
                 //end: new Date().toISOString(),
                 //advice: "n.n."
             })
