@@ -50,8 +50,8 @@ async function send_feedback(uuid, group) {
                 group: group,
                 questionButton: "n.n.",
                 start: new Date().toISOString(),
-                end: new Date().toISOString(),
-                advice: "n.n."
+                //end: new Date().toISOString(),
+                //advice: "n.n."
             })
         });
 
