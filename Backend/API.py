@@ -37,7 +37,9 @@ class ClickEvent(BaseModel):
     user_id: uuid.UUID
     group: str
     questionButton: str
-    timestamp: datetime
+    start: datetime
+    end: datetime
+    advice: str
     #click_time: int
 
 couch = couchdb.Server('http://admin:password@couchdb:5984/')
@@ -53,8 +55,6 @@ def create_id():
     id = uuid.uuid4()
     dict_id = {'id': id}
     return dict_id
-
-
 
 @app.get("/feature_importance/", response_model=List[FeatureImportance], tags=["feature_importance"])
 def get_feature_importance():
@@ -88,7 +88,9 @@ def save_click_event(click_event: ClickEvent):
             "user_id": str(click_event.user_id),
             "group": click_event.group,
             "questionButton": click_event.questionButton,
-            "timestamp": click_event.timestamp.isoformat(),
+            "start": click_event.start.isoformat(),
+            "end": click_event.end.isoformat(),
+            "advice": click_event.advice,
             #"click_time": click_event.click_time
         }
         db.save(click_event_doc)
