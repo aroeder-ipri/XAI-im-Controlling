@@ -46,22 +46,20 @@ async function send_feedback(uuid, group) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                user_id: uuid,
+                user_id: uuid, // Nur die reine UUID senden
                 group: group,
                 questionButton: "n.n.",
-                timestamp: new Date().toISOString(),
-                //end: new Date().toISOString(),
-                //advice: "n.n."
+                start: Date.now(),
+                end: Date.now(),
+                advice: "n.n."
             })
         });
 
-        // Log response for debugging
-        const responseText = await rawResponse.text();
-        console.log("Response from API:", responseText);
-
         if (!rawResponse.ok) {
-            throw new Error(`HTTP error! Status: ${rawResponse.status} - ${responseText}`);
+            throw new Error(`HTTP error! Status: ${rawResponse.status}`);
         }
+
+        await rawResponse.json();
     } catch (error) {
         console.error("Error sending feedback:", error);
     }
