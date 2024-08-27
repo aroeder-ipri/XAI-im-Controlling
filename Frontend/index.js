@@ -68,6 +68,7 @@ async function send_feedback(uuid, group, startTime) {
                 initialGuess: "n.n.",
                 finalTarget: "n.n.",
                 advice: "n.n.",
+                completionCodeGenerated: "n.n.",
                 end: Date.now()
             })
         });
