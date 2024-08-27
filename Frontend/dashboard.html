@@ -225,6 +225,12 @@ async function btn_click() {
     const group = localStorage.getItem("user_group");
     const startTime = localStorage.getItem("start_time");
 
+    // Neue Werte in den localStorage speichern
+    localStorage.setItem("questionButtonClick", questionButtonClick);
+    localStorage.setItem("savedSliderValue", savedSliderValue);
+    localStorage.setItem("yourTarget", yourTarget);
+    localStorage.setItem("optionId", optionId);
+
     // Werte an die API senden
     try {
         const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
@@ -241,6 +247,7 @@ async function btn_click() {
                 initialGuess: savedSliderValue,
                 finalTarget: yourTarget,
                 advice: optionId,
+                completionCodeGenerated: "n.n.",
                 end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
             })
         });
