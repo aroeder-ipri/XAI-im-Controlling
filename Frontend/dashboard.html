@@ -20,7 +20,7 @@
     fetch(apiUrl).then(response => {
       return response.json();
     }).then(data => {
-      //Work with JSON data here
+      // Work with JSON data here
       console.log(data);
     }).catch(err => {
       console.log('Error', err)
@@ -123,6 +123,19 @@
 </div>
 </div>
 
+<!-- Modalfenster für Task overview -->
+ <div id="modalTask" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>On the upcoming pages you’ll use a sales development tool to providing you with information on your store. You’ll go through the target-setting process in six steps:</p>
+    <p>1. You'll make an initial guess about your store's sales performance for the upcoming month. (Note: This is not your target!)</p>
+    <p>2. The tool will provide an AI-generated sales forecast.</p>
+    <p>3. You can set a sales target for the upcoming month.</p>
+    <p>4. You can ask your supervisor for advice.</p>
+    <p>5. You can adjust your sales target one last time.</p>
+  </div>
+ </div>
+
 
 <div class="container">
   <!-- Seitenüberschrift -->
@@ -149,7 +162,7 @@
     <!-- Rechte Seite - Nebenboxen -->
     <div class="col-md-4">
       <div class="content-box2 mt-3">
-        <h2>Forecast</h2>
+        <h2>AI-Forecast</h2>
         <p class="AIestimate" style="display: none;">The AI estimates <span style="color: red;"><strong>$10182.20</strong></span> for the Month of April.</p>
         <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
         <button type="button" id="continueButton" class="btn custom-btn" style="display: none;">continue to set target</button>
@@ -242,6 +255,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var increaseButton = document.getElementById('increaseButton');
     var decreaseButton2 = document.getElementById('decreaseButton2');
     var increaseButton2 = document.getElementById('increaseButton2');
+    var taskOverview = document.getElementById('modalTask');
+
+    function showModalTask() {
+        taskOverview.style.display = "block";
+    }
+    window.onload = showModalTask;
     
     // Zeige Modal3 bei Klick auf den Continue-Button
     continueButton.onclick = function() {
@@ -492,7 +511,7 @@ increaseButton.onclick = function() {
           continueButton.style.display = "block";
           estimateButton.style.display = "none";
           AIestimate.style.display = "block";
-          taskParagraph.innerHTML = 'Get more information by clicking on <span class="question-mark">?</span> in the forecast.'; // Ändert den HTML-Inhalt des <p> Elements
+          taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.'; // Ändert den HTML-Inhalt des <p> Elements
           // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
           estimateSale.innerHTML = `Your estimated sales were $${savedSliderValue}.`;
       }
@@ -555,7 +574,7 @@ increaseButton.onclick = function() {
 
               // HTML-Inhalt des Modals anpassen
               modal1Content.innerHTML = `
-                  <p>Following you can see which factors had the biggest influence:</p>
+                  <p>Following you can see which factors had the biggest influence on the AI forecast:</p>
                   ${progressBarsHTML}
               `;
 
@@ -600,7 +619,7 @@ increaseButton.onclick = function() {
                   const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
 
                   modal2Content.innerHTML = `
-                      <p>The AI estimates <strong>$${closestData.Sales.toFixed(2)}</strong> instead of <strong>$${savedSliderValue}</strong> for the following reasons:</p>
+                      <p>The AI estimates <strong>$${closestData.Sales.toFixed(2)}</strong> instead of <strong>$${savedSliderValue}</strong> (your estimation) for the following reasons:</p>
                       <ul style="color: #555;">
                           ${issuesList}
                       </ul>
