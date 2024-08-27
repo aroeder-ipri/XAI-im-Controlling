@@ -212,17 +212,57 @@ var actualSales = 10300;
 var basePayout = 0;
 var optionCost = 0;
 
-function btn_click() {
+async function btn_click() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
-    // Post-Request ans Backend
-    window.location.href = "survey.html?id=" + id
-        + "&YourTarget=" + encodeURIComponent(yourTarget)
-        + "&actualSales=" + encodeURIComponent(actualSales)
-        + "&basePayout=" + encodeURIComponent(basePayout)
-        + "&optionCost=" + encodeURIComponent(optionCost);
+
+    // Werte aus dem localStorage abrufen
+    const uuid = localStorage.getItem("user_uuid");
+    const group = localStorage.getItem("user_group");
+    const startTime = localStorage.getItem("start_time");
+
+    // Werte an die API senden
+    try {
+        const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: uuid, // Nur die reine UUID senden
+                group: group,
+                start: startTime, // Verwende den gespeicherten Startzeitpunkt
+                questionButton: "JA",
+                initialGuess: "n.n.",
+                firstTarget: "n.n.",
+                finalTarget: "n.n.",
+                advice: "n.n.",
+                end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Data successfully sent to the API:", data);
+
+        // Weiterleitung zur nächsten Seite
+        window.location.href = "survey.html?id=" + encodeURIComponent(id)
+            + "&YourTarget=" + encodeURIComponent(yourTarget)
+            + "&actualSales=" + encodeURIComponent(actualSales)
+            + "&basePayout=" + encodeURIComponent(basePayout)
+            + "&optionCost=" + encodeURIComponent(optionCost);
+
+    } catch (error) {
+        console.error('Error sending data to the API:', error);
+    }
 }
+
+
 
 document.addEventListener('DOMContentLoaded', (event) => {
     var modal3 = document.getElementById("modal3");
