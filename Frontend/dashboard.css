@@ -187,7 +187,6 @@ p {
     border-radius: 50%;
     line-height: 30px;
     text-align: center;
-    z-index: 9999; /* Stellt sicher, dass der Button über anderen Inhalten liegt */
 }
 
 #questionButton:hover {
