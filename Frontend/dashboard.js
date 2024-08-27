@@ -770,7 +770,7 @@ barChart = new Chart(barCtx, {
         labels: ['2022', '2023', '2024 (current)'],
         datasets: [{
             label: 'Jahresumsatz',
-            data: [132498, 130456, 69477],
+            data: [132498, 130456, 29118],
             backgroundColor: ['grey'],
             borderColor: 'transparent',
             borderWidth: 1,
