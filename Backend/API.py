@@ -39,7 +39,6 @@ class ClickEvent(BaseModel):
     start: datetime
     questionButton: str
     initialGuess: str
-    firstTarget: str
     finalTarget: str
     advice: str
     end: datetime
@@ -94,7 +93,6 @@ def save_click_event(click_event: ClickEvent):
             "start": click_event.start.isoformat(),
             "questionButton": click_event.questionButton,
             "initialGuess": click_event.initialGuess,
-            "firstTarget": click_event.firstTarget,
             "finalTarget": click_event.finalTarget,
             "advice": click_event.advice,
             "end": click_event.end.isoformat(),
