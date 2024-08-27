@@ -6,7 +6,7 @@ function assignGroup() {
 }
 
 async function id_api_call() {
-    const apiUrl = 'https://controlling.xaidemo.de/api/id'; //Sicherstellen, dass diese URL korrekt ist
+    const apiUrl = 'https://controlling.xaidemo.de/api/id'; // Sicherstellen, dass diese URL korrekt ist
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -20,6 +20,17 @@ async function id_api_call() {
     }
 }
 
+// Funktion zum Speichern des Startzeitpunkts im Local Storage
+function saveStartTime() {
+    if (!localStorage.getItem("start_time")) {
+        const startTime = Date.now();
+        localStorage.setItem("start_time", startTime);
+        return startTime;
+    } else {
+        return localStorage.getItem("start_time");
+    }
+}
+
 async function btn_click() {
     let group = assignGroup(); // Benutzer in eine Gruppe einteilen
     try {
@@ -29,15 +40,19 @@ async function btn_click() {
         // Speichere die UUID und Gruppe in localStorage
         localStorage.setItem("user_uuid", uuid);
         localStorage.setItem("user_group", group);
-        
-        send_feedback(uuid, group); // Nur die reine UUID an die API senden
+
+        // Speichere den Startzeitpunkt im Local Storage
+        const startTime = saveStartTime();
+
+        // Feedback senden mit dem Startzeitpunkt aus dem Local Storage
+        send_feedback(uuid, group, startTime); // Nur die reine UUID an die API senden
         window.location.href = "setting.html?id=" + id; // Präfix weiterhin für die URL verwenden
     } catch (error) {
         console.error('Error in btn_click:', error);
     }
 }
 
-async function send_feedback(uuid, group) {
+async function send_feedback(uuid, group, startTime) {
     try {
         const rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
             method: 'POST',
@@ -48,10 +63,13 @@ async function send_feedback(uuid, group) {
             body: JSON.stringify({
                 user_id: uuid, // Nur die reine UUID senden
                 group: group,
+                start: startTime, // Verwende den gespeicherten Startzeitpunkt
                 questionButton: "n.n.",
-                start: Date.now(),
-                end: Date.now(),
-                advice: "n.n."
+                initialGuess: "n.n.",
+                firstTarget: "n.n.",
+                finalTarget: "n.n.",
+                advice: "n.n.",
+                end: Date.now()
             })
         });
 
