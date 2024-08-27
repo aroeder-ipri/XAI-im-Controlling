@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XAI in controlling</title>
-  <!--Bootstrap CSS -->
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
@@ -66,6 +66,7 @@
   <script>
     function checkAnswer() {
       const answerInput = document.getElementById('answer');
+      const checkButton = document.getElementById('check');
       const successMessage = document.getElementById('successMessage');
       const button = document.getElementById('mainButton');
       const redirectMessage = document.getElementById('redirectMessage');
@@ -74,15 +75,17 @@
       if (correctAnswers.includes(answerInput.value.trim())) {
         successMessage.style.display = 'block';
         button.style.display = 'inline-block';
+        checkButton.style.display = 'none';
       } else {
         successMessage.style.display = 'none';
         redirectMessage.style.display = 'block';
-        let countdown = 5;
-        redirectMessage.textContent = `Incorrect answer, you will be redirected in ${countdown} seconds.`;
+        checkButton.style.display = 'none';
+        let countdown = 2;
+        redirectMessage.textContent = `Incorrect answer, redirecting...`;
         const countdownInterval = setInterval(() => {
           countdown--;
           if (countdown > 0) {
-            redirectMessage.textContent = `Incorrect answer, you will be redirected in ${countdown} seconds.`;
+            redirectMessage.textContent = `Incorrect answer, redirecting...`;
           } else {
             clearInterval(countdownInterval);
             const queryString = window.location.search;
@@ -107,11 +110,15 @@
   <div class="landing-container">
     <h1>Comprehension Check</h1>
     <center><img src="image.png" alt="Image" style="width: 55%; margin-bottom: 20px;"><br></center>
-    <p>After asking for advice from your supervisor you set a sales target of $13,000. What is your bonus payment if your store reaches this goal?</p>
+    <p><strong>Calculation:</strong>
+    <br>$0.40 + X*$0.20 – $0.30 (Advice)
+    <br>Where X is sales beyond $8,000 divided by $1,000</p>
+    <p><strong>Question:</strong>
+      <br>After asking for advice from your supervisor you set a sales target of $13,000. What is your bonus payment if your store reaches this goal?</p>
     <input type="text" id="answer" class="form-control" placeholder="Enter your answer - NOTE: use periods for cent amounts (e.g. 0.50)">
-    <button class="btn btn-check-answer mt-3" onclick="checkAnswer()">Check Answer</button>
+    <button id="check" class="btn btn-check-answer mt-3" onclick="checkAnswer()">Check Answer</button>
     <p id="successMessage" class="success-message">Correct answer! You can now proceed.</p>
-    <p id="redirectMessage" class="feedback">Incorrect answer, you will be redirected in 5 seconds.</p>
+    <p id="redirectMessage" class="feedback">Incorrect answer, redirecting...</p>
     <a id="mainButton" onclick="btn_click();" class="btn mt-3">Continue to Forecast</a>
   </div>
 </body>
