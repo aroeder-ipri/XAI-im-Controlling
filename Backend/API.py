@@ -9,7 +9,7 @@ import couchdb
 
 app = FastAPI(root_path="/api")
 
-#hinzufügen von CORS Middleware , um Anfragen von jeder Quelle zu erlauben
+# hinzufügen von CORS Middleware , um Anfragen von jeder Quelle zu erlauben
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  #Erlaubt Zugriffe von allen Domänen
