@@ -213,7 +213,7 @@ var basePayout = 0;
 var optionCost = 0;
 var questionButtonClick = "no";
 var savedSliderValue = 8000;
-var optionID = "noMessage";
+var optionId = "noMessage";
 
 async function btn_click() {
     const queryString = window.location.search;
@@ -240,7 +240,7 @@ async function btn_click() {
                 questionButton: questionButtonClick,
                 initialGuess: savedSliderValue,
                 finalTarget: yourTarget,
-                advice: optionID,
+                advice: optionId,
                 end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
             })
         });
