@@ -66,7 +66,6 @@ async function send_feedback(uuid, group, startTime) {
                 start: startTime, // Verwende den gespeicherten Startzeitpunkt
                 questionButton: "n.n.",
                 initialGuess: "n.n.",
-                firstTarget: "n.n.",
                 finalTarget: "n.n.",
                 advice: "n.n.",
                 end: Date.now()
