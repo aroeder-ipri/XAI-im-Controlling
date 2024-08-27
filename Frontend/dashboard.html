@@ -439,10 +439,9 @@ increaseButton2.onclick = function() {
                 modal4.style.display = "none";
                 showMessageExample(exampleText);
                 optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
+                // Aktualisiere die globale optionId
+                optionId = selectedOptionId;
             }
-
-            // Aktualisiere die globale optionId
-            optionId = selectedOptionId;
 
             // Zeige den Hinweistext in Modal3
             showHintInModal3(hintText);
