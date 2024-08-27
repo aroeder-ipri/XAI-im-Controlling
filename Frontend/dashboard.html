@@ -212,6 +212,8 @@ var actualSales = 10300;
 var basePayout = 0;
 var optionCost = 0;
 var questionButtonClick = "no";
+var savedSliderValue = 8000;
+var optionID = "noMessage";
 
 async function btn_click() {
     const queryString = window.location.search;
@@ -236,10 +238,9 @@ async function btn_click() {
                 group: group,
                 start: startTime, // Verwende den gespeicherten Startzeitpunkt
                 questionButton: questionButtonClick,
-                initialGuess: "n.n.",
-                firstTarget: "n.n.",
+                initialGuess: savedSliderValue,
                 finalTarget: yourTarget,
-                advice: "n.n.",
+                advice: optionID,
                 end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
             })
         });
@@ -262,8 +263,6 @@ async function btn_click() {
         console.error('Error sending data to the API:', error);
     }
 }
-
-
 
 document.addEventListener('DOMContentLoaded', (event) => {
     var modal3 = document.getElementById("modal3");
@@ -290,7 +289,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var taskParagraph = document.querySelector('p.task');
     var estimateSale = document.querySelector('p.estimateSale');
     var selectedOption = 'noMessage';
-    var savedSliderValue = 8000;
     var AIestimate = document.querySelector('p.AIestimate');
     var decreaseButton = document.getElementById('decreaseButton');
     var increaseButton = document.getElementById('increaseButton');
@@ -422,19 +420,19 @@ increaseButton2.onclick = function() {
     // Event-Listener für die Auswahloptionen im Modal4
     optionButtons.forEach(function(button) {
         button.addEventListener('click', function() {
-            var optionId = this.id.replace('Btn', '');
+            var selectedOptionId = this.id.replace('Btn', '');
             var exampleText = "";
             var hintText = "";
 
-            if (optionId === 'noMessage') {
+            if (selectedOptionId === 'noMessage') {
                 modal4.style.display = "none";
                 optionCost = 0.00; // Keine Kosten
                 hintText = "You can now adjust your target level one last time. ";
             } else {
-                if (optionId === 'salesExpectations') {
+                if (selectedOptionId === 'salesExpectations') {
                     exampleText = "What are your sales expectations from our store?";
                     hintText = "After asking your supervisor you can now adjust your target level one last time.";
-                } else if (optionId === 'trustForecast') {
+                } else if (selectedOptionId === 'trustForecast') {
                     exampleText = "Do you think I should trust the forecast?";
                     hintText = "After asking your supervisor you can now adjust your target level one last time.";
                 }
@@ -442,6 +440,9 @@ increaseButton2.onclick = function() {
                 showMessageExample(exampleText);
                 optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
             }
+
+            // Aktualisiere die globale optionId
+            optionId = selectedOptionId;
 
             // Zeige den Hinweistext in Modal3
             showHintInModal3(hintText);
