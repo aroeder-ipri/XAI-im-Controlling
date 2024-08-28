@@ -1,7 +1,7 @@
 [
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 9071.4,
         "Percentage1": 0.9,
         "Percentage2": 0.93,
@@ -21,7 +21,7 @@
     },
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 9971.4,
         "Percentage1": 0.9,
         "Percentage2": 0.93,
@@ -41,7 +41,7 @@
     },
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 10046.4,
         "Percentage1": 0.96,
         "Percentage2": 0.98,
@@ -61,7 +61,7 @@
     },
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 10411.2,
         "Percentage1": 0.98,
         "Percentage2": 1.0,
@@ -81,7 +81,7 @@
     },
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 10499.5,
         "Percentage1": 1.02,
         "Percentage2": 1.04,
@@ -101,7 +101,7 @@
     },
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 10866.2,
         "Percentage1": 1.06,
         "Percentage2": 1.08,
@@ -121,7 +121,7 @@
     },
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 11648.2,
         "Percentage1": 1.08,
         "Percentage2": 1.11,
@@ -141,7 +141,7 @@
     },
     {
         "Store": 470.0,
-        "Sales": 10182.2001953125,
+        "Sales": 10182,
         "Sales_CF": 11733.8,
         "Percentage1": 1.1,
         "Percentage2": 1.12,
