@@ -59,11 +59,11 @@
         <label for="targetSlider">Target Value:</label>
         <span id="sliderValue"></span>
         <div id="sliderWrapper">
-            <span id="minValue">$8000</span>&nbsp;
+            <span id="minValue">$8,000</span>&nbsp;
             <button type="button" id="decreaseButton2" class="slider-button">-</button>&nbsp;
             <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">&nbsp;
             <button type="button" id="increaseButton2" class="slider-button">+</button>&nbsp;
-            <span id="maxValue">$15000</span>
+            <span id="maxValue">$15,000</span>
         </div>
     </div>
     <!-- Anzeige der erwarteten Auszahlung -->
@@ -111,11 +111,11 @@
         <div class="slider-container">
             <center><span id="sliderValue1">+0</span></center>
             <div id="sliderWrapper">
-                <span id="minValue">$8000</span>&nbsp;
+                <span id="minValue">$8,000</span>&nbsp;
                 <button type="button" id="decreaseButton" class="slider-button">-</button>&nbsp;
                 <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="8000">&nbsp;
                 <button type="button" id="increaseButton" class="slider-button">+</button>&nbsp;
-                <span id="maxValue">$15000</span>
+                <span id="maxValue">$15,000</span>
             </div>
             <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later point.</p>
             <button type="button" id="anzeigenButton" class="btn custom-btn">Continue to Forecast</button>
@@ -147,15 +147,15 @@
       <div class="content-box1 mt-3">
         <!-- Hier wird der Graph eingebettet -->
         <!-- Der erste Linechart -->
-        <canvas id="lineChart" style="display: none;" width="2000" height="650"></canvas>
+        <canvas id="lineChart" style="display: none;" width="2000" height="2000"></canvas>
         <!-- Der zweite Linechart -->
-        <canvas id="lineChart2" width="2000" height="650"></canvas>
+        <canvas id="lineChart2" width="2000" height="2000"></canvas>
         <div class="canvas-container">
           <button id="questionButton" class="position-absolute">?</button>
         </div>
       </div>
-      <!-- Hier wird der Graph eingebettet -->
-      <div class="content-box1 mt-3">
+      <!-- Hier wird der Chart mit den kummulierten Werten für mehrere Jahre eingebettet AKTUELL NICHT GEBRAUCHT -->
+      <div class="content-box1 mt-3" style="display: none;">
         <canvas id="barChart" width="2000" height="600"></canvas>
       </div>
     </div>
@@ -163,7 +163,7 @@
     <div class="col-md-4">
       <div class="content-box2 mt-3">
         <h2>AI-Forecast</h2>
-        <p class="AIestimate" style="display: none;">The AI estimates <span style="color: red;"><strong>$10182.20</strong></span> for the Month of April.</p>
+        <p class="AIestimate" style="display: none;">The AI estimates <span style="color: red;"><strong>$10,182</strong></span> for the Month of April.</p>
         <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
         <button type="button" id="continueButton" class="btn custom-btn" style="display: none;">continue to set target</button>
         <p class="task"><span style="font-size: 0.83rem;">
@@ -328,7 +328,8 @@ updatePayout(initialSliderValue);
 // Event-Listener für Slider-Eingaben
 targetSlider.oninput = function() {
     var currentValue = this.value;
-    sliderValue.textContent = `$${currentValue}`;
+    const formattedValue = formatNumberWithCommas(currentValue);
+    sliderValue.textContent = `$${formattedValue}`;
     yourTarget = currentValue; // Speichern des aktuellen Werts
     updatePayout(currentValue);
 };
@@ -338,8 +339,9 @@ decreaseButton2.onclick = function() {
     var currentValue = parseInt(targetSlider.value);
     if (currentValue > parseInt(targetSlider.min)) {
         targetSlider.value = currentValue - parseInt(targetSlider.step);
+        const formattedValue = formatNumberWithCommas(targetSlider.value);
         currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
-        sliderValue.textContent = `$${currentValue}`;
+        sliderValue.textContent = `$${formattedValue}`;
         yourTarget = currentValue; // Speichern des aktuellen Werts
         updatePayout(currentValue);
     }
@@ -350,8 +352,9 @@ increaseButton2.onclick = function() {
     var currentValue = parseInt(targetSlider.value);
     if (currentValue < parseInt(targetSlider.max)) {
         targetSlider.value = currentValue + parseInt(targetSlider.step);
+        const formattedValue = formatNumberWithCommas(targetSlider.value);
         currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
-        sliderValue.textContent = `$${currentValue}`;
+        sliderValue.textContent = `$${formattedValue}`;
         yourTarget = currentValue; // Speichern des aktuellen Werts
         updatePayout(currentValue);
     }
@@ -532,7 +535,8 @@ decreaseButton.onclick = function() {
     var currentValue1 = parseInt(targetSlider1.value);
     if (currentValue1 > parseInt(targetSlider1.min)) {
         targetSlider1.value = currentValue1 - parseInt(targetSlider1.step);
-        sliderValue1.textContent = `$${targetSlider1.value}`;
+        const formattedValue = formatNumberWithCommas(targetSlider1.value);
+        sliderValue1.textContent = `$${formattedValue}`;
         savedSliderValue = targetSlider1.value;
     }
 };
@@ -542,7 +546,8 @@ increaseButton.onclick = function() {
     var currentValue1 = parseInt(targetSlider1.value);
     if (currentValue1 < parseInt(targetSlider1.max)) {
         targetSlider1.value = currentValue1 + parseInt(targetSlider1.step);
-        sliderValue1.textContent = `$${targetSlider1.value}`;
+        const formattedValue = formatNumberWithCommas(targetSlider1.value);
+        sliderValue1.textContent = `$${formattedValue}`;
         savedSliderValue = targetSlider1.value;
     }
 };
@@ -550,7 +555,8 @@ increaseButton.onclick = function() {
       // Event-Listener für Slider-Eingaben
       targetSlider1.oninput = function() {
           var currentValue1 = this.value;
-          sliderValue1.textContent = `$${currentValue1}`;
+          const formattedValue = formatNumberWithCommas(currentValue1);
+          sliderValue1.textContent = `$${formattedValue}`;
           savedSliderValue = currentValue1; // Speichern des aktuellen Werts
       };
 
@@ -561,7 +567,7 @@ increaseButton.onclick = function() {
           AIestimate.style.display = "block";
           taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.'; // Ändert den HTML-Inhalt des <p> Elements
           // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
-          estimateSale.innerHTML = `Your estimated sales were $${savedSliderValue}.`;
+            estimateSale.innerHTML = `Your estimated sales were $${formatNumberWithCommas(savedSliderValue)}.`;
       }
 
       const modal = document.getElementById("modal");
@@ -642,7 +648,7 @@ increaseButton.onclick = function() {
       async function openModal2() {
           try {
               // Lade die JSON-Daten
-              const data = await loadJSON("/cf_470.json");
+              const data = await loadJSON("/Backend/cf_470.json");
               
               // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
               let closestData = null;
@@ -666,8 +672,11 @@ increaseButton.onclick = function() {
                   // Formatiere die Issues als HTML-Liste
                   const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
 
+                  const formattedClosestDataSales = formatNumberWithCommas(Math.round(closestData.Sales));
+                  const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+
                   modal2Content.innerHTML = `
-                      <p>The AI estimates <strong>$${closestData.Sales.toFixed(2)}</strong> instead of <strong>$${savedSliderValue}</strong> (your estimation) for the following reasons:</p>
+                      <p>The AI estimates <strong>$${formattedClosestDataSales}</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation) for the following reasons:</p>
                       <ul style="color: #555;">
                           ${issuesList}
                       </ul>
@@ -743,6 +752,10 @@ function shuffle(array) {
   shuffledButtons.forEach(button => {
     messageOptions.appendChild(button);
   });
+  // Funktion, um eine Zahl mit Tausendertrennzeichen zu formatieren
+  function formatNumberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 });
 </script>
 </body>
