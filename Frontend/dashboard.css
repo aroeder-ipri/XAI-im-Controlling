@@ -6,7 +6,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 49.3%;
+    height: 100%;
 }
 .content-box2 {
     background-color: #FFE699; /* Hintergrundfarbe */
@@ -89,7 +89,7 @@ p {
 @media (max-width: 768px) {
     /* Automatische Höhe für die Boxen auf kleinen Bildschirmen */
     .content-box1{
-        height: 45%;
+        height: 95%;
     }
     .content-box2{
         height: 30%;
@@ -173,9 +173,8 @@ p {
 /* Fragezeichen-Button für Modalfenster */
 #questionButton {
     position: fixed;
-    top: -25vh;
-    right: 2vw;
-    
+    top: -30vh;
+    right: 0vw;
     background-color: #74B027;
     color: white;
     padding: 0;
