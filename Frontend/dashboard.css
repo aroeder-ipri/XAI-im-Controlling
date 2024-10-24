@@ -27,6 +27,14 @@
     height: 62.7%;
 }
 
+
+
+html {
+    transform: scale(0.9); /* Adjust the scale as needed (0.9 = 90%) */
+    transform-origin: top middle; /* Set the scaling origin */
+    overflow-x: none; /* Prevent horizontal overflow */
+}
+
 /* Stil für die Seitenüberschrift */
 h1 {
     margin-top: 20px; /* Abstand nach oben */
@@ -207,6 +215,13 @@ p {
     pointer-events: none; /* Symbol nicht klickbar machen */
 }
 
+.current-store {
+    margin-right: 150px; /* Reduziere diesen Wert, um den aktuellen Store näher an die Überschrift zu bringen */
+    display: none; /* Ensures that margin applies correctly */
+    /* Optional: Vertikalen Abstand verringern, falls nötig */
+    vertical-align: middle; /* Aligns it with the h2 text vertically */
+}
+
 /* Carousel-Buttons deaktiviert */
 #prevStoreButton[disabled],
 #nextStoreButton[disabled] {
@@ -217,9 +232,7 @@ p {
 /* Stil für die Carousel-Buttons */
 #prevStoreButton,
 #nextStoreButton {
-    background-color: transparent; /* Transparenter Hintergrund */
-    border: none; /* Kein Rahmen */
-    cursor: pointer; /* Zeige den Zeiger beim Überfahren an */
+    display: none; /* Schaltflächen weiterhin ausblenden */
 }
 
 /* Stil für die Carousel-Buttons beim Überfahren, jedoch nicht wenn deaktiviert */
@@ -240,11 +253,9 @@ p {
 }
 
 #storeHeader button {
-    background: none;
-    border: none;
-    font-size: 1.2em;
-    cursor: pointer;
+    display: none; /* Schaltflächen weiterhin ausblenden */
 }
+
 
 /* Slider Wrapper */
 #sliderWrapper {
@@ -305,6 +316,7 @@ p {
     font-size: 16px;
 }
 
+
 .option-btn {
     background-color: #74B027;
     color: #fff;
@@ -322,8 +334,35 @@ p {
   }
 
   .AIestimate, .task, .btn {
-    margin: 2px 0; /* Adjust the value as needed */
+    margin: 3px 0; /* Reduzierte Margins für kompakteren Abstand */
 }
+
+.task {
+    font-size: 0.83rem; /* Kleinere Schriftgröße für den Text */
+    padding: 0px; /* Beispielwert, kannst du anpassen */
+}
+
+.AIestimate {
+    font-size: 0.83rem; /* Kleinere Schriftgröße für die Schätzung */
+    padding: 0x; /* Beispielwert, kannst du anpassen */
+}
+
+.btn {
+    padding: 10px 12px; /* Weniger Padding für kompaktere Buttons */
+    font-size: 1rem;
+    margin: 0; /* Kleinere Schriftgröße für die Buttons */
+}
+
+/* Optional: Reduziere die Schriftgröße für den Titel */
+h2 {
+    font-size: 1.5rem; /* Kleinere Schriftgröße für den Titel */
+    margin-bottom: 0px; /* Kleinerer Abstand zum nächsten Element */
+}
+
+.button-wrapper {
+  margin-top: auto; /* Pushes the continue button to the bottom */
+}
+
 
 .slider-button {
     background-color: #74B027;
