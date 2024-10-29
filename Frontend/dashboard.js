@@ -26,6 +26,9 @@
         return data;
     }
 
+
+
+    
 // Funktion zum Analysieren der CSV-Daten und Extrahieren der Werte mit der Bedingung
 function parseCSVWithCondition(csv) {
     const lines = csv.split('\n');
@@ -158,30 +161,32 @@ if (storeInfo) {
     storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
 
     storeInfoDiv.innerHTML = `
-        <div style="display: flex; gap: 50px; max-width: 100%;">
-            <div style="flex: 1; overflow-wrap: break-word; max-width: 100%;">
-                <p><strong>Store Type:</strong></p>
-                <label><input type="checkbox" ${storeInfo.storeType === 'City Center' ? 'checked' : ''} disabled> City Center</label><br>
-                <label><input type="checkbox" ${storeInfo.storeType === 'Commercial Area' ? 'checked' : ''} disabled> Commercial Area</label>
-                <label><input type="checkbox" ${storeInfo.storeType === 'Suburbs' ? 'checked' : ''} disabled> Suburbs</label><br>
-                <label><input type="checkbox" ${storeInfo.storeType === 'Rural' ? 'checked' : ''} disabled> Rural</label><br>
-            </div>
-            <div style="flex: 1; overflow-wrap: break-word; max-width: 100%;">
-                <p><strong>Assortment:</strong></p>
-                <label><input type="checkbox" ${storeInfo.assortment === 'basic' ? 'checked' : ''} disabled> Basic</label><br>
-                <label><input type="checkbox" ${storeInfo.assortment === 'extra' ? 'checked' : ''} disabled> Extra</label><br>
-                <label><input type="checkbox" ${storeInfo.assortment === 'extended' ? 'checked' : ''} disabled> Extended</label><br>
-            </div>
+    <div style="overflow-wrap: break-word; max-width: 100%;">
+        <div style="margin-bottom: 20px;">
+            <p><strong>Store Location:</strong></p>
+            <p>${currentStoreElement.textContent}</p>
         </div>
-        <div style="overflow-wrap: break-word; max-width: 100%;">
+        <div style="margin-bottom: 20px;">
+            <p><strong>Store Type:</strong></p>
+            <p>${storeInfo.storeType}</p>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <p><strong>Assortment:</strong></p>
+            <p> ${storeInfo.assortment}</p>
+        </div>
+        <div style="margin-bottom: 20px;">
             <p><strong>Distance to next store:</strong></p>
-            <p>${storeInfo.competitionDistance} mi</p>
+            <p>${storeInfo.competitionDistance} miles</p>
         </div>
-        <div style="overflow-wrap: break-word; max-width: 100%;">
+        <div>
             <p><strong>Days with promotions in the last month:</strong></p>
             <p>${storeInfo.promo} days</p>
         </div>
-    `;
+    </div>
+`;
+
+
+
 
 
         storeInfoContainer.appendChild(storeInfoDiv);
@@ -341,8 +346,6 @@ function updateGraphWithCSVData(data, chart) {
     chart.data.labels = labels;
     chart.data.datasets = datasets;
 
-chart.options.scales.y.min = Math.floor((minValue - 1000) / 100) * 100;
-chart.options.scales.y.max = Math.ceil((maxValue + 1000) / 100) * 100;
 
     chart.update();
 }
@@ -360,13 +363,13 @@ chart.options.scales.y.max = Math.ceil((maxValue + 1000) / 100) * 100;
 lineChart = new Chart(lineCtx, {
     type: 'line',
     data: {
-        labels: [],
-        datasets: []
+        labels: [],  // Your x-axis labels here
+        datasets: [] // Your datasets here
     },
     options: {
         plugins: {
             legend: {
-                display: false,
+                display: false, // Hides the legend
                 position: 'top',
                 labels: {
                     font: {
@@ -378,26 +381,27 @@ lineChart = new Chart(lineCtx, {
                 boxPadding: 3,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return '$' + tooltipItem.formattedValue;
+                        return '$' + tooltipItem.formattedValue; // Adds '$' before the value in tooltips
                     }
                 }
             }
         },
         scales: {
             y: {
-                beginAtZero: false,
-                min: 0,
-                max: 0,
+                beginAtZero: false, // Do not start the y-axis at zero
+                min: 8000, // Set minimum y-axis value
+                max: 15000,
+                grace: '0%',
                 ticks: {
-                    callback: function(value, index, values) {
-                        return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
+                    callback: function(value) {
+                        return '$' + Math.round(value); // Format y-axis labels with dollar sign
                     }
                 }
-
             }
         }
     }
 });
+
 
             // Media Query für kleine Bildschirme
             if (window.matchMedia('(max-width: 768px)').matches) {
@@ -437,8 +441,8 @@ lineChart2 = new Chart(lineCtx2, {
         scales: {
             y: {
                 beginAtZero: false,
-                min: 0,
-                max: 0,
+                min:8000,
+                max: 15000,
                 ticks: {
                     callback: function(value, index, values) {
                         return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
