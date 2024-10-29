@@ -27,12 +27,12 @@
     }
     .landing-container h1 {
       color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
     .landing-container p {
-      color: #555;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
+    color: #555;
+    font-size: 1.2rem;
+    margin-bottom: 15px; /* Wert verringert für kleineren Abstand */
     }
     .landing-container .btn {
       color: #fff;
@@ -46,23 +46,14 @@
       border-color: #5c9021;
     }
   </style>
-  <script>
-    function btn_click(){
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get('id')
-    //Post-Request ans Backend
-    window.location.href = "setting3.html?id=" + id;
-};
-  </script>
+  <script src="setting.js" defer></script>
 </head>
 <body>
   <div class="landing-container">
     <h1>Introduction to the Task</h1>
-    <p>You will be asked for the sales target which has a direct influence on your payment. <strong>You can earn a bonus up to $1.80 if your store reaches the target.</strong> Setting higher targets increases the potential bonus payment you can receive. However, if your store does not achieve your target, there will be no bonus payment. Starting at $0.40, your bonus payment increases by $0.20 for every 1,000$ of sales beyond $8,000 . This is shown by the blue line on the graph below.</p>
-    <p>If you feel unsure about your decision or if you want additional information, you can always <strong>ask your supervisor for advice.</strong> With their expertise and experience, the supervisor can make a very accurate guess about future sales providing you with another forecast of future sales which is very close to the actual sales.  However, for the time and effort required to help you, your supervisor will reduce your bonus payment. Hence, <strong>your bonus will be reduced by $0.30 if you ask your supervisor for advice</strong> (gray line).</p>
-    <center><img src="image.png" alt="Image" style="width: 35%; margin-bottom: 20px;"><br></center>
-    <p><strong>Please note that if you fail to reach your targets, your bonus payment will be $0 (orange line).</strong></p>
+    <p>Imagine you are the manager of a convenience store which is part of a store chain called <i>STORE</i>.</p>
+    <p>Once a month all store managers set a sales target for their store for the upcoming month and report them to their supervisor. Depending on the target difficulty and the sales performance, store managers receive an additional bonus at the end of the month.</p>
+    <p>To make an informed decision on the target difficulty, store managers receive a <strong>sales forecast provided by an artificial intelligence </strong>(AI) which has shown decent forecasting accuracy in previous years.</p>
     <a onclick="btn_click();" class="btn">Ok, I understand</a>
   </div>
 </body>
