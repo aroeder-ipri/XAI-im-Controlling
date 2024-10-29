@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>XAI in controlling</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -82,16 +82,19 @@
 
 <!-- Modalfenster 4 -->
 <div id="modal4" class="modal">
-  <div class="modal-content">
-    <p><strong>You can now send a message to your supervisor and ask for advice.</strong></p>
-    <div id="messageOptions">
-      <button id="noMessageBtn" class="option-btn">No message (no cost)</button>
-      <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-$0.30)</button>
-      <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-$0.30)</button>
+    <div class="modal-content">
+      <p><strong>You can now choose to send a message to your supervisor and ask for advice.</strong></p>
+      <div id="messageOptions">
+        <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-$0.30)</button>
+        <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-$0.30)</button>
+      </div>
+      <div id="noMessageoption">
+        <button id="noMessageBtn" class="option-btn">No message (no cost)</button>
+      </div>
+      <p style="font-size: 12px;">*The answer of your supervisor is not dependent on the message you send</p>
     </div>
-    <p style="font-size: 12px;">*The answer of your supervisor is not dependent on the message you send</p>
   </div>
-</div>
+  
 
 <!-- Modalfenster für Nachrichtenbeispiele -->
 <div id="messageExampleModal" class="modal" style="display: none;">
@@ -161,15 +164,18 @@
     </div>
     <!-- Rechte Seite - Nebenboxen -->
     <div class="col-md-4">
-      <div class="content-box2 mt-3">
+      <div class="content-box2 mt-3" style="padding: 10px;">
         <h2>AI-Forecast</h2>
-        <p class="AIestimate" style="display: none;">The AI estimates <span style="color: red;"><strong>$10,182</strong></span> for the Month of April.</p>
-        <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
-        <button type="button" id="continueButton" class="btn custom-btn" style="display: none;">continue to set target</button>
-        <p class="task"><span style="font-size: 0.83rem;">
-            <strong>Please provide your sales estimate for the month of April.</strong></span>
-            <span style="font-size: 0.74rem;">You will receive additional information from an AI to set your targets after you provide your sales estimate for the month of April.</span>
+        <p class="AIestimate" style="display: none;">The AI estimates <span style="color: black;"><strong>$10,182</strong></span> for the Month of April.</p>
+        <p class="task"><span style="font-size: 1rem;"></span>
+            <strong>Please provide your sales estimate for the month of April.</strong>
+            <br>
+            <span style="font-size: 0.83rem;">You will receive additional information from an AI to set your targets after you provide your sales estimate for the month of April.</span>
           </p>
+        <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
+        <div class="button-wrapper" style="margin-top: auto;">
+            <button type="button" id="continueButton" class="btn custom-btn" style="display: none; margin-top: 40px;">Continue to set target</button>
+        </div>
         <p id="vorhersageAnzeigen" style="display: none;"></p>
       </div>
       <!-- CHANGE STORE mit Checkboxen dynamisch einfügen - AKTUELL NICHT GEBRAUCHT DA NUR 1 Store -->
@@ -181,7 +187,7 @@
         <div id="storeHeader">
           <h2>Store Info</h2>
           <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
-          <span id="currentStore"></span>
+          <span id="currentStore" class="current-store">Current Store Name</span> <!-- Added class for styling -->
           <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
         </div>
         <div id="storeInfoContainer">
@@ -224,6 +230,7 @@ async function btn_click() {
     const uuid = localStorage.getItem("user_uuid");
     const group = localStorage.getItem("user_group");
     const startTime = localStorage.getItem("start_time");
+    
 
     // Neue Werte in den localStorage speichern
     localStorage.setItem("questionButtonClick", questionButtonClick);
@@ -730,32 +737,42 @@ questionButton.addEventListener("click", async function() {
 // Funktion zum Mischen eines Arrays
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-  }
+}
 
-  // Das parent Element für die Buttons
-  const messageOptions = document.getElementById('messageOptions');
+// Das parent Element für die Buttons
+const messageOptions = document.getElementById('messageOptions');
 
-  // Die Buttons sammeln und in ein Array konvertieren
-  const buttons = Array.from(messageOptions.getElementsByTagName('button'));
+// Die Buttons sammeln und in ein Array konvertieren
+const buttons = Array.from(messageOptions.getElementsByTagName('button'));
 
-  // Die Reihenfolge der Buttons randomisieren
-  const shuffledButtons = shuffle(buttons);
+// Die Reihenfolge der Buttons randomisieren
+const shuffledButtons = shuffle(buttons);
 
-  // Alte Buttons entfernen
-  messageOptions.innerHTML = '';
+// Die alten Buttons entfernen
+messageOptions.innerHTML = '';
 
-  // Die neu sortierten Buttons hinzufügen
-  shuffledButtons.forEach(button => {
-    messageOptions.appendChild(button);
-  });
-  // Funktion, um eine Zahl mit Tausendertrennzeichen zu formatieren
-  function formatNumberWithCommas(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+// Die neu sortierten Buttons hinzufügen und den Text anpassen
+shuffledButtons.forEach((button, index) => {
+    // Ändere den Text je nach Index
+    if (index === 0) {
+        button.textContent = "Message Option 1: " + button.textContent; // Erster Button
+        localStorage.setItem('firstMessageOption', button.innerText)
+    } else if (index === 1) {
+        button.textContent = "Message Option 2: " + button.textContent; // Zweiter Button
     }
+    messageOptions.appendChild(button);
+});
+
+// Funktion, um eine Zahl mit Tausendertrennzeichen zu formatieren
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
 });
 </script>
 </body>
