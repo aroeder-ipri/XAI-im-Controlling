@@ -2,12 +2,16 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>XAI in controlling</title>
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
+      transform: scale(0.75); /* Scale down to 90% */
+      transform-origin: top middle; /* Set the origin to the top left */
+      overflow: hidden; /* Prevents overflow due to scaling */
+      width: 100vw; /* Keep the full width */
+      height: 100vh; /* Keep the full height */
       background-color: #F2F2F2;
       display: flex;
       justify-content: center;
@@ -24,15 +28,35 @@
       width: 100%;
       text-align: left;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column; /* Änderung für vertikale Anordnung */
+    }
+    .text-section {
+      width: 100%; /* Breite für die gesamte Spalte */
+      margin-bottom: 20px; /* Abstand zwischen Abschnitten */
+    }
+    .text-image-container {
+      display: flex; /* Flex-Container für Text und Bild */
+      width: 100%; /* Breite für die gesamte Spalte */
+    }
+    .text-left {
+      width: 40%; /* Breite für den Textbereich */
+      padding-right: 20px; /* Abstand zwischen Text und Bild */
+    }
+    .image-section {
+      width: 60%; /* Breite für den Bildbereich */
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .landing-container h1 {
       color: #333;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     .landing-container p {
-    color: #555;
-    font-size: 1.2rem;
-    margin-bottom: 15px; /* Wert verringert für kleineren Abstand */
+      color: #555;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
     }
     .landing-container .btn {
       color: #fff;
@@ -45,16 +69,45 @@
       background-color: #5c9021;
       border-color: #5c9021;
     }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .full-width {
+      width: 100%;
+      margin-top: 20px; /* Abstand zwischen Abschnitten */
+    }
   </style>
-  <script src="setting.js" defer></script>
+  <script>
+    function btn_click(){
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const id = urlParams.get('id');
+      window.location.href = "setting3.html?id=" + id;
+    }
+  </script>
 </head>
 <body>
   <div class="landing-container">
-    <h1>Introduction to the Task</h1>
-    <p>Imagine you are the manager of a convenience store which is part of a store chain called <i>STORE</i>.</p>
-    <p>Once a month all store managers set a sales target for their store for the upcoming month and report them to their supervisor. Depending on the target difficulty and the sales performance, store managers receive an additional bonus at the end of the month.</p>
-    <p>To make an informed decision on the target difficulty, store managers receive a <strong>sales forecast provided by an artificial intelligence </strong>(AI) which has shown decent forecasting accuracy in previous years.</p>
-    <a onclick="btn_click();" class="btn">Ok, I understand</a>
+    <div class="text-section">
+      <h1>Introduction to the Task</h1>
+      <p>You will be asked for the sales target which has a direct influence on your payment. <strong>You can earn a bonus up to $1.80 if your store reaches the target.</strong> Setting higher targets increases the potential bonus payment you can receive. However, if your store does not achieve your target, there will be no bonus payment. Starting at $0.40, your bonus payment increases by $0.20 for every $1,000 of sales beyond $8,000. This is shown by the blue line on the graph below.</p>
+    </div>
+    <div class="text-image-container">
+      <div class="text-left">
+        <p>If you feel unsure about your decision or if you want additional information, you can always <strong>ask your supervisor for advice.</strong> With their expertise and experience, the supervisor can make a very accurate guess about future sales, providing you with another forecast of future sales which is very close to the actual sales. However, for the time and effort required to help you, your supervisor will reduce your bonus payment. Hence, <strong>your bonus will be reduced by $0.30 if you ask your supervisor for advice</strong> (gray line).</p>
+      </div>
+      <div class="image-section">
+        <img src="image.png" alt="Image">
+      </div>
+    </div>
+    <div class="text-section">
+        <p><strong>Please note that if you fail to reach your targets, your bonus payment will be $0.</strong></p>
+    </div>
+    <div class="full-width">
+      <a onclick="btn_click();" class="btn">Ok, I understand</a>
+    </div>
   </div>
 </body>
 </html>
