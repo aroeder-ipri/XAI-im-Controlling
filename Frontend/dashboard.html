@@ -147,12 +147,18 @@
   <div class="row">
     <!-- Linke Seite - Hauptboxen -->
     <div class="col-md-8">
+        <div class="content-box4 mt-3">
+            <div id="storeInfoContainer">
+              <div id="storeInfo"></div>
+              
+            </div>
+          </div>
       <div class="content-box1 mt-3">
         <!-- Hier wird der Graph eingebettet -->
         <!-- Der erste Linechart -->
-        <canvas id="lineChart" style="display: none;" width="3000" height="2000"></canvas>
+        <canvas id="lineChart" style="display: none;" width="3500" height="2000"></canvas>
         <!-- Der zweite Linechart -->
-        <canvas id="lineChart2" width="3000" height="2000"></canvas>
+        <canvas id="lineChart2" width="3500" height="2000"></canvas>
         <div class="canvas-container">
           <button id="questionButton" class="position-absolute">?</button>
         </div>
@@ -174,7 +180,7 @@
           </p>
         <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
         <div class="button-wrapper" style="margin-top: auto;">
-            <button type="button" id="continueButton" class="btn custom-btn" style="display: none; margin-top: 40px;">Continue to set target</button>
+            <button type="button" id="continueButton" class="btn custom-btn" style="display: none; margin-top: 20px;">Continue to set target</button>
         </div>
         <p id="vorhersageAnzeigen" style="display: none;"></p>
       </div>
@@ -185,14 +191,19 @@
       </div>
       <div class="content-box3 mt-3">
         <div id="storeHeader">
-          <h2>Store Info</h2>
+          <h2>Information on the upcoming Month of April:</h2>
           <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
           <span id="currentStore" class="current-store">Current Store Name</span> <!-- Added class for styling -->
           <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
         </div>
-        <div id="storeInfoContainer">
-          <div id="storeInfo"></div>
+        <div id="store-info-box">
+            <p></p>
+            <p><strong>Customers (expected):</strong> <span id="customers-value">0</span></p>
+            <p><strong>School or state holidays: </strong> <span id="holidays-value">0</span></p>
+            <p><strong>Days with promotions:</strong> <span id="promo-value">0</span> days</p>
         </div>
+        
+        
       </div>
     </div>
   </div>
