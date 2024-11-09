@@ -135,12 +135,70 @@ function parseStoreInfo(csv) {
         // Speichere die monatlichen Daten für "Customers" und "HolidaysThisMonth" im "monthlyData"-Objekt
         data[store].monthlyData[month] = {
             customers: customers,
-            holidaysThisMonth: holidaysThisMonth
+            holidaysThisMonth: holidaysThisMonth,
+            promos: promo
         };
     }
 
     return data;
 }
+
+function getLastRecordData(storeData) {
+    // Überprüfe, ob die monatlichen Daten vorhanden sind
+    if (!storeData || !storeData.monthlyData) return null;
+
+    // Alle Monate aus den monatlichen Daten extrahieren
+    const months = Object.keys(storeData.monthlyData);
+
+    // Den letzten Monat (letzten Datensatz) auswählen
+    const lastMonth = months[months.length - 1];
+
+    // Rückgabe der letzten Datensatz-Daten
+    return storeData.monthlyData[lastMonth];
+}
+
+function updateStoreInfoBox(storeData) {
+    if (storeData) {
+        // Rufe die Daten des letzten Datensatzes ab
+        const lastRecordData = getLastRecordData(storeData);
+
+        if (lastRecordData) {
+            const customers = lastRecordData.customers || 0;
+            const holidaysThisMonth = lastRecordData.holidaysThisMonth || 0;
+            const promo = lastRecordData.promos || 0;
+
+            console.log(`Anzeigen von Daten für den letzten Datensatz:`);
+            console.log(`Kunden: ${customers}, Feiertage: ${holidaysThisMonth}, Promotionen: ${promo}`);
+
+            // Aktualisiere die HTML-Elemente mit den letzten Werten
+            document.getElementById('customers-value').textContent = customers;
+            document.getElementById('holidays-value').textContent = holidaysThisMonth;
+            document.getElementById('promo-value').textContent = promo;
+        } else {
+            console.warn("Kein letzter Datensatz gefunden.");
+        }
+    } else {
+        console.warn("Keine Store-Daten vorhanden.");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const csvUrl = 'fiktiv.csv'; // Ersetze dies mit dem tatsächlichen Pfad zu deiner CSV-Datei
+    const csvData = await loadCSV(csvUrl);
+
+    // Store-Daten aus CSV laden
+    const storeInfoData = parseStoreInfo(csvData);
+
+    // Überprüfe die Struktur von storeInfoData in der Konsole
+    console.log("Inhalt von storeInfoData:", storeInfoData);
+
+    // Prüfe, ob der Store 'New York' in den Daten vorhanden ist
+    if (storeInfoData['New York']) {
+        updateStoreInfoBox(storeInfoData['New York']);
+    } else {
+        console.warn("Store 'New York' nicht gefunden.");
+    }
+});
         
 // Funktion zum Aktualisieren der Store-Informationen im HTML
 function updateStoreInfo(selectedStore, storeInfoData) {
@@ -156,47 +214,35 @@ const storeInfo = storeInfoData[selectedStore];
 if (storeInfo) {
     const storeInfoDiv = document.createElement('div');
 
- // Stile für das Container-Div hinzufügen
- storeInfoDiv.style.display = 'flex';
- storeInfoDiv.style.alignItems = 'flex-start'; // Anpassung für vertikale Ausrichtung oben
- storeInfoDiv.style.gap = '50px'; // Abstand zwischen den Gruppen
- storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
- storeInfoDiv.style.overflow = 'hidden'; // Verhindert das Überlaufen des Inhalts
+// Stile für das Container-Div hinzufügen
+storeInfoDiv.style.display = 'flex';
+storeInfoDiv.style.flexDirection = 'row'; // Inhalte nebeneinander anordnen
+storeInfoDiv.style.alignItems = 'flex-start'; // Optionale Ausrichtung
+storeInfoDiv.style.gap = '50px'; // Abstand zwischen den Gruppen
+storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
+storeInfoDiv.style.overflow = 'hidden'; // Verhindert das Überlaufen des Inhalts
+storeInfoDiv.style.marginTop = '0px'; // Reduzierter oberer Abstand
 
-    // Stile für das Container-Div hinzufügen
-    storeInfoDiv.style.display = 'flex';
-    storeInfoDiv.style.flexDirection = 'column'; // Inhalte untereinander anordnen
-    storeInfoDiv.style.gap = '20px'; // Abstand zwischen den Gruppen
-    storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
-
-    storeInfoDiv.innerHTML = `
-    <div style="overflow-wrap: break-word; max-width: 100%;">
-        <div style="margin-bottom: 20px;">
-            <p><strong>Store Location:</strong></p>
-            <p>${currentStoreElement.textContent}</p>
+storeInfoDiv.innerHTML = `
+    <div style="display: flex; flex-direction: row; gap: 50px; overflow-wrap: break-word; max-width: 100%; margin-top: 0;">
+        <div style="margin: 0 30px 0 0;">
+            <p style="margin: 0;"><strong>Store Location:</strong></p>
+            <p style="margin: 0;">${currentStoreElement.textContent}</p>
         </div>
-        <div style="margin-bottom: 20px;">
-            <p><strong>Store Type:</strong></p>
-            <p>${storeInfo.storeType}</p>
+        <div style="margin: 0 30px 0 0;">
+            <p style="margin: 0;"><strong>Store Type:</strong></p>
+            <p style="margin: 0;">${storeInfo.storeType}</p>
         </div>
-        <div style="margin-bottom: 20px;">
-            <p><strong>Assortment:</strong></p>
-            <p> ${storeInfo.assortment}</p>
+        <div style="margin: 0 30px 0 0;">
+            <p style="margin: 0;"><strong>Assortment:</strong></p>
+            <p style="margin: 0;">${storeInfo.assortment}</p>
         </div>
-        <div style="margin-bottom: 20px;">
-            <p><strong>Distance to next store:</strong></p>
-            <p>${storeInfo.competitionDistance} miles</p>
-        </div>
-        <div>
-            <p><strong>Days with promotions in the last month:</strong></p>
-            <p>${storeInfo.promo} days</p>
+        <div style="margin: 0 30px 0 0;">
+            <p style="margin: 0;"><strong>Distance to next Store:</strong></p>
+            <p style="margin: 0;">${storeInfo.competitionDistance} miles</p>
         </div>
     </div>
 `;
-
-
-
-
 
         storeInfoContainer.appendChild(storeInfoDiv);
     } else {
@@ -224,7 +270,6 @@ function prevStore() {
     selectedStoreIndex = (selectedStoreIndex - 1 + stores.length) % stores.length;
     updateSelectedStore();
 }
-
 
 // Event-Listener für die nächste Store-Schaltfläche
 document.getElementById('nextStoreButton').addEventListener('click', nextStore);
@@ -399,12 +444,14 @@ lineChart = new Chart(lineCtx, {
                         const monthlyData = storeInfoData[store]?.monthlyData[month];
                         const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
                         const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
+                        const promos = monthlyData ? monthlyData.promos : 0; // Promotionen für den Monat
             
                         // Tooltip-Text zusammenstellen
                         return [
                             '$' + tooltipItem.formattedValue,
                             'Customers: ' + customers,
-                            'Holidays: ' + holidaysThisMonth
+                            'Holidays: ' + holidaysThisMonth,
+                            'Promos: ' + promos
                         ];
                     }
                 }
@@ -466,12 +513,14 @@ lineChart2 = new Chart(lineCtx2, {
                         const monthlyData = storeInfoData[store]?.monthlyData[month];
                         const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
                         const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
+                        const promos = monthlyData ? monthlyData.promos : 0; // Promotionen für den Monat
             
                         // Tooltip-Text zusammenstellen
                         return [
                             '$' + tooltipItem.formattedValue,
                             'Customers: ' + customers,
-                            'Holidays: ' + holidaysThisMonth
+                            'Holidays: ' + holidaysThisMonth,
+                            'Promos: ' + promos
                         ];
                     }
                 }
