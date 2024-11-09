@@ -355,6 +355,8 @@ function updateGraphWithCSVData(data, chart) {
     chart.data.labels = labels;
     chart.data.datasets = datasets;
 
+    chart.options.scales.y.min = Math.floor((minValue - 1000) / 100) * 100;
+    chart.options.scales.y.max = Math.ceil((maxValue + 1000) / 100) * 100;
 
     chart.update();
 }
