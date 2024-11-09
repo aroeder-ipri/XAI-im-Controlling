@@ -26,9 +26,6 @@
         return data;
     }
 
-
-
-    
 // Funktion zum Analysieren der CSV-Daten und Extrahieren der Werte mit der Bedingung
 function parseCSVWithCondition(csv) {
     const lines = csv.split('\n');
@@ -40,7 +37,7 @@ function parseCSVWithCondition(csv) {
             const parts = line.split(';');
             
             // Überprüfe, ob genug Elemente vorhanden sind
-            if (parts.length < 8) {
+            if (parts.length < 11) {
                 console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
                 continue;
             }
@@ -74,7 +71,7 @@ function parseCSVAll(csv) {
             const parts = line.split(';');
             
             // Überprüfe, ob genug Elemente vorhanden sind
-            if (parts.length < 8) {
+            if (parts.length < 11) {
                 console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
                 continue;
             }
@@ -110,23 +107,35 @@ function parseStoreInfo(csv) {
         const parts = line.split(';');
         
         // Überprüfe, ob genügend Spalten vorhanden sind
-        if (parts.length < 8) {
+        if (parts.length < 11) {
             console.warn(`Zeile ${i + 1} enthält nicht genügend Spalten: ${line}`);
             continue;
         }
 
         const store = parts[0].trim();
-        const storeType = parts[5].trim(); // Die 6. Spalte enthält den Store-Typ
-        const assortment = parts[6].trim(); // Die 7. Spalte enthält das Assortment
-        const competitionDistance = parts[7].trim(); // Die 8. Spalte enthält die Wettbewerbsdistanz
-        const promo = parts[8].trim(); // Die 9. Spalte enthält promo
+        const month = parts[2].trim(); // Monat als Schlüssel für monatliche Daten
+        const storeType = parts[5].trim();
+        const assortment = parts[6].trim();
+        const competitionDistance = parseInt(parts[7].trim(), 10); // Wettbewerbsdistanz
+        const promo = parseInt(parts[8].trim(), 10); // Promotionen
+        const customers = parseInt(parts[9].trim(), 10); // Kundenanzahl
+        const holidaysThisMonth = parseInt(parts[10].trim(), 10); // Feiertage
 
-        // Speichere die Store-Informationen im Datenobjekt
-        data[store] = {
-            storeType: storeType,
-            assortment: assortment,
-            competitionDistance: competitionDistance,
-            promo: promo
+        // Wenn der Store noch nicht im Datenobjekt existiert, erstelle ein leeres Objekt
+        if (!data[store]) {
+            data[store] = {
+                storeType: storeType,
+                assortment: assortment,
+                competitionDistance: competitionDistance,
+                promo: promo,
+                monthlyData: {} // Neues Objekt für monatliche Daten
+            };
+        }
+
+        // Speichere die monatlichen Daten für "Customers" und "HolidaysThisMonth" im "monthlyData"-Objekt
+        data[store].monthlyData[month] = {
+            customers: customers,
+            holidaysThisMonth: holidaysThisMonth
         };
     }
 
@@ -363,13 +372,13 @@ function updateGraphWithCSVData(data, chart) {
 lineChart = new Chart(lineCtx, {
     type: 'line',
     data: {
-        labels: [],  // Your x-axis labels here
-        datasets: [] // Your datasets here
+        labels: [],
+        datasets: []
     },
     options: {
         plugins: {
             legend: {
-                display: false, // Hides the legend
+                display: false,
                 position: 'top',
                 labels: {
                     font: {
@@ -381,22 +390,37 @@ lineChart = new Chart(lineCtx, {
                 boxPadding: 3,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return '$' + tooltipItem.formattedValue; // Adds '$' before the value in tooltips
+                        const store = tooltipItem.dataset.label; // Store-Name vom Dataset holen
+                        const month = tooltipItem.label; // Monat aus Tooltip-Label abrufen
+            
+                        // Zugriff auf die monatlichen Daten für "Customers" und "HolidaysThisMonth"
+                        const monthlyData = storeInfoData[store]?.monthlyData[month];
+                        const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
+                        const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
+            
+                        // Tooltip-Text zusammenstellen
+                        return [
+                            '$' + tooltipItem.formattedValue,
+                            'Customers: ' + customers,
+                            'Holidays: ' + holidaysThisMonth
+                        ];
                     }
                 }
             }
+            
+            
         },
         scales: {
             y: {
-                beginAtZero: false, // Do not start the y-axis at zero
-                min: 8000, // Set minimum y-axis value
-                max: 15000,
-                grace: '0%',
+                beginAtZero: false,
+                min: 0,
+                max: 0,
                 ticks: {
-                    callback: function(value) {
-                        return '$' + Math.round(value); // Format y-axis labels with dollar sign
+                    callback: function(value, index, values) {
+                        return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
                     }
                 }
+
             }
         }
     }
@@ -433,16 +457,30 @@ lineChart2 = new Chart(lineCtx2, {
                 boxPadding: 3,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return '$' + tooltipItem.formattedValue;
+                        const store = tooltipItem.dataset.label; // Store-Name vom Dataset holen
+                        const month = tooltipItem.label; // Monat aus Tooltip-Label abrufen
+            
+                        // Zugriff auf die monatlichen Daten für "Customers" und "HolidaysThisMonth"
+                        const monthlyData = storeInfoData[store]?.monthlyData[month];
+                        const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
+                        const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
+            
+                        // Tooltip-Text zusammenstellen
+                        return [
+                            '$' + tooltipItem.formattedValue,
+                            'Customers: ' + customers,
+                            'Holidays: ' + holidaysThisMonth
+                        ];
                     }
                 }
             }
+            
         },
         scales: {
             y: {
                 beginAtZero: false,
-                min:8000,
-                max: 15000,
+                min: 0,
+                max: 0,
                 ticks: {
                     callback: function(value, index, values) {
                         return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
