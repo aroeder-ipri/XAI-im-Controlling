@@ -55,7 +55,7 @@ async function btn_click() {
 
         // Feedback senden mit dem Startzeitpunkt aus dem Local Storage
         send_feedback(uuid, group, startTime, prolificID); // Nur die reine UUID an die API senden
-        window.location.href = "index2.html?id=" + id + prolificID; // Präfix weiterhin für die URL verwenden
+        window.location.href = "index2.html?id=" + id; // Präfix weiterhin für die URL verwenden
     } catch (error) {
         console.error('Error in btn_click:', error);
     }
