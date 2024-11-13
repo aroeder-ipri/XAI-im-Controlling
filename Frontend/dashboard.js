@@ -238,7 +238,7 @@ storeInfoDiv.innerHTML = `
             <p style="margin: 0;">${storeInfo.assortment}</p>
         </div>
         <div style="margin: 0 30px 0 0;">
-            <p style="margin: 0;"><strong>Distance to next Store:</strong></p>
+            <p style="margin: 0;"><strong>Next Store:</strong></p>
             <p style="margin: 0;">${storeInfo.competitionDistance} miles</p>
         </div>
     </div>
@@ -400,8 +400,7 @@ function updateGraphWithCSVData(data, chart) {
     chart.data.labels = labels;
     chart.data.datasets = datasets;
 
-    chart.options.scales.y.min = Math.floor((minValue - 1000) / 100) * 100;
-    chart.options.scales.y.max = Math.ceil((maxValue + 1000) / 100) * 100;
+
 
     chart.update();
 }
@@ -462,8 +461,8 @@ lineChart = new Chart(lineCtx, {
         scales: {
             y: {
                 beginAtZero: false,
-                min: 0,
-                max: 0,
+                min: 8000,
+                max: 15000,
                 ticks: {
                     callback: function(value, index, values) {
                         return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
@@ -530,8 +529,8 @@ lineChart2 = new Chart(lineCtx2, {
         scales: {
             y: {
                 beginAtZero: false,
-                min: 0,
-                max: 0,
+                min: 8000,
+                max: 15000,
                 ticks: {
                     callback: function(value, index, values) {
                         return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
@@ -554,12 +553,12 @@ if (window.matchMedia('(max-width: 768px)').matches) {
     lineChart2.options.animation = {
     onComplete: function() {
         const dataset = lineChart2.data.datasets[0];
-        const lastValueIndex = dataset.data.length - 1;
-        const lastValue = dataset.data[lastValueIndex];
+        //const lastValueIndex = dataset.data.length - 1;
+        //const lastValue = dataset.data[lastValueIndex];
         const button = document.getElementById('questionButton');
-        const scale = lineChart2.scales.y;
+        //const scale = lineChart2.scales.y;
         const meta = lineChart2.getDatasetMeta(0);
-        const rect = meta.data[lastValueIndex].getProps(['x', 'y', 'base']);
+        //const rect = meta.data[lastValueIndex].getProps(['x', 'y', 'base']);
 
         // Animation für das Einfliegen des Buttons
         button.style.transition = 'top 0.5s, left 0.5s';
