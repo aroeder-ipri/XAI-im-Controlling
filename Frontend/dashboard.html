@@ -69,9 +69,9 @@
     <!-- Anzeige der erwarteten Auszahlung -->
     <div id="payoutContainer" class="calculation">
       <p class="label">Expected payout for reaching the target:</p>
-      <p id="payoutAmount" class="value">$0.00</p>
+      <p id="payoutAmount" class="value">£0.00</p>
       <p>Payout for failing to reach the target:</p>
-      <p>$0</p>
+      <p>£0</p>
     </div>
     <button id="setTargetButton" class="custom-btn">Continue</button>
     <button id="finalSetTargetButton" class="custom-btn" style="display: none;">Submit</button>
@@ -85,8 +85,8 @@
     <div class="modal-content">
       <p><strong>You can now choose to send a message to your supervisor and ask for advice.</strong></p>
       <div id="messageOptions">
-        <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-$0.30)</button>
-        <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-$0.30)</button>
+        <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-£0.30)</button>
+        <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-£0.30)</button>
       </div>
       <div id="noMessageoption">
         <button id="noMessageBtn" class="option-btn">No message (no cost)</button>
@@ -198,9 +198,9 @@
         </div>
         <div id="store-info-box">
             <p></p>
-            <p><strong>Customers (expected):</strong> <span id="customers-value">0</span></p>
-            <p><strong>School or state holidays: </strong> <span id="holidays-value">0</span></p>
-            <p><strong>Days with promotions:</strong> <span id="promo-value">0</span> days</p>
+            <p><strong>Customers (expected):</strong><br><span id="customers-value">0</span></p>
+            <p><strong>School or state holidays: </strong><br><span id="holidays-value">0</span></p>
+            <p><strong>Days with promotions:</strong><br><span id="promo-value">0</span> days</p>
         </div>
         
         
@@ -241,6 +241,8 @@ async function btn_click() {
     const uuid = localStorage.getItem("user_uuid");
     const group = localStorage.getItem("user_group");
     const startTime = localStorage.getItem("start_time");
+    const prolificID = localStorage.getItem("prolific_id");
+    const comprehensionCheck = localStorage.getItem("comprehensionCheck");
     
 
     // Neue Werte in den localStorage speichern
@@ -259,8 +261,10 @@ async function btn_click() {
             },
             body: JSON.stringify({
                 user_id: uuid, // Nur die reine UUID senden
+                prolificID: prolificID,
                 group: group,
                 start: startTime, // Verwende den gespeicherten Startzeitpunkt
+                comprehensionCheck: comprehensionCheck,
                 questionButton: questionButtonClick,
                 initialGuess: savedSliderValue,
                 finalTarget: yourTarget,
@@ -385,13 +389,13 @@ increaseButton2.onclick = function() {
         if (optionCost > 0) {
             payoutAmount.innerHTML = `
                 <div class="calculation">
-                <p class="value">$${basePayout.toFixed(2)} - <span style="color: red;">$${optionCost.toFixed(2)}</span> = $${Math.max(payout, 0).toFixed(2)}</p>
+                <p class="value">£${basePayout.toFixed(2)} - <span style="color: red;">£${optionCost.toFixed(2)}</span> = £${Math.max(payout, 0).toFixed(2)}</p>
                 </div>
             `;
         } else {
             payoutAmount.innerHTML = `
                 <div class="calculation">
-                <p class="value">$${basePayout.toFixed(2)}</p>
+                <p class="value">£${basePayout.toFixed(2)}</p>
                 </div>
             `;
         }
