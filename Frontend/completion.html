@@ -66,7 +66,7 @@
     async function showCompletionCode() {
         // Setze den Completion-Code und die Abschiedsnachricht
         const codeElement = document.getElementById('code');
-        codeElement.innerHTML = "12345";
+        codeElement.innerHTML = "CIGXXQC5";
         
         const goodbyeElement = document.getElementById('goodbye');
         goodbyeElement.innerHTML = "Please make sure you have entered your completion code on the Connect platform before closing this browser window or tab.<br>Thank you for participating!";
@@ -79,6 +79,7 @@
 
         // Werte aus dem localStorage abrufen
         const uuid = localStorage.getItem("user_uuid");
+        const prolificID = localStorage.getItem("prolificID");
         const group = localStorage.getItem("user_group");
         const startTime = localStorage.getItem("start_time");
         const questionButtonClick = localStorage.getItem("questionButtonClick");
@@ -86,6 +87,7 @@
         const yourTarget = localStorage.getItem("yourTarget");
         const optionId = localStorage.getItem("optionId");
         const completionCodeGenerated = localStorage.getItem("completionCodeGenerated");
+        const comprehensionCheck = localStorage.getItem("comprehensionCheck");
 
         // Werte an die API senden
         try {
@@ -97,8 +99,10 @@
                 },
                 body: JSON.stringify({
                     user_id: uuid, // Nur die reine UUID senden
+                    prolificID: prolificID,
                     group: group,
                     start: startTime, // Verwende den gespeicherten Startzeitpunkt
+                    comprehensionCheck: comprehensionCheck,
                     questionButton: questionButtonClick,
                     initialGuess: savedSliderValue,
                     finalTarget: yourTarget,
