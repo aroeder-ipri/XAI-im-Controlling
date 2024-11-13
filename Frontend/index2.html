@@ -46,12 +46,19 @@
       border-color: #5c9021;
     }
   </style>
-  <script src="index.js" defer></script>
+  <script>
+    function btn_click(){
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const id = urlParams.get('id');
+      window.location.href = "setting.html?id=" + id;
+    }
+  </script>
 </head>
 <body>
   <div class="landing-container">
     <h1>What you can earn</h1>
-    <p>For your participation you receive <b>$2</b> as described on prolific. However, your decisions throughout the experiment can earn you up to <b>$1.80</b> in bonus payment, depending on how you set the sales target for your store. </p>
+    <p>For your participation you receive <b>£2</b> as described on prolific. However, your decisions throughout the experiment can earn you up to <b>£1.80</b> in bonus payment, depending on how you set the sales target for your store. </p>
     <p>All data collected will be held anonymously and will be used for academic research purposes only.</p>
     <p>Please do not reload the page or go back to the previous page after completing a site. Otherwise, the system may not be able to calculate your bonus accurately.</p>
     <a onclick="btn_click();" class="btn">I want to participate in this study</a>
