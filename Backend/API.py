@@ -35,8 +35,10 @@ class RandId(BaseModel):
 
 class ClickEvent(BaseModel):
     user_id: uuid.UUID
+    prolificID: str
     group: str
     start: datetime
+    comprehensionCheck: str
     questionButton: str
     initialGuess: str
     finalTarget: str
@@ -90,8 +92,10 @@ def save_click_event(click_event: ClickEvent):
     try:
         click_event_doc = {
             "user_id": str(click_event.user_id),
+            "prolificID": click_event.prolificID,
             "group": click_event.group,
             "start": click_event.start.isoformat(),
+            "comprehensionCheck": click_event.comprehensionCheck,
             "questionButton": click_event.questionButton,
             "initialGuess": click_event.initialGuess,
             "finalTarget": click_event.finalTarget,
