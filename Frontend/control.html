@@ -78,91 +78,108 @@
 let comprehensionCheck = 'n.n.';
 
 
-    async function checkAnswer() {
-      // Werte aus dem localStorage abrufen
-      const uuid = localStorage.getItem("user_uuid");
-      const group = localStorage.getItem("user_group");
-      const startTime = localStorage.getItem("start_time");
-      const prolificID = localStorage.getItem("prolificID");
+async function checkAnswer() {
+  // Werte aus dem localStorage abrufen
+  const uuid = localStorage.getItem("user_uuid");
+  const group = localStorage.getItem("user_group");
+  const startTime = localStorage.getItem("start_time");
+  const prolificID = localStorage.getItem("prolificID");
 
-      // Neue Werte in den localStorage speichern
-      localStorage.setItem("comprehensionCheck", comprehensionCheck);
+  // Initialwert von comprehensionCheck
+  let comprehensionCheck = localStorage.getItem("comprehensionCheck") || 'n.n.';  // Sicherstellen, dass der Wert aus localStorage korrekt geholt wird
 
-    // Werte an die API senden
-    try {
-            const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  user_id: uuid, // Nur die reine UUID senden
-                  prolificID: prolificID,
-                  group: group,
-                  start: startTime, // Verwende den gespeicherten Startzeitpunkt
-                  comprehensionCheck: comprehensionCheck,
-                  questionButton: "n.n.",
-                  initialGuess: "n.n.",
-                  finalTarget: "n.n.",
-                  advice: "n.n.",
-                  completionCodeGenerated: "n.n.",
-                  end: Date.now()
-                })
-            });
+  const answerInput = document.getElementById('answer');
+  const checkButton = document.getElementById('check');
+  const successMessage = document.getElementById('successMessage');
+  const button = document.getElementById('mainButton');
+  const redirectMessage = document.getElementById('redirectMessage');
+  const correctAnswers = ['1.10', '1.1', '1,1', '1,10']; // Set the correct answer here
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+  console.log('Initial comprehensionCheck:', comprehensionCheck);  // Debugging: Überprüfen, was anfangs gespeichert ist
 
-            const data = await response.json();
-            console.log("Data successfully sent to the API:", data);
-
-        } catch (error) {
-            console.error('Error sending data to the API:', error);
-        }
-
-      const answerInput = document.getElementById('answer');
-      const checkButton = document.getElementById('check');
-      const successMessage = document.getElementById('successMessage');
-      const button = document.getElementById('mainButton');
-      const redirectMessage = document.getElementById('redirectMessage');
-      const correctAnswers = ['1.10', '1.1', '1,1', '1,10']; // Set the correct answer here
-
-      if (correctAnswers.includes(answerInput.value.trim())) {
-        successMessage.style.display = 'block';
-        button.style.display = 'inline-block';
-        checkButton.style.display = 'none';
-        comprehensionCheck = 'passed';
-      } else {
-        successMessage.style.display = 'none';
-        redirectMessage.style.display = 'block';
-        checkButton.style.display = 'none';
-        comprehensionCheck = 'failed';
-        let countdown = 2;
+  if (correctAnswers.includes(answerInput.value.trim())) {
+    successMessage.style.display = 'block';
+    button.style.display = 'inline-block';
+    checkButton.style.display = 'none';
+    comprehensionCheck = 'passed';  // Update comprehensionCheck here
+    console.log('comprehensionCheck set to:', comprehensionCheck);  // Debugging: Bestätigen, dass der Wert geändert wird
+  } else {
+    successMessage.style.display = 'none';
+    redirectMessage.style.display = 'block';
+    checkButton.style.display = 'none';
+    comprehensionCheck = 'failed';  // Update comprehensionCheck here
+    console.log('comprehensionCheck set to:', comprehensionCheck);  // Debugging: Bestätigen, dass der Wert geändert wird
+    let countdown = 2;
+    redirectMessage.textContent = `Incorrect answer, redirecting...`;
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
         redirectMessage.textContent = `Incorrect answer, redirecting...`;
-        const countdownInterval = setInterval(() => {
-          countdown--;
-          if (countdown > 0) {
-            redirectMessage.textContent = `Incorrect answer, redirecting...`;
-          } else {
-            clearInterval(countdownInterval);
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const id = urlParams.get('id')
-            //Post-Request ans Backend
-            window.location.href = "setting.html?id=" + id;
-          }
-        }, 1000); // Update every second
+      } else {
+        clearInterval(countdownInterval);
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+        //Post-Request ans Backend
+        window.location.href = "setting.html?id=" + id;
       }
+    }, 1000); // Update every second
+  }
+
+  // Speichere den neuen Wert von comprehensionCheck im localStorage nach der Antwortprüfung
+  localStorage.setItem("comprehensionCheck", comprehensionCheck);  // Speichern des aktualisierten Werts
+  console.log('comprehensionCheck stored in localStorage:', comprehensionCheck);  // Debugging: Bestätigen, dass der Wert gespeichert wird
+
+  // Werte an die API senden
+  try {
+    const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: uuid, // Nur die reine UUID senden
+        prolificID: prolificID,
+        group: group,
+        start: startTime, // Verwende den gespeicherten Startzeitpunkt
+        comprehensionCheck: comprehensionCheck,
+        questionButton: "n.n.",
+        initialGuess: "n.n.",
+        finalTarget: "n.n.",
+        advice: "n.n.",
+        completionCodeGenerated: "n.n.",
+        end: Date.now()
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
+    const data = await response.json();
+    console.log("Data successfully sent to the API:", data);
+
+  } catch (error) {
+    console.error('Error sending data to the API:', error);
+  }
+}
+
+
     function btn_click(){
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       const id = urlParams.get('id')
       //Post-Request ans Backend
-      window.location.href = "dashboard.html?id=" + id;
+      //window.location.href = "dashboard.html?id=" + id;
     };
+
+    console.log('Sending data:', {
+        comprehensionCheck: comprehensionCheck,
+    });
+
+
+    
   </script>
 </head>
 <body>
