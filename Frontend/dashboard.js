@@ -218,13 +218,13 @@ if (storeInfo) {
 storeInfoDiv.style.display = 'flex';
 storeInfoDiv.style.flexDirection = 'row'; // Inhalte nebeneinander anordnen
 storeInfoDiv.style.alignItems = 'flex-start'; // Optionale Ausrichtung
-storeInfoDiv.style.gap = '50px'; // Abstand zwischen den Gruppen
+storeInfoDiv.style.gap = '20px'; // Abstand zwischen den Gruppen
 storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
 storeInfoDiv.style.overflow = 'hidden'; // Verhindert das Überlaufen des Inhalts
 storeInfoDiv.style.marginTop = '0px'; // Reduzierter oberer Abstand
 
 storeInfoDiv.innerHTML = `
-    <div style="display: flex; flex-direction: row; gap: 50px; overflow-wrap: break-word; max-width: 100%; margin-top: 0;">
+    <div style="display: flex; flex-direction: row; gap: 20px; overflow-wrap: break-word; max-width: 100%; margin-top: 0;">
         <div style="margin: 0 30px 0 0;">
             <p style="margin: 0;"><strong>Store Location:</strong></p>
             <p style="margin: 0;">${currentStoreElement.textContent}</p>
