@@ -6,7 +6,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 77%;
+    height: 72.5%;
 }
 .content-box2 {
     background-color: #FFE699; /* Hintergrundfarbe */
@@ -15,7 +15,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 30%;
+    height: 35%;
 }
 .content-box3 {
     background-color: #F2F2F2; /* Hintergrundfarbe */
@@ -24,7 +24,7 @@
     padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 63.5%;
+    height: 57.5%;
 }
 .content-box4 {
     background-color: #F2F2F2; /* Hintergrundfarbe */
@@ -33,7 +33,7 @@
     padding: 5px; /* Verringert Innenabstand */
     margin-top: 5px; /* Entfernt Abstand nach oben */
     margin-bottom: 5px; /* Beibehaltung des Abstands nach unten */
-    height: auto; /* Höhe automatisch entsprechend dem Inhalt */
+    height: 20%; /* Höhe automatisch entsprechend dem Inhalt */
 }
 
 .content-box4 p, .content-box4 div {
@@ -138,7 +138,7 @@ p {
 /* Modalfensterinhalt */
 .modal-content {
     position: absolute;
-    top: 25%;
+    top: 5%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #F2F2F2;
@@ -189,8 +189,17 @@ p {
     position: relative;
 }
 
+#lineChart {
+    position: relative; /*muss relativ sein*/
+    width: 100%; /* Setzt die Breite auf 100% der übergeordneten Box */
+    height: 100%; /* Setzt die Höhe auf 100% der übergeordneten Box */
+    box-sizing: border-box; /* Vermeidet, dass padding und border die Größe beeinflussen */
+}
 #lineChart2 {
-    position: relative; /*muss relativ*/
+    position: relative; /*muss relativ sein*/
+    width: 100%; /* Setzt die Breite auf 100% der übergeordneten Box */
+    height: 100%; /* Setzt die Höhe auf 100% der übergeordneten Box */
+    box-sizing: border-box; /* Vermeidet, dass padding und border die Größe beeinflussen */
 }
 
 /* Fragezeichen-Button für Modalfenster */
