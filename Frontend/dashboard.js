@@ -238,7 +238,7 @@ storeInfoDiv.innerHTML = `
             <p style="margin: 0;">${storeInfo.assortment}</p>
         </div>
         <div style="margin: 0 30px 0 0;">
-            <p style="margin: 0;"><strong>Next Store:</strong></p>
+            <p style="margin: 0;"><strong>Distance to Next Store:</strong></p>
             <p style="margin: 0;">${storeInfo.competitionDistance} miles</p>
         </div>
     </div>
@@ -391,7 +391,7 @@ function updateGraphWithCSVData(data, chart) {
             data: values,
             lineTension: 0,
             backgroundColor: 'transparent',
-            borderColor: ['grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'red'],
+            borderColor: ['grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey'],
             borderWidth: 2,
             pointBackgroundColor: '#ffffff'
         });
