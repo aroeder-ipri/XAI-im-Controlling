@@ -68,11 +68,9 @@
     </div>
     <!-- Anzeige der erwarteten Auszahlung -->
     <div id="payoutContainer" class="calculation">
-      <p class="label">Expected payout for reaching the target:</p>
-      <p id="payoutAmount" class="value">£0.00</p>
-      <p>Payout for failing to reach the target:</p>
-      <p>£0</p>
-    </div>
+        <p><span class="label">Expected payout for reaching the target:</span> <span id="payoutAmount" class="value">£0.00</span></p>
+        <p><span class="label">Payout for failing to reach the target:</span> <br><span>£0</span></p>
+      </div>
     <button id="setTargetButton" class="custom-btn">Continue</button>
     <button id="finalSetTargetButton" class="custom-btn" style="display: none;">Submit</button>
     <div id="redirectMessage" style="color: #74B027; display:none;"></div>
@@ -172,11 +170,11 @@
     <div class="col-md-4">
       <div class="content-box2 mt-3" style="padding: 10px;">
         <h2>AI-Forecast</h2>
-        <p class="AIestimate" style="display: none;">The AI estimates <span style="color: black;"><strong>$10,182</strong></span> for the Month of April.</p>
+        <p class="AIestimate" style="display: none;">The AI estimates <span style="color: black;"><strong>$10,200</strong></span> for the month of <span style="color: black;"><strong>April.</strong></p>
         <p class="task"><span style="font-size: 1rem;"></span>
             <strong>Please provide your sales estimate for the month of April.</strong>
             <br>
-            <span style="font-size: 0.83rem;">You will receive additional information from an AI to set your targets after you provide your sales estimate for the month of April.</span>
+            <span style="font-size: 0.83rem;">You will receive additional information from an AI to set your targets after you provide your sales estimate for the month of April. <br>Hover over individual points on the chart to view detailed monthly data.</span>
           </p>
         <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
         <div class="button-wrapper" style="margin-top: auto;">
@@ -191,7 +189,7 @@
       </div>
       <div class="content-box3 mt-3">
         <div id="storeHeader">
-          <h2>Information on the upcoming Month of April:</h2>
+          <h2>Information on the upcoming month of April:</h2>
           <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
           <span id="currentStore" class="current-store">Current Store Name</span> <!-- Added class for styling -->
           <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
@@ -200,7 +198,7 @@
             <p></p>
             <p><strong>Customers (expected):</strong><br><span id="customers-value">0</span></p>
             <p><strong>School or state holidays: </strong><br><span id="holidays-value">0</span></p>
-            <p><strong>Days with promotions:</strong><br><span id="promo-value">0</span> days</p>
+            <p><strong>Days with local promotion:</strong><br><span id="promo-value">0</span> days</p>
         </div>
         
         
