@@ -78,6 +78,30 @@
       width: 100%;
       margin-top: 20px; /* Abstand zwischen Abschnitten */
     }
+    /* Media Query für Bildschirme mit max. Breite von 768px */
+  @media (max-width: 768px) {
+    .text-image-container {
+      flex-direction: column; /* Stapelt Text und Bild vertikal */
+    }
+    .text-left, .image-section {
+      width: 100%; /* Text und Bild nehmen volle Breite ein */
+      padding-right: 0; /* Kein Padding auf der rechten Seite */
+    }
+    .landing-container {
+      padding: 20px;
+    }
+    .landing-container h1 {
+      font-size: 1.4rem;
+    }
+    .landing-container p {
+      font-size: 1rem;
+    }
+    .landing-container .btn {
+      font-size: 1rem;
+      padding: 8px 15px;
+      width: 100%; /* Button nimmt volle Breite ein */
+    }
+  }
   </style>
   <script>
     function btn_click(){
