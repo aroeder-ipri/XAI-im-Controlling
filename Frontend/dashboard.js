@@ -1,4 +1,4 @@
-/* globals Chart:false **/
+/* globals Chart:false */
 
 (() => {
     'use strict';
