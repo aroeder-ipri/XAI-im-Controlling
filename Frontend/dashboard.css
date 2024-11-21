@@ -29,11 +29,6 @@
 
 
 
-html {
-    transform: scale(0.9); /* Adjust the scale as needed (0.9 = 90%) */
-    transform-origin: top middle; /* Set the scaling origin */
-    overflow-x: none; /* Prevent horizontal overflow */
-}
 
 /* Stil für die Seitenüberschrift */
 h1 {
