@@ -288,7 +288,7 @@ html {
 /* Fragezeichen-Button für Modalfenster */
 #questionButton {
     position: fixed;
-    top: -25vh;
+    top: -20vh;
     right: 0vw;
     background-color: #74B027;
     color: white;
