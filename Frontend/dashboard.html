@@ -280,7 +280,7 @@ async function btn_click() {
         console.log("Data successfully sent to the API:", data);
 
         // Weiterleitung zur nächsten Seite
-window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/" + encodeURIComponent(id)
+window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/" + "?id=" + encodeURIComponent(id)
             + "&YourTarget=" + encodeURIComponent(yourTarget)
             + "&actualSales=" + encodeURIComponent(actualSales)
             + "&basePayout=" + encodeURIComponent(basePayout)
@@ -290,6 +290,11 @@ window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/" 
             //+ "&actualSales=" + encodeURIComponent(actualSales)
             //+ "&basePayout=" + encodeURIComponent(basePayout)
             //+ "&optionCost=" + encodeURIComponent(optionCost);
+
+    } catch (error) {
+        console.error('Error sending data to the API:', error);
+    }
+}
 
     } catch (error) {
         console.error('Error sending data to the API:', error);
