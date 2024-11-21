@@ -41,11 +41,12 @@
     padding: 0;
 }
 
-html {
-    transform: scale(0.9); /* Adjust the scale as needed (0.9 = 90%) */
-    transform-origin: top middle; /* Set the scaling origin */
-    overflow-x: none; /* Prevent horizontal overflow */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
+
 
 /* Stil für die Seitenüberschrift */
 h1 {
@@ -220,7 +221,7 @@ html {
 /* Modalfensterinhalt */
 .modal-content {
     position: absolute;
-    top: 15%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #F2F2F2;
@@ -231,7 +232,6 @@ html {
     max-width: 500px; /* Maximalbreite des Modalfensters */
     width: 90%; /* 90% der verfügbaren Breite */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten für das Modalfenster */
-    z-index: 1;
 }
 
 /* Tabs Schriftfarbe */
