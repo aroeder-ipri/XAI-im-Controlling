@@ -97,11 +97,12 @@
     }
 
     // Beim Laden der Seite den festen Wechselkurs und das Datum anzeigen
-    window.onload = displayExchangeRate;
-    window.onload = function() {
+    window.addEventListener('load', displayExchangeRate);
+    window.addEventListener('load', function() {
       document.getElementById('prolificID').addEventListener('input', toggleButton);
       toggleButton();
-    };
+});
+
   </script>
 </head>
 <body>
