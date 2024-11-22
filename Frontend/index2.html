@@ -50,25 +50,58 @@
       color: #888 !important;
       margin: 0 !important;
     }
+    .btn-disabled {
+      background-color: #cccccc !important;
+      border-color: #cccccc !important;
+      pointer-events: none;
+      cursor: not-allowed !important;
+      color: #666666 !important;
+    }
   </style>
   <script>
+    function toggleButton() {
+      const input = document.getElementById('prolificID');
+      const button = document.getElementById('continueButton');
+ 
+      if (input.value.trim() === "") {
+        button.classList.add('btn-disabled');
+      } else {
+        button.classList.remove('btn-disabled');
+      }
+    }
+
     function displayExchangeRate() {
-      const exchangeRate = 1.27; //Wechselkurs von GBP zu USD
-      const lastUpdated = "14th November 2024"; //Datum -> Anpassen bei Änderung Wechselkurs
+      const exchangeRate = 1.25; //Wechselkurs von GBP zu USD
+      const lastUpdated = "22. November 2024"; //Datum -> Anpassen bei Änderung Wechselkurs
 
       document.getElementById('exchange-rate').textContent = `1 GBP = ${exchangeRate} USD`;
       document.getElementById('last-updated').textContent = `last updated: ${lastUpdated}`;
     }
 
-    function btn_click(){
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const id = urlParams.get('id');
-      window.location.href = "setting.html?id=" + id;
+    async function btn_click() {
+    // Speichere die Prolific ID des Nutzers im localStorage
+    const prolificID = document.getElementById("prolificID").value.trim();
+
+    if (!prolificID) {
+        alert("Please enter your Prolific ID.");
+        return;
+    }
+
+        // Speichere localStorage
+        localStorage.setItem("prolificID", prolificID);
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+        window.location.href = "setting.html?id=" + id;
     }
 
     // Beim Laden der Seite den festen Wechselkurs und das Datum anzeigen
     window.onload = displayExchangeRate;
+    window.onload = function() {
+      document.getElementById('prolificID').addEventListener('input', toggleButton);
+      toggleButton();
+    };
   </script>
 </head>
 <body>
@@ -79,7 +112,11 @@
     <p id="exchange-rate">Loading exchange rate...</p>
     <p>All data collected will be held anonymously and will be used for academic research purposes only.</p>
     <p>Please do not reload the page or go back to the previous page after completing a site. Otherwise, the system may not be able to calculate your bonus accurately.</p>
-    <a onclick="btn_click();" class="btn">I want to participate in this study</a>
+    <p>By entering your Prolific ID you agree that you want to participate in this study.</p>
+    <div class="input-group">
+      <input type="text" id="prolificID" class="form-control" placeholder="Please Enter your Prolific ID here" required>
+    </div><br>
+    <a onclick="btn_click();" id="continueButton" class="btn btn-disabled">I want to participate in this study</a>
   </div>
 </body>
 </html>
