@@ -75,23 +75,6 @@
   }
   </style>
     <script src="index.js" defer></script>
-  <script>
-    function toggleButton() {
-      const input = document.getElementById('prolificID');
-      const button = document.getElementById('continueButton');
- 
-      if (input.value.trim() === "") {
-        button.classList.add('btn-disabled');
-      } else {
-        button.classList.remove('btn-disabled');
-      }
-    }
-
-    window.onload = function() {
-      document.getElementById('prolificID').addEventListener('input', toggleButton);
-      toggleButton();
-    };
-  </script>
 </head>
 <body>
   <div class="landing-container">
@@ -99,12 +82,7 @@
     <p>On the next pages, you will be taking the role of a <b>convenience store manager</b> in a store chain called <i><b>STORE</b></i>. Once a month all <i>STORE</i> managers are tasked to set sales targets for their store in the upcoming month. Throughout the experiment you will be guided through this target setting process.</p>
     <p>Please read all information provided during the experiment carefully and try to immerse yourself into the situation as well as possible. Pay close attention to the instructions and familiarize yourself with the situation which is presented to you.</p>
     <p>To ensure the quality of our data, the experiment includes control mechanisms to check your attention. Your questionnaire will be invalidated, and you will not receive any payment, if you fail to answer these control questions.</p>
-    <p>All data collected will be held anonymously and will be used for academic research purposes only.<br>
-      By entering your Prolific ID you agree that you want to participate in this study.</p>
-    <div class="input-group">
-      <input type="text" id="prolificID" class="form-control" placeholder="Please Enter your Prolific ID here" required>
-    </div>
-    <a onclick="btn_click();" id="continueButton" class="btn btn-disabled">Continue</a>
+    <a onclick="btn_click();" class="btn">Continue</a>
   </div>
 </body>
 </html>
