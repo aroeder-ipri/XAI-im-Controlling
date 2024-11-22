@@ -32,14 +32,6 @@ function saveStartTime() {
 }
 
 async function btn_click() {
-    // Speichere die Prolific ID des Nutzers im localStorage
-    const prolificID = document.getElementById("prolificID").value.trim();
-
-    if (!prolificID) {
-        alert("Please enter your Prolific ID.");
-        return;
-    }
-
     let group = assignGroup(); // Benutzer in eine Gruppe einteilen
     try {
         let uuid = await id_api_call(); // Hol dir die reine UUID
@@ -48,13 +40,12 @@ async function btn_click() {
         // Speichere die UUID und Gruppe in localStorage
         localStorage.setItem("user_uuid", uuid);
         localStorage.setItem("user_group", group);
-        localStorage.setItem("prolificID", prolificID);
-
+        
         // Speichere den Startzeitpunkt im Local Storage
         const startTime = saveStartTime();
 
         // Feedback senden mit dem Startzeitpunkt aus dem Local Storage
-        send_feedback(uuid, group, startTime, prolificID); // Nur die reine UUID an die API senden
+        send_feedback(uuid, group, startTime); // Nur die reine UUID an die API senden
         window.location.href = "index2.html?id=" + id; // Präfix weiterhin für die URL verwenden
     } catch (error) {
         console.error('Error in btn_click:', error);
@@ -63,7 +54,7 @@ async function btn_click() {
 
 
 
-async function send_feedback(uuid, group, startTime, prolificID) {
+async function send_feedback(uuid, group, startTime) {
     try {
         const rawResponse = await fetch("https://controlling.xaidemo.de/api/clicks", {
             method: 'POST',
@@ -73,7 +64,7 @@ async function send_feedback(uuid, group, startTime, prolificID) {
             },
             body: JSON.stringify({
                 user_id: uuid,
-                prolificID: prolificID,
+                prolificID: "n.n.",
                 group: group,
                 start: startTime,
                 comprehensionCheck: "n.n.",
@@ -99,7 +90,7 @@ async function send_feedback(uuid, group, startTime, prolificID) {
     }
     console.log('Sending data:', {
         user_id: uuid,
-        prolificID: prolificID,
+        prolificID: "n.n.",
         group: group,
         start: startTime,
         comprehensionCheck: "n.n.",
