@@ -88,6 +88,7 @@
         const optionId = localStorage.getItem("optionId");
         const completionCodeGenerated = localStorage.getItem("completionCodeGenerated");
         const comprehensionCheck = localStorage.getItem("comprehensionCheck");
+        const initialYourTarget = localStorage.getItem("initialYourTarget");
 
         // Werte an die API senden
         try {
@@ -105,6 +106,7 @@
                     comprehensionCheck: comprehensionCheck,
                     questionButton: questionButtonClick,
                     initialGuess: savedSliderValue,
+                    initialTarget: initialYourTarget,
                     finalTarget: yourTarget,
                     advice: optionId,
                     completionCodeGenerated: completionCodeGenerated,
