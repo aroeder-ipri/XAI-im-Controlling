@@ -241,6 +241,7 @@ async function btn_click() {
     const startTime = localStorage.getItem("start_time");
     const prolificID = localStorage.getItem("prolificID");
     const comprehensionCheck = localStorage.getItem("comprehensionCheck");
+    const initialYourTarget = localStorage.getItem("initialYourTarget");
     
 
     // Neue Werte in den localStorage speichern
@@ -265,6 +266,7 @@ async function btn_click() {
                 comprehensionCheck: comprehensionCheck,
                 questionButton: questionButtonClick,
                 initialGuess: savedSliderValue,
+                initialTarget: initialYourTarget, //hier
                 finalTarget: yourTarget,
                 advice: optionId,
                 completionCodeGenerated: "n.n.",
@@ -280,11 +282,11 @@ async function btn_click() {
         console.log("Data successfully sent to the API:", data);
 
         // Weiterleitung zur nächsten Seite
-window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/" 
-    + "?id=" + encodeURIComponent(id) 
-    + "&YourTarget=" + encodeURIComponent(yourTarget) 
+window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/"
+    + "?id=" + encodeURIComponent(id)
+    + "&YourTarget=" + encodeURIComponent(yourTarget)
     + "&actualSales=" + encodeURIComponent(actualSales)
-    + "&basePayout=" + encodeURIComponent(basePayout) 
+    + "&basePayout=" + encodeURIComponent(basePayout)
     + "&optionCost=" + encodeURIComponent(optionCost);
 
         //window.location.href = "survey.html?id=" + encodeURIComponent(id)
@@ -430,10 +432,16 @@ increaseButton2.onclick = function() {
         messageExampleModal.style.display = "block";
     }
 
-    // Event-Listener für den Set Target Button
     setTargetButton.onclick = function() {
-        showModal4();
-    }
+    // Hole den aktuellen Wert des Sliders
+        yourTarget = targetSlider.value;
+    // Ursprünglichen Wert von yourTarget zwischenspeichern (Wert vor Supervisor Message)
+        localStorage.setItem("initialYourTarget", yourTarget);
+    
+    // Zeige Modal4 an
+    showModal4();
+};
+
 
     // Funktion zur Auswahl einer Option im Modal4
     function selectOption(optionId) {
