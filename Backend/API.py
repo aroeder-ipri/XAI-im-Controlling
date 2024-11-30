@@ -41,6 +41,7 @@ class ClickEvent(BaseModel):
     comprehensionCheck: str
     questionButton: str
     initialGuess: str
+    initialTarget: str
     finalTarget: str
     advice: str
     completionCodeGenerated: str
@@ -98,6 +99,7 @@ def save_click_event(click_event: ClickEvent):
             "comprehensionCheck": click_event.comprehensionCheck,
             "questionButton": click_event.questionButton,
             "initialGuess": click_event.initialGuess,
+            "initialTarget": click_event.initialTarget,
             "finalTarget": click_event.finalTarget,
             "advice": click_event.advice,
             "completionCodeGenerated": click_event.completionCodeGenerated,
