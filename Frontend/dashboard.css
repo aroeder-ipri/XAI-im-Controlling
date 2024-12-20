@@ -293,19 +293,40 @@ html {
     background-color: #74B027;
     color: white;
     padding: 0;
-    width: 30px;
-    height: 30px;
-    font-size: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 25px;
     border: none;
     cursor: pointer;
     border-radius: 50%;
     line-height: 30px;
     text-align: center;
+
+    /* Animation hinzufügen */
+    animation: pulse 2s infinite; /* Name der Animation, Dauer 2s, unendlich wiederholen */
+}
+
+/* Definition der Animation */
+@keyframes pulse {
+    0% {
+        background-color: #74B027; /* Startfarbe */
+        transform: scale(1); /* Originalgröße */
+    }
+    50% {
+        background-color: #5c9021; /* Leicht dunklerer Grünton */
+        transform: scale(1.3); /* Leicht vergrößern */
+    }
+    100% {
+        background-color: #74B027; /* Zurück zur Startfarbe */
+        transform: scale(1); /* Zurück zur Originalgröße */
+    }
 }
 
 #questionButton:hover {
+    animation: none; /* Animation pausieren/deaktivieren */
     background-color: #5c9021; /* Hintergrundfarbe ändern, wenn der Button aktiv ist */
     font-weight: bold; /* Fragezeichen fett anzeigen */
+    transform: scale(1.3); /* Vergrößern, wenn der Button aktiv ist */
 }
 
 /* Fragezeichen (nur Bild, nicht klickbar) */
@@ -376,6 +397,20 @@ html {
     width: 100%;
     accent-color: #74B027; /* Setzt die Farbe des Sliders auf Grün */
 }
+/* Slider im deaktivierten Zustand */
+#targetSlider:disabled {
+    accent-color: #ccc; /* Grauer Farbton für deaktivierten Zustand */
+    opacity: 0.5; /* Verringert die Sichtbarkeit */
+    cursor: not-allowed; /* Zeigt, dass der Slider nicht interaktiv ist */
+}
+/* Deaktivierte Buttons */
+.slider-button:disabled {
+    background-color: #ccc; /* Graue Hintergrundfarbe */
+    color: #999; /* Graue Schriftfarbe */
+    cursor: not-allowed; /* Zeigt, dass der Button nicht interaktiv ist */
+    opacity: 0.5; /* Verringert die Sichtbarkeit */
+}
+
 
 /* Slider-Wert */
 #sliderValue {
