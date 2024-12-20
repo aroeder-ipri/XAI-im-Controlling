@@ -287,7 +287,9 @@ window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/"
     + "&YourTarget=" + encodeURIComponent(yourTarget)
     + "&actualSales=" + encodeURIComponent(actualSales)
     + "&basePayout=" + encodeURIComponent(basePayout)
-    + "&optionCost=" + encodeURIComponent(optionCost);
+    + "&optionCost=" + encodeURIComponent(optionCost)
+    + "&initialYourTarget=" + encodeURIComponent(initialYourTarget)
+    + "&questionButtonClick=" + encodeURIComponent(questionButtonClick);
 
         //window.location.href = "survey.html?id=" + encodeURIComponent(id)
             //+ "&YourTarget=" + encodeURIComponent(yourTarget)
@@ -433,11 +435,13 @@ increaseButton2.onclick = function() {
     }
 
     setTargetButton.onclick = function() {
-    // Hole den aktuellen Wert des Sliders
-        yourTarget = targetSlider.value;
-    // Ursprünglichen Wert von yourTarget zwischenspeichern (Wert vor Supervisor Message)
+    // Hole den aktuellen Wert des Sliders (falls er noch nicht aktualisiert wurde)
+    yourTarget = targetSlider.value; 
+
+    // Ursprünglichen Wert von yourTarget zwischenspeichern, falls noch nicht geschehen
         localStorage.setItem("initialYourTarget", yourTarget);
     
+
     // Zeige Modal4 an
     showModal4();
 };
@@ -515,6 +519,11 @@ increaseButton2.onclick = function() {
           // Mache den Continue-Button nicht mehr klickbar
           continueButton.style.pointerEvents = "none";
           continueButton.style.opacity = "0.5";
+          //target slider deaktivieren
+          document.getElementById('targetSlider').disabled = true;
+          // Deaktiviert die Buttons
+            document.getElementById('decreaseButton2').disabled = true;
+            document.getElementById('increaseButton2').disabled = true;
           
           // Zeige die Redirect Message
           const redirectMessage = document.getElementById('redirectMessage');
