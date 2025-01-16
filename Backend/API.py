@@ -44,7 +44,6 @@ class ClickEvent(BaseModel):
     initialTarget: str
     finalTarget: str
     advice: str
-    completionCodeGenerated: str
     end: datetime
 
 couch = couchdb.Server('http://admin:password@couchdb:5984/')
@@ -102,7 +101,6 @@ def save_click_event(click_event: ClickEvent):
             "initialTarget": click_event.initialTarget,
             "finalTarget": click_event.finalTarget,
             "advice": click_event.advice,
-            "completionCodeGenerated": click_event.completionCodeGenerated,
             "end": click_event.end.isoformat(),
         }
         db.save(click_event_doc)
