@@ -612,6 +612,7 @@ increaseButton.onclick = function() {
           taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.'; // Ändert den HTML-Inhalt des <p> Elements
           // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
             estimateSale.innerHTML = `Your estimated sales were $${formatNumberWithCommas(savedSliderValue)}.`;
+          determineAndOpenModal();
       }
 
       const modal = document.getElementById("modal");
