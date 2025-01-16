@@ -1,6 +1,6 @@
 // Funktion zur zufälligen Zuweisung der Gruppe
 function assignGroup() {
-    const groups = ['CF', 'FI'];
+    const groups = ['CF', 'FI', 'NX'];
     const randomIndex = Math.floor(Math.random() * groups.length);
     return groups[randomIndex];
 }
@@ -70,10 +70,8 @@ async function send_feedback(uuid, group, startTime) {
                 comprehensionCheck: "n.n.",
                 questionButton: "n.n.",
                 initialGuess: "n.n.",
-                initialTarget: "n.n.",
                 finalTarget: "n.n.",
                 advice: "n.n.",
-                completionCodeGenerated: "n.n.",
                 end: Date.now()
             })
         });
@@ -97,10 +95,8 @@ async function send_feedback(uuid, group, startTime) {
         comprehensionCheck: "n.n.",
         questionButton: "n.n.",
         initialGuess: "n.n.",
-        initialTarget: "n.n.",
         finalTarget: "n.n.",
         advice: "n.n.",
-        completionCodeGenerated: "n.n.",
         end: Date.now()
     });
 }
