@@ -662,13 +662,28 @@ increaseButton.onclick = function() {
         // Protokolliere die Daten in der Konsole zur Überprüfung
         console.log("Geladene Daten:", data);
 
-        // Extrahiere die ersten beiden Werte und Namen
-        const firstTwoItems = data.slice(0, 3);
+        // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
+        let closestData = null;
+        let closestDifference = Infinity;
 
-        // Protokolliere die extrahierten Items zur Überprüfung
-        console.log("Extrahierte Items:", firstTwoItems);
+        data.forEach(item => {
+            const difference = Math.abs(item.Sales_CF - savedSliderValue);
+            if (difference < closestDifference) {
+                closestDifference = difference;
+                closestData = item;
+            }
+        });
+
+        // Prüfe, ob wir eine passende Datenreihe gefunden haben
+        if (!closestData) {
+            throw new Error("Keine passende Datenreihe gefunden.");
+        }
+
+        // Extrahiere die Issues
+        const issues = closestData.Explanation?.Issues || [];
 
         // Generiere den HTML-Code für die Progress Bars
+        const firstTwoItems = data.slice(0, 3);
         const progressBarsHTML = firstTwoItems.map(item => {
             const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
             return `
@@ -683,11 +698,11 @@ increaseButton.onclick = function() {
 
         // Berechne die geschätzten und benutzerdefinierten Werte
         const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
-        const estimatedValue = formatNumberWithCommas(Math.round(data.estimated_sales || 0)); // Geschätzter Wert aus JSON-Daten
+        const formattedEstimatedValue = formatNumberWithCommas(Math.round(closestData.Sales));
 
         // HTML-Inhalt des Modals anpassen
         modal1Content.innerHTML = `
-            <p>The AI estimates <strong>$${estimatedValue}</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
+            <p>The AI estimates <strong>$${formattedEstimatedValue}</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
             <p>Here you can see which factors had the biggest influence on the AI forecast:</p>
             ${progressBarsHTML}
         `;
@@ -704,6 +719,7 @@ increaseButton.onclick = function() {
         console.error("Fehler:", error);
     }
 }
+
 
 
       async function openModal2() {
