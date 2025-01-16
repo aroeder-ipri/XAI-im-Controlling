@@ -288,8 +288,7 @@ window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/"
     + "&actualSales=" + encodeURIComponent(actualSales)
     + "&basePayout=" + encodeURIComponent(basePayout)
     + "&optionCost=" + encodeURIComponent(optionCost)
-    + "&initialYourTarget=" + encodeURIComponent(initialYourTarget)
-    + "&questionButtonClick=" + encodeURIComponent(questionButtonClick);
+    + "&initialYourTarget=" + encodeURIComponent(initialYourTarget);
 
         //window.location.href = "survey.html?id=" + encodeURIComponent(id)
             //+ "&YourTarget=" + encodeURIComponent(yourTarget)
@@ -605,15 +604,29 @@ increaseButton.onclick = function() {
       };
 
       anzeigenButton.onclick = function() {
-          modalEstimate.style.display = "none";
-          continueButton.style.display = "block";
-          estimateButton.style.display = "none";
-          AIestimate.style.display = "block";
-          taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.'; // Ändert den HTML-Inhalt des <p> Elements
-          // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
-            estimateSale.innerHTML = `Your estimated sales were $${formatNumberWithCommas(savedSliderValue)}.`;
-          determineAndOpenModal();
-      }
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+
+    modalEstimate.style.display = "none";
+    continueButton.style.display = "block";
+    estimateButton.style.display = "none";
+    AIestimate.style.display = "block";
+
+    // Bedingung für Gruppe NX
+    if (id && id.startsWith("NX")) {
+        taskParagraph.innerHTML = ''; // Leer
+    } else {
+        // Text hinzufügen, wenn nicht in Gruppe NX
+        taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.';
+    }
+
+    // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
+    estimateSale.innerHTML = `Your estimated sales were $${formatNumberWithCommas(savedSliderValue)}.`;
+    determineAndOpenModal();
+}
+
+
 
       const modal = document.getElementById("modal");
       const modal2 = document.getElementById("modal2");
@@ -631,64 +644,67 @@ increaseButton.onclick = function() {
 
       // Funktion zum Öffnen des ersten Modals und Laden der JSON-Daten
       async function openModal1() {
-          try {
-              // Stelle sicher, dass der Modal-Container vorhanden ist
-              const modal1Content = document.getElementById("modal1Content");
-              if (!modal1Content) {
-                  console.error("Das Element 'modal1Content' wurde nicht gefunden.");
-                  return;
-              }
+    try {
+        // Stelle sicher, dass der Modal-Container vorhanden ist
+        const modal1Content = document.getElementById("modal1Content");
+        if (!modal1Content) {
+            console.error("Das Element 'modal1Content' wurde nicht gefunden.");
+            return;
+        }
 
-              // Lade die JSON-Daten
-              const response = await fetch("/shap_feature_importance.json");
-              if (!response.ok) {
-                  throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
-              }
-              const data = await response.json();
+        // Lade die JSON-Daten
+        const response = await fetch("/shap_feature_importance.json");
+        if (!response.ok) {
+            throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
+        }
+        const data = await response.json();
 
-              // Protokolliere die Daten in der Konsole zur Überprüfung
-              console.log("Geladene Daten:", data);
+        // Protokolliere die Daten in der Konsole zur Überprüfung
+        console.log("Geladene Daten:", data);
 
-              // Extrahiere die ersten beiden Werte und Namen
-              const firstTwoItems = data.slice(0, 3);
-              
-              // Protokolliere die extrahierten Items zur Überprüfung
-              console.log("Extrahierte Items:", firstTwoItems);
+        // Extrahiere die ersten beiden Werte und Namen
+        const firstTwoItems = data.slice(0, 3);
 
-              // Generiere den HTML-Code für die Progress Bars
-              const progressBarsHTML = firstTwoItems.map(item => {
-                  const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
-                  return `
-                      <div class="progress-container" style="margin-bottom: 15px;">
-                          <p><strong>${item.col_name}</strong></p>
-                          <div class="progress">
-                              <div class="progress-bar" role="progressbar" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentage}%;"></div>
-                          </div>
-                      </div>
-                  `;
-              }).join('');
+        // Protokolliere die extrahierten Items zur Überprüfung
+        console.log("Extrahierte Items:", firstTwoItems);
 
-              // Protokolliere den HTML-Code für die Progress Bars
-              console.log("Generierter HTML-Code für Progress Bars:", progressBarsHTML);
+        // Generiere den HTML-Code für die Progress Bars
+        const progressBarsHTML = firstTwoItems.map(item => {
+            const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
+            return `
+                <div class="progress-container" style="margin-bottom: 15px;">
+                    <p><strong>${item.col_name}</strong></p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentage}%;"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
 
-              // HTML-Inhalt des Modals anpassen
-              modal1Content.innerHTML = `
-                  <p>Following you can see which factors had the biggest influence on the AI forecast:</p>
-                  ${progressBarsHTML}
-              `;
+        // Berechne die geschätzten und benutzerdefinierten Werte
+        const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+        const estimatedValue = formatNumberWithCommas(Math.round(data.estimated_sales || 0)); // Geschätzter Wert aus JSON-Daten
 
-              // Modal anzeigen
-              const modal = document.getElementById("modal");
-              if (!modal) {
-                  console.error("Das Modal-Element wurde nicht gefunden.");
-                  return;
-              }
-              modal.style.display = "block";
-              
-          } catch (error) {
-              console.error("Fehler:", error);
-          }
-      }
+        // HTML-Inhalt des Modals anpassen
+        modal1Content.innerHTML = `
+            <p>The AI estimates <strong>$${estimatedValue}</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
+            <p>Here you can see which factors had the biggest influence on the AI forecast:</p>
+            ${progressBarsHTML}
+        `;
+
+        // Modal anzeigen
+        const modal = document.getElementById("modal");
+        if (!modal) {
+            console.error("Das Modal-Element wurde nicht gefunden.");
+            return;
+        }
+        modal.style.display = "block";
+
+    } catch (error) {
+        console.error("Fehler:", error);
+    }
+}
+
 
       async function openModal2() {
           try {
@@ -742,9 +758,8 @@ increaseButton.onclick = function() {
           const id = urlParams.get('id');
 
           // Überprüfe, ob eine ID vorhanden ist und ob sie gültig ist
-          if (!id) {
-              console.warn("Keine ID in der URL gefunden. Öffne Modal 1.");
-              openModal2();
+          if (id.startsWith("NX")) {
+              questionButton.style.display = 'none';
               return;
           }
 
