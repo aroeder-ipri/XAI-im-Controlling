@@ -659,29 +659,6 @@ increaseButton.onclick = function() {
         }
         const data = await response.json();
 
-        // Protokolliere die Daten in der Konsole zur Überprüfung
-        console.log("Geladene Daten:", data);
-
-        // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
-        let closestData = null;
-        let closestDifference = Infinity;
-
-        data.forEach(item => {
-            const difference = Math.abs(item.Sales_CF - savedSliderValue);
-            if (difference < closestDifference) {
-                closestDifference = difference;
-                closestData = item;
-            }
-        });
-
-        // Prüfe, ob wir eine passende Datenreihe gefunden haben
-        if (!closestData) {
-            throw new Error("Keine passende Datenreihe gefunden.");
-        }
-
-        // Extrahiere die Issues
-        const issues = closestData.Explanation?.Issues || [];
-
         // Generiere den HTML-Code für die Progress Bars
         const firstTwoItems = data.slice(0, 3);
         const progressBarsHTML = firstTwoItems.map(item => {
@@ -698,7 +675,6 @@ increaseButton.onclick = function() {
 
         // Berechne die geschätzten und benutzerdefinierten Werte
         const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
-        const formattedEstimatedValue = formatNumberWithCommas(Math.round(closestData.Sales));
 
         // HTML-Inhalt des Modals anpassen
         modal1Content.innerHTML = `
