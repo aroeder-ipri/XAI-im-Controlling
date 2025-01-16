@@ -12,7 +12,7 @@
       transform-origin: top middle; /* Set the origin to the top left */
       overflow: hidden; /* Prevents overflow due to scaling */
       width: 100vw; /* Keep the full width */
-      height: 100vh;
+      height: 100vh; /* Keep the full height */
       background-color: #F2F2F2;
       display: flex;
       justify-content: center;
@@ -120,38 +120,44 @@ async function checkAnswer() {
 
   localStorage.setItem("comprehensionCheck", comprehensionCheck);
 
-  try {
-    const response = await fetch("https://controlling.xaidemo.de/api/clicks", {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user_id: uuid,
-        prolificID: prolificID,
-        group: group,
-        start: startTime,
-        comprehensionCheck: comprehensionCheck,
-        questionButton: "n.n.",
-        initialGuess: "n.n.",
-        finalTarget: "n.n.",
-        advice: "n.n.",
-        completionCodeGenerated: "n.n.",
-        end: Date.now()
-      })
-    });
+  const requestData = {
+  user_id: uuid,
+  prolificID: prolificID,
+  group: group,
+  start: startTime,
+  comprehensionCheck: comprehensionCheck,
+  questionButton: "n.n.",
+  initialGuess: "n.n.",
+  initialTarget: "n.n.",
+  finalTarget: "n.n.",
+  advice: "n.n.",
+  end: Date.now()
+};
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+console.log("Sending request data:", requestData);
 
-    const data = await response.json();
-    console.log("Data successfully sent to the API:", data);
+try {
+  const response = await fetch("https://controlling.xaidemo.de/api/clicks", {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestData)
+  });
 
-  } catch (error) {
-    console.error('Error sending data to the API:', error);
+  if (!response.ok) {
+    const errorMessage = await response.text(); // Detaillierte Fehlermeldung vom Server
+    throw new Error(`HTTP error! Status: ${response.status} - ${errorMessage}`);
   }
+
+  const data = await response.json();
+  console.log("Data successfully sent to the API:", data);
+
+} catch (error) {
+  console.error('Error sending data to the API:', error);
+}
+
 }
 
 function btn_click(){
