@@ -46,6 +46,14 @@
   </div>
 </div>
 
+<!-- Modalfenster NX -->
+<div id="modalNX" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modalNXContent"></div>
+    </div>
+  </div>
+
 <!-- Modalfenster 3 -->
 <div id="modal3" class="modal" style="display: none;">
   <div class="modal-content">
@@ -629,10 +637,9 @@ increaseButton.onclick = function() {
     determineAndOpenModal();
 }
 
-
-
       const modal = document.getElementById("modal");
       const modal2 = document.getElementById("modal2");
+      const modalNX = document.getElementById("modalNX");
       const questionButton = document.getElementById("questionButton");
       const mehrButton = document.getElementById("mehrButton");
 
@@ -644,6 +651,37 @@ increaseButton.onclick = function() {
           }
           return await response.json();
       }
+
+      // Funktion zum Öffnen des Modals NX
+async function openModalNX() {
+    try {
+        // Stelle sicher, dass der Modal-Container vorhanden ist
+        const modalNXContent = document.getElementById("modalNXContent");
+        if (!modalNXContent) {
+            console.error("Das Element 'modalNXContent' wurde nicht gefunden.");
+            return;
+        }
+
+        // Berechne die benutzerdefinierte Schieberegler-Wertformatierung
+        const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+
+        // HTML-Inhalt des Modals anpassen
+        modalNXContent.innerHTML = `
+            <p>The AI estimates <strong>$10,200</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
+        `;
+
+        // Modal anzeigen
+        const modalNX = document.getElementById("modalNX");
+        if (!modalNX) {
+            console.error("Das Modal-Element wurde nicht gefunden.");
+            return;
+        }
+        modalNX.style.display = "block";
+
+    } catch (error) {
+        console.error("Fehler beim Öffnen des Modals NX:", error);
+    }
+}
 
       // Funktion zum Öffnen des ersten Modals und Laden der JSON-Daten
       async function openModal1() {
@@ -755,6 +793,7 @@ increaseButton.onclick = function() {
           // Überprüfe, ob eine ID vorhanden ist und ob sie gültig ist
           if (id.startsWith("NX")) {
               questionButton.style.display = 'none';
+                openModalNX();
               return;
           }
 
