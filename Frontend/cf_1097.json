@@ -1,1 +1,437 @@
-
+[
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 9061.5,
+        "Percentage1": 0.9,
+        "Percentage2": 0.95,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -1845.2,
+                    "Factor": "Customers"
+                },
+                {
+                    "Value": 11.05,
+                    "Factor": "AvgSalesPerCustomer"
+                },
+                {
+                    "Value": -4.0,
+                    "Factor": "Holidays_lastmonth"
+                }
+            ],
+            "Issues": [
+                "1845 Kunden zu viel in diesem Monat",
+                "Durchschnittlcher Verkauf pro Kunde um 11€ zu niedrig",
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 9061.5,
+        "Percentage1": 0.9,
+        "Percentage2": 0.95,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -1845.2,
+                    "Factor": "Customers"
+                },
+                {
+                    "Value": 11.05,
+                    "Factor": "AvgSalesPerCustomer"
+                },
+                {
+                    "Value": -4.0,
+                    "Factor": "Holidays_lastmonth"
+                }
+            ],
+            "Issues": [
+                "1845 Kunden zu viel in diesem Monat",
+                "Durchschnittlcher Verkauf pro Kunde um 11€ zu niedrig",
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 9249.7,
+        "Percentage1": 0.94,
+        "Percentage2": 0.96,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -327.0,
+                    "Factor": "Customers"
+                },
+                {
+                    "Value": -5.0,
+                    "Factor": "Holidays_thismonth"
+                },
+                {
+                    "Value": 2.8,
+                    "Factor": "PromoInterval"
+                }
+            ],
+            "Issues": [
+                "327 Kunden zu viel in diesem Monat",
+                "5 Ferien- oder Feiertag(e) zu viel in diesem Monat",
+                "Promointervall 0 statt 2"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 9344.0,
+        "Percentage1": 0.96,
+        "Percentage2": 0.99,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -3.6,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "StoreType"
+                },
+                {
+                    "Value": 1.0,
+                    "Factor": "Promo2"
+                }
+            ],
+            "Issues": [
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "Store-Typ 2 statt 1",
+                "keine Teilnahme an Promo2"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 9621.4,
+        "Percentage1": 0.98,
+        "Percentage2": 1.0,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -3.6,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": -0.17,
+                    "Factor": "SchoolHoliday"
+                },
+                {
+                    "Value": -0.03,
+                    "Factor": "StateHoliday"
+                }
+            ],
+            "Issues": [
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "5 schulfreie(r) Tag(e) zu viel in diesem Monat",
+                "0 gesetzliche(r) Feiertag(e) zu viel im Monat"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 9709.7,
+        "Percentage1": 1.0,
+        "Percentage2": 1.02,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": 4.0,
+                    "Factor": "Holidays_nextmonth"
+                },
+                {
+                    "Value": -3.6,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": -0.17,
+                    "Factor": "SchoolHoliday"
+                }
+            ],
+            "Issues": [
+                "4 Ferien- oder Feiertag(e) zu wenig im nächsten Monat",
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "5 schulfreie(r) Tag(e) zu viel in diesem Monat"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 10054.0,
+        "Percentage1": 1.02,
+        "Percentage2": 1.04,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -3.6,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "Open"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "Month"
+                }
+            ],
+            "Issues": [
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "zu oft geöffnet",
+                "Änderung zu Monat 3"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 10107.7,
+        "Percentage1": 1.04,
+        "Percentage2": 1.06,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -3.6,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": 2.0,
+                    "Factor": "Holidays_thismonth"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "Assortment"
+                }
+            ],
+            "Issues": [
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "2 Ferien- oder Feiertag(e) zu wenig in diesem Monat",
+                "Assortment-Typ 2 statt 1"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 10298.0,
+        "Percentage1": 1.06,
+        "Percentage2": 1.08,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -3.4,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "Assortment"
+                },
+                {
+                    "Value": 1.0,
+                    "Factor": "Promo2"
+                }
+            ],
+            "Issues": [
+                "3 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "Assortment-Typ 2 statt 1",
+                "keine Teilnahme an Promo2"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 10510.9,
+        "Percentage1": 1.08,
+        "Percentage2": 1.1,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -3.5,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "Open"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "Assortment"
+                }
+            ],
+            "Issues": [
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "zu oft geöffnet",
+                "Assortment-Typ 2 statt 1"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 10706.0,
+        "Percentage1": 1.1,
+        "Percentage2": 1.12,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -3.5,
+                    "Factor": "Holidays_lastmonth"
+                },
+                {
+                    "Value": 3.0,
+                    "Factor": "Holidays_nextmonth"
+                },
+                {
+                    "Value": -1.0,
+                    "Factor": "Open"
+                }
+            ],
+            "Issues": [
+                "4 Ferien- oder Feiertag(e) zu viel im vorherigen Monat",
+                "3 Ferien- oder Feiertag(e) zu wenig im nächsten Monat",
+                "zu oft geöffnet"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 11109.0,
+        "Percentage1": 1.14,
+        "Percentage2": 1.16,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -609.0,
+                    "Factor": "Customers"
+                },
+                {
+                    "Value": -4.0,
+                    "Factor": "Holidays_thismonth"
+                },
+                {
+                    "Value": -1.5,
+                    "Factor": "Holidays_lastmonth"
+                }
+            ],
+            "Issues": [
+                "609 Kunden zu viel in diesem Monat",
+                "4 Ferien- oder Feiertag(e) zu viel in diesem Monat",
+                "2 Ferien- oder Feiertag(e) zu viel im vorherigen Monat"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 11376.1,
+        "Percentage1": 1.16,
+        "Percentage2": 1.18,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -1157.3,
+                    "Factor": "Customers"
+                },
+                {
+                    "Value": 5.44,
+                    "Factor": "AvgSalesPerCustomer"
+                },
+                {
+                    "Value": 5.0,
+                    "Factor": "Holidays_thismonth"
+                }
+            ],
+            "Issues": [
+                "1157 Kunden zu viel in diesem Monat",
+                "Durchschnittlcher Verkauf pro Kunde um 5€ zu niedrig",
+                "5 Ferien- oder Feiertag(e) zu wenig in diesem Monat"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 11437.4,
+        "Percentage1": 1.15,
+        "Percentage2": 1.2,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -1001.4,
+                    "Factor": "Customers"
+                },
+                {
+                    "Value": 3.48,
+                    "Factor": "AvgSalesPerCustomer"
+                },
+                {
+                    "Value": 2.0,
+                    "Factor": "Holidays_thismonth"
+                }
+            ],
+            "Issues": [
+                "1001 Kunden zu viel in diesem Monat",
+                "Durchschnittlcher Verkauf pro Kunde um 3€ zu niedrig",
+                "2 Ferien- oder Feiertag(e) zu wenig in diesem Monat"
+            ]
+        }
+    },
+    {
+        "Store": 1097.0,
+        "Sales": 9700,
+        "Sales_CF": 11550.5,
+        "Percentage1": 1.18,
+        "Percentage2": 1.2,
+        "CF": "",
+        "Explanation": {
+            "Factors": [
+                {
+                    "Value": -1088.9,
+                    "Factor": "Customers"
+                },
+                {
+                    "Value": -5.0,
+                    "Factor": "Holidays_thismonth"
+                },
+                {
+                    "Value": 3.92,
+                    "Factor": "AvgSalesPerCustomer"
+                }
+            ],
+            "Issues": [
+                "1089 Kunden zu viel in diesem Monat",
+                "5 Ferien- oder Feiertag(e) zu viel in diesem Monat",
+                "Durchschnittlcher Verkauf pro Kunde um 4€ zu niedrig"
+            ]
+        }
+    }
+]
