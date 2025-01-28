@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XAI in Controlling</title>
-  <!-- Bootstrap CSS -->
+  <title>Survey - XAI in Controlling</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
@@ -12,128 +11,287 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
     }
-    .landing-container {
+    .survey-container {
       background-color: white;
       border: 3px solid #74B027;
       border-radius: 10px;
       padding: 30px;
-      max-width: 800px;
+      max-width: 650px;
+      max-height: 800px;
       width: 100%;
-      text-align: left;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
     }
-    .landing-container h1 {
-      color: #333;
+
+    .question {
       margin-bottom: 20px;
     }
-    .landing-container p {
-      color: #555;
-      font-size: 1.2rem;
+    .question h5 {
+      color: #333;
       margin-bottom: 15px;
     }
-    .landing-container .btn {
-      color: #fff;
+    .form-check {
+      margin-bottom: 50px;
+    }
+    .form-check-inline {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .form-check-input {
+      appearance: none; /* Standard-Design entfernen */
+      width: 20px;
+      height: 20px;
+      border: 2px solid #9d9d9d;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .form-check-input:checked {
+      background-color: #74B027;
+      border-color: #5c9021;
+    }
+
+    .form-check-input:checked::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .btn-success {
       background-color: #74B027;
       border-color: #74B027;
-      padding: 10px 20px;
-      font-size: 1.2rem;
     }
-    .landing-container .btn:hover {
+    .btn-success:hover {
       background-color: #5c9021;
       border-color: #5c9021;
     }
-    .landing-container .btn:disabled {
-      background-color: #A9A9A9;
-      border-color: #A9A9A9;
-      cursor: not-allowed;
+    .d-flex span {
+      color: #74B027;
+      margin-bottom: -10px;
     }
-    .completion-code {
-      margin-top: 15px;
-      font-size: 1.2rem;
-    font-weight: bold;
-    color: #74B027;
-    }
-    .goodbye {
-      margin-top: 15px;
-      font-size: 1.2rem;
-      color: #555;
-    }
+
+
   </style>
-  <script>
-    async function showCompletionCode() {
-        // Setze den Completion-Code und die Abschiedsnachricht
-        const codeElement = document.getElementById('code');
-        codeElement.innerHTML = "CIGXXQC5";
-        
-        const goodbyeElement = document.getElementById('goodbye');
-        goodbyeElement.innerHTML = "Please make sure you have entered your completion code on the Connect platform before closing this browser window or tab.<br>Thank you for participating!";
-        
-        const buttonElement = document.getElementById('generateButton');
-        buttonElement.disabled = true;
-
-        // Setze die Variable für den Completion-Code Status
-        localStorage.setItem("completionCodeGenerated", "yes");
-
-        // Werte aus dem localStorage abrufen
-        const uuid = localStorage.getItem("user_uuid");
-        const prolificID = localStorage.getItem("prolificID");
-        const group = localStorage.getItem("user_group");
-        const startTime = localStorage.getItem("start_time");
-        const questionButtonClick = localStorage.getItem("questionButtonClick");
-        const savedSliderValue = localStorage.getItem("savedSliderValue");
-        const yourTarget = localStorage.getItem("yourTarget");
-        const optionId = localStorage.getItem("optionId");
-        const completionCodeGenerated = localStorage.getItem("completionCodeGenerated");
-        const comprehensionCheck = localStorage.getItem("comprehensionCheck");
-        const initialYourTarget = localStorage.getItem("initialYourTarget");
-
-        // Werte an die API senden
-        try {
-            const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    user_id: uuid, // Nur die reine UUID senden
-                    prolificID: prolificID,
-                    group: group,
-                    start: startTime, // Verwende den gespeicherten Startzeitpunkt
-                    comprehensionCheck: comprehensionCheck,
-                    questionButton: questionButtonClick,
-                    initialGuess: savedSliderValue,
-                    initialTarget: initialYourTarget,
-                    finalTarget: yourTarget,
-                    advice: optionId,
-                    completionCodeGenerated: completionCodeGenerated,
-                    end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log("Data successfully sent to the API:", data);
-
-        } catch (error) {
-            console.error('Error sending data to the API:', error);
-        }
-    }
-</script>
 </head>
 <body>
-  <div class="landing-container">
-    <h1>Completion Code</h1>
-    <p>Please click here to generate your Completion Code.</p>
-    <button id="generateButton" class="btn" onclick="showCompletionCode()">Generate Code</button>
-    <div id="code" class="completion-code"></div>
-    <div id="goodbye" class="goodbye"></div>
+  <div class="survey-container">
+
+    <!-- Question 1 -->
+    <div class="question">
+      <h5>1. How confident are you in your initial estimate?</h5>
+      <label>How much confidence do you have in your initial estimate?</label>
+      <div class="d-flex justify-content-between mb-3">
+        <span>None</span>
+        <span>A lot</span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_initial" value="1">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_initial" value="2">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_initial" value="3">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_initial" value="4">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_initial" value="5">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_initial" value="6">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_initial" value="7">
+        </div>
+      </div>
+      <label>How likely is it that your initial estimate predicts sales performance almost perfectly?</label>
+      <div class="d-flex justify-content-between mb-3">
+        <span>Certainly Not True</span>
+        <span>Certainly True</span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_initial" value="1">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_initial" value="2">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_initial" value="3">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_initial" value="4">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_initial" value="5">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_initial" value="6">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_initial" value="7">
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question">
+      <h5>2. How confident are you in the AI estimate?</h5>
+      <label>How much confidence do you have in the AI sales estimate?</label>
+      <div class="d-flex justify-content-between mb-3">
+        <span>None</span>
+        <span>A lot</span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_ai" value="1">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_ai" value="2">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_ai" value="3">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_ai" value="4">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_ai" value="5">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_ai" value="6">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_ai" value="7">
+        </div>
+      </div>
+      <label>How likely is it that the AI predicts sales performance almost perfectly?</label>
+      <div class="d-flex justify-content-between mb-3">
+        <span>Certainly Not True</span>
+        <span>Certainly True</span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_ai" value="1">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_ai" value="2">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_ai" value="3">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_ai" value="4">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_ai" value="5">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_ai" value="6">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_ai" value="7">
+        </div>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question">
+      <h5>3. How confident are you in the estimate of your supervisor?</h5>
+      <label>How much confidence do you have in your supervisor sales estimate?</label>
+      <div class="d-flex justify-content-between mb-3">
+        <span>None</span>
+        <span>A lot</span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_supervisor" value="1">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_supervisor" value="2">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_supervisor" value="3">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_supervisor" value="4">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_supervisor" value="5">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_supervisor" value="6">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="confidence_supervisor" value="7">
+        </div>
+      </div>
+      <label>How likely is it that your supervisor predicts sales performance almost perfectly?</label>
+      <div class="d-flex justify-content-between mb-3">
+        <span>Certainly Not True</span>
+        <span>Certainly True</span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_supervisor" value="1">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_supervisor" value="2">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_supervisor" value="3">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_supervisor" value="4">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_supervisor" value="5">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_supervisor" value="6">
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="accuracy_supervisor" value="7">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-success w-100 mt-4">Submit</button>
   </div>
+
+  <script>
+    document.getElementById("surveyForm").addEventListener("submit", function(event) {
+      let allRadioGroups = document.querySelectorAll("input[type='radio']");
+      let namesChecked = new Set();
+
+      allRadioGroups.forEach(input => {
+        if (input.checked) {
+          namesChecked.add(input.name);
+        }
+      });
+
+      let uniqueNames = new Set();
+      allRadioGroups.forEach(input => uniqueNames.add(input.name));
+
+      if (namesChecked.size !== uniqueNames.size) {
+        alert("Bitte beantworten Sie alle Fragen.");
+        event.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>
