@@ -14,21 +14,19 @@ import functools
 random.seed(1)
 
 '''
-Set aggregation period: daily, weekly, monthly
+Set aggregation period: monthly or weekly
 '''
 period = 'monthly'
 shap_nfeat = 0 # set to nr>0 to set 
 explain_week_after = '2015-01-01'
 store_type=1 # default
-store=470
-month=4
+store=470 # set store
+month=4 # set forecast month and year
+year=2015
 
-path = 'train_extended_'+period+'.csv'
+path = 'C:/Users/laram/Downloads/train_extended_'+period+'.csv'
 
-if period=='daily':
-    df = pd.read_csv('train_store.csv', sep=',', index_col = 'Date')
-else:
-    df = pd.read_csv(path, sep=';', decimal=',')
+df = pd.read_csv(path, sep=';', decimal=',')
     
 # Get relevant columns for model
 
@@ -79,30 +77,26 @@ if 'WeekOfYear' in df.columns:
 '''
 # Plot time series for stores
 
+# Add Day to use datetime
 if period == 'monthly':
     df['Day'] = 1
     df['Date'] = pd.to_datetime(df[['Year', 'Month', 'Day']])
 
 plt.plot('Date', 'Sales', data = df.loc[df['Store']==470])
-plt.scatter(datetime.strptime('2015-04-01', '%Y-%m-%d'), y_pred[470-1], c='red')
-
 plt.plot('Date', 'Sales', data = df.loc[df['Store']==1097])
-plt.scatter(datetime.strptime('2015-04-01', '%Y-%m-%d'), y_pred[1097-1], c='red')
 
+# Remove again
 df = df.drop(['Day','Date'], axis=1)
 '''
 
 
 '''
-Train XGBoost model without parameter tuning
+Train basic XGBoost model (no parameter tuning)
 '''
 
-# Split train and test
-split_date = 2015
-
-# year not 2015 and month not greater 4
-train = df.loc[(df.Year != split_date) | (df.Month < month)].copy()
-test = df.loc[(df.Year >= split_date) & (df.Month == month)].copy()
+# Train on all months before month/year specified above
+train = df.loc[(df.Year != year) | (df.Month < month)].copy()
+test = df.loc[(df.Year >= year) & (df.Month == month)].copy()
 
 X_train = train.drop(labels=['Sales'], axis=1)
 y_train = train['Sales']
@@ -114,11 +108,12 @@ print('Train a XGBoost model')
 model = xgb.XGBRegressor()
 model.fit(X_train, y_train)
 
+# Predictions for month/year for all stores
 y_pred = model.predict(X_test)
 
 
 '''
-Calculate feature importance using SHAP
+Calculate general feature importance using SHAP
 '''
 
 # instatiate SHAP explainer
@@ -142,7 +137,8 @@ shap_importance.sort_values(by=['feature_importance_vals'],
 shap_importance
 
 '''
-*MAX*Feature importance in JSON for the frontend
+*MAX* Save feature importance in JSON for the frontend
+'''
 '''
 # Berechne Gesamtwert der Feature Importance-Werte
 total_importance = vals.sum()
@@ -157,12 +153,19 @@ shap_importance.sort_values(by=['percentage_importance'], ascending=False, inpla
 shap_importance.to_json('shap_feature_importance.json', orient='records')
 
 print('SHAP feature importance saved to shap_feature_importance.json')
+'''
 
 '''
-Define functions for CF
+Define functions for CF search for stores
+CF search is quite time intensive so define a timeout function (here 60s) for the search
+If not CF found, stop search
+
 '''
 
 def timeout(timeout):
+    """
+    Define length of CF seach before timeout in seconds
+    """
     def deco(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -197,15 +200,12 @@ def generate_cf(query, desired_range, features_vary, permitted_range):
 
 
 def get_cf(store, X_test, y_pred, desired_range, features_vary, permitted_range):
+    """
+    Try to generate a CF in the given time
+    """
     query_instances_rossmann = X_test[store-1:store]
     y_query = y_pred[store-1:store]
     query = query_instances_rossmann
-    #permitted_range = {'Month': [max(1,query['Month'].values[0]-1),min(12,query['Month'].values[0]+1)],
-    #                   'Holidays_lastmonth':[max(0,query['Holidays_lastmonth'].values[0]-5),min(28,query['Holidays_lastmonth'].values[0]+5)],
-    #                   'Holidays_nextmonth':[max(0,query['Holidays_nextmonth'].values[0]-5),min(28,query['Holidays_nextmonth'].values[0]+5)],
-    #                   'Holidays_thismonth':[max(0,query['Holidays_thismonth'].values[0]-5),min(28,query['Holidays_thismonth'].values[0]+5)]}
-    #desired_range = [desired_percentage*y_query.values[0], 5*y_query.values[0]]
-    #desired_range = [1.05*y_query[0], 1.1*y_query[0]]
     features_vary = features_vary
     
     try:
@@ -253,6 +253,9 @@ def interpret_cf(genetic_rossmann, query, y_query):
 
 
 def case_statement(top_features, i, query):
+    """
+    Convert CF to sentence.
+    """
     features = query.columns
     if top_features[i][1]== features[1] and top_features[i][0] > 0: # customers
         result = str(int(round(top_features[i][0]))) + ' customers too few in April'
@@ -313,10 +316,13 @@ def case_statement(top_features, i, query):
 # 1 - basic, 2 - extra, 3 - extended
 
 '''
-Generate CF
+Here we generate a multitude of CFs in different ranges for a selected store
+This is so that the CF sales are close to the participants estimated sale
+
+First general instantiation of CF
 '''
 
-# initiate
+# initiate (see DiCE documentation for details)
 continuous_features_rossmann = df.drop(['Sales'], axis=1).columns.tolist()  
 d_rossmann = dice_ml.Data(dataframe=df, continuous_features=continuous_features_rossmann, outcome_name='Sales')
 m_rossmann = dice_ml.Model(model=model, backend='sklearn', model_type='regressor')
@@ -329,26 +335,44 @@ features_vary.remove('Year')
 features_vary.remove('SchoolHolidayRatio')
 features_vary.remove('OpenDayRatio')
 
-
-# Determine range of CFs
-
+# Set percentage ranges for the CF search
 percentages = [0.9,0.92,0.94,0.96,0.98,1.0,1.02,1.04,1.06,1.08,1.1,1.12,1.14,1.16,1.18,1.2]
 #percentages = [0.9,0.93,0.96,0.99,1.02,1.05,1.08,1.11,1.14,1.17,1.2]
 #percentages = [0.9,0.95,1.0,1.05,1.1,1.15,1.2]
 
+# initiate df to save results
 save_cfs = pd.DataFrame(columns=['Store', 'Sales', 'Sales_CF', 'Percentage1', 'Percentage2', 'CF', 'Explanation'])
 
-# Multiple queries can be given as input at once
+# CF query for selected store (see DiCE documentation for details)
 query_instances_rossmann = X_test[store-1:store] 
-y_query = y_pred[store-1:store]
+y_query = y_pred[store-1:store] 
 query = query_instances_rossmann
-#permitted_range = {"Customers": [query["Customers"],query[]]
- #                  "Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
-  #                 "Holidays_lastmonth":[max(0,query["Holidays_lastmonth"].values[0]-5),min(28,query["Holidays_lastmonth"].values[0]+5)],
-   #                "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
-    #               "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
 
+# Illustration with simple desired sales range 
+desired_range=[10000,12000]
+permitted_range = {"Customers": [query["Customers"].values[0],3*query["Customers"].values[0]],
+                   "Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
+                   "Holidays_lastmonth":[max(0,query["Holidays_lastmonth"].values[0]-5),min(28,query["Holidays_lastmonth"].values[0]+5)],
+                   "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
+                   "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
+
+try:
+    genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary, permitted_range)
+    response_values, changes = interpret_cf(genetic_rossmann, query, y_query)
+    print(response_values)
+except ValueError:
+    print('No counterfactual found. Try another target range.')
+
+
+'''
+Here we try to generate CFs for different desired ranges of a CF sale
+For each choice of percentages save results in a csv
+Summer 2024 we then manually screened results and combined the best ones 
+for stores 470 and 1097
+'''
+'''
 for k in range(1,len(percentages)):
+    # Set permitted range for customers and date features to keep CF plausible
     if percentages[k] <= 1.0:
         permitted_range = {"Customers": [0,query["Customers"].values[0]],
                            "Month": [max(1,query["Month"].values[0]-1),min(11,query["Month"].values[0]+1)],
@@ -363,44 +387,37 @@ for k in range(1,len(percentages)):
                            "Holidays_nextmonth":[max(0,query["Holidays_nextmonth"].values[0]-5),min(28,query["Holidays_nextmonth"].values[0]+5)],
                            "Holidays_thismonth":[max(0,query["Holidays_thismonth"].values[0]-5),min(28,query["Holidays_thismonth"].values[0]+5)]}
 
-    
-    
+    # Set desired range of the sales according to percentage range
     desired_range = [percentages[k-1]*y_query[0], percentages[k]*y_query[0]]
     
     try:
         genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary, permitted_range)
         response_values, changes = interpret_cf(genetic_rossmann, query, y_query)
         
-        # cf
+        # get generated CF 
         cf_instance = genetic_rossmann.cf_examples_list[0].final_cfs_df.transpose()
-         # original
+        # get original
         instance = query.transpose().values
         cf = cf_instance.values[:-1]
         dif = cf - instance
         dif = [x for xs in dif for x in xs]
         dif = list(np.around(np.array(dif),2))
 
-        # top three differences
+        # get top three differences between CF and original for explanation
         zipped = list(zip(dif,X_test.columns))
         top_three = sorted(zipped, key=lambda x: abs(x[0]), reverse=True)[:3]
 
         save_cfs.loc[len(save_cfs.index)] = [store, round(y_query[0],1), round(cf_instance.values[-1][0],1), percentages[k-1], percentages[k], str(top_three), str(changes)] 
         
     except ValueError:
-        # append no CF
+        # append no CF if no CF found in sales range
         save_cfs.loc[len(save_cfs.index)] = [store, round(y_query[0],1), None, percentages[k-1], percentages[k], None, None] 
         print('No counterfactual found.')
         continue
 
+# Save the generated CF values
 save_cfs.to_csv("C:/Users/laram/Downloads/cf_470_2er_.csv", decimal=".")
-
-
-desired_range=[10000,12000]
-try:
-    genetic_rossmann, query, y_query = get_cf(store, X_test, y_pred, desired_range, features_vary)
-    response_values, changes = interpret_cf(genetic_rossmann, query, y_query)
-except ValueError:
-    print('No counterfactual found. Try another target range.')
+'''
 
 
 '''
@@ -422,7 +439,7 @@ with open('counterfactual_explanations.json', 'w') as json_file:
 '''
 
 '''
-JSON for the store description
+JSON for the store description from store.csv
 
 store_descriptions = [
     {
