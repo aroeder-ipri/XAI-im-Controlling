@@ -26,204 +26,204 @@
         return data;
     }
 
-// Funktion zum Analysieren der CSV-Daten und Extrahieren der Werte mit der Bedingung
-function parseCSVWithCondition(csv) {
-    const lines = csv.split('\n');
-    const data = {};
+    // Funktion zum Analysieren der CSV-Daten und Extrahieren der Werte mit der Bedingung
+    function parseCSVWithCondition(csv) {
+        const lines = csv.split('\n');
+        const data = {};
 
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line) { // Ignoriere leere Zeilen
-            const parts = line.split(';');
-            
-            // Überprüfe, ob genug Elemente vorhanden sind
-            if (parts.length < 11) {
-                console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
-                continue;
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (line) { // Ignoriere leere Zeilen
+                const parts = line.split(';');
+
+                // Überprüfe, ob genug Elemente vorhanden sind
+                if (parts.length < 11) {
+                    console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
+                    continue;
+                }
+
+                // Überprüfe, ob die Bedingung erfüllt ist
+                if (parts[3].trim() === '0') {
+                    const store = parts[0].trim();
+                    const month = parts[2].trim();
+                    const value = parseFloat(parts[1].trim()); // Nutze parseFloat für bessere Genauigkeit bei Werten
+
+                    if (!data[store]) {
+                        data[store] = {};
+                    }
+
+                    data[store][month] = value;
+                }
             }
+        }
 
-            // Überprüfe, ob die Bedingung erfüllt ist
-            if (parts[3].trim() === '0') {
+        return data;
+    }
+
+    // Funktion zum Analysieren der CSV-Daten und Extrahieren aller Werte
+    function parseCSVAll(csv) {
+        const lines = csv.split('\n');
+        const data = {};
+
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (line) { // Ignoriere leere Zeilen
+                const parts = line.split(';');
+
+                // Überprüfe, ob genug Elemente vorhanden sind
+                if (parts.length < 11) {
+                    console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
+                    continue;
+                }
+
                 const store = parts[0].trim();
+                const sales = parseFloat(parts[1].trim()); // Hier wird der Sales-Wert analysiert
                 const month = parts[2].trim();
-                const value = parseFloat(parts[1].trim()); // Nutze parseFloat für bessere Genauigkeit bei Werten
+                // Weitere Felder könnten hier analysiert werden, falls nötig
 
                 if (!data[store]) {
                     data[store] = {};
                 }
 
-                data[store][month] = value;
+                data[store][month] = sales;
             }
         }
+
+        return data;
     }
 
-    return data;
-}
+    // Funktion zum Analysieren der CSV-Daten und Extrahieren der Store-Informationen
+    function parseStoreInfo(csv) {
+        const lines = csv.split('\n');
+        const data = {};
 
-// Funktion zum Analysieren der CSV-Daten und Extrahieren aller Werte
-function parseCSVAll(csv) {
-    const lines = csv.split('\n');
-    const data = {};
+        // Gehe durch jede Zeile der CSV-Datei
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
 
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line) { // Ignoriere leere Zeilen
+            // Überspringe leere Zeilen
+            if (!line) continue;
+
             const parts = line.split(';');
-            
-            // Überprüfe, ob genug Elemente vorhanden sind
+
+            // Überprüfe, ob genügend Spalten vorhanden sind
             if (parts.length < 11) {
-                console.warn(`Zeile ${i + 1} enthält nicht genügend Elemente: ${line}`);
+                console.warn(`Zeile ${i + 1} enthält nicht genügend Spalten: ${line}`);
                 continue;
             }
 
             const store = parts[0].trim();
-            const sales = parseFloat(parts[1].trim()); // Hier wird der Sales-Wert analysiert
-            const month = parts[2].trim();
-            // Weitere Felder könnten hier analysiert werden, falls nötig
+            const month = parts[2].trim(); // Monat als Schlüssel für monatliche Daten
+            const storeType = parts[5].trim();
+            const assortment = parts[6].trim();
+            const competitionDistance = parseInt(parts[7].trim(), 10); // Wettbewerbsdistanz
+            const promo = parseInt(parts[8].trim(), 10); // Promotionen
+            const customers = parseInt(parts[9].trim(), 10); // Kundenanzahl
+            const holidaysThisMonth = parseInt(parts[10].trim(), 10); // Feiertage
 
+            // Wenn der Store noch nicht im Datenobjekt existiert, erstelle ein leeres Objekt
             if (!data[store]) {
-                data[store] = {};
+                data[store] = {
+                    storeType: storeType,
+                    assortment: assortment,
+                    competitionDistance: competitionDistance,
+                    promo: promo,
+                    monthlyData: {} // Neues Objekt für monatliche Daten
+                };
             }
 
-            data[store][month] = sales;
-        }
-    }
-
-    return data;
-}
-
-// Funktion zum Analysieren der CSV-Daten und Extrahieren der Store-Informationen
-function parseStoreInfo(csv) {
-    const lines = csv.split('\n');
-    const data = {};
-
-    // Gehe durch jede Zeile der CSV-Datei
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        
-        // Überspringe leere Zeilen
-        if (!line) continue;
-        
-        const parts = line.split(';');
-        
-        // Überprüfe, ob genügend Spalten vorhanden sind
-        if (parts.length < 11) {
-            console.warn(`Zeile ${i + 1} enthält nicht genügend Spalten: ${line}`);
-            continue;
-        }
-
-        const store = parts[0].trim();
-        const month = parts[2].trim(); // Monat als Schlüssel für monatliche Daten
-        const storeType = parts[5].trim();
-        const assortment = parts[6].trim();
-        const competitionDistance = parseInt(parts[7].trim(), 10); // Wettbewerbsdistanz
-        const promo = parseInt(parts[8].trim(), 10); // Promotionen
-        const customers = parseInt(parts[9].trim(), 10); // Kundenanzahl
-        const holidaysThisMonth = parseInt(parts[10].trim(), 10); // Feiertage
-
-        // Wenn der Store noch nicht im Datenobjekt existiert, erstelle ein leeres Objekt
-        if (!data[store]) {
-            data[store] = {
-                storeType: storeType,
-                assortment: assortment,
-                competitionDistance: competitionDistance,
-                promo: promo,
-                monthlyData: {} // Neues Objekt für monatliche Daten
+            // Speichere die monatlichen Daten für "Customers" und "HolidaysThisMonth" im "monthlyData"-Objekt
+            data[store].monthlyData[month] = {
+                customers: customers,
+                holidaysThisMonth: holidaysThisMonth,
+                promos: promo
             };
         }
 
-        // Speichere die monatlichen Daten für "Customers" und "HolidaysThisMonth" im "monthlyData"-Objekt
-        data[store].monthlyData[month] = {
-            customers: customers,
-            holidaysThisMonth: holidaysThisMonth,
-            promos: promo
-        };
+        return data;
     }
 
-    return data;
-}
+    function getLastRecordData(storeData) {
+        // Überprüfe, ob die monatlichen Daten vorhanden sind
+        if (!storeData || !storeData.monthlyData) return null;
 
-function getLastRecordData(storeData) {
-    // Überprüfe, ob die monatlichen Daten vorhanden sind
-    if (!storeData || !storeData.monthlyData) return null;
+        // Alle Monate aus den monatlichen Daten extrahieren
+        const months = Object.keys(storeData.monthlyData);
 
-    // Alle Monate aus den monatlichen Daten extrahieren
-    const months = Object.keys(storeData.monthlyData);
+        // Den letzten Monat (letzten Datensatz) auswählen
+        const lastMonth = months[months.length - 1];
 
-    // Den letzten Monat (letzten Datensatz) auswählen
-    const lastMonth = months[months.length - 1];
+        // Rückgabe der letzten Datensatz-Daten
+        return storeData.monthlyData[lastMonth];
+    }
 
-    // Rückgabe der letzten Datensatz-Daten
-    return storeData.monthlyData[lastMonth];
-}
+    function updateStoreInfoBox(storeData) {
+        if (storeData) {
+            // Rufe die Daten des letzten Datensatzes ab
+            const lastRecordData = getLastRecordData(storeData);
 
-function updateStoreInfoBox(storeData) {
-    if (storeData) {
-        // Rufe die Daten des letzten Datensatzes ab
-        const lastRecordData = getLastRecordData(storeData);
+            if (lastRecordData) {
+                const customers = lastRecordData.customers || 0;
+                const holidaysThisMonth = lastRecordData.holidaysThisMonth || 0;
+                const promo = lastRecordData.promos || 0;
 
-        if (lastRecordData) {
-            const customers = lastRecordData.customers || 0;
-            const holidaysThisMonth = lastRecordData.holidaysThisMonth || 0;
-            const promo = lastRecordData.promos || 0;
+                console.log(`Anzeigen von Daten für den letzten Datensatz:`);
+                console.log(`Kunden: ${customers}, Feiertage: ${holidaysThisMonth}, Promotionen: ${promo}`);
 
-            console.log(`Anzeigen von Daten für den letzten Datensatz:`);
-            console.log(`Kunden: ${customers}, Feiertage: ${holidaysThisMonth}, Promotionen: ${promo}`);
-
-            // Aktualisiere die HTML-Elemente mit den letzten Werten
-            document.getElementById('customers-value').textContent = customers;
-            document.getElementById('holidays-value').textContent = holidaysThisMonth;
-            document.getElementById('promo-value').textContent = promo;
+                // Aktualisiere die HTML-Elemente mit den letzten Werten
+                document.getElementById('customers-value').textContent = customers;
+                document.getElementById('holidays-value').textContent = holidaysThisMonth;
+                document.getElementById('promo-value').textContent = promo;
+            } else {
+                console.warn("Kein letzter Datensatz gefunden.");
+            }
         } else {
-            console.warn("Kein letzter Datensatz gefunden.");
+            console.warn("Keine Store-Daten vorhanden.");
         }
-    } else {
-        console.warn("Keine Store-Daten vorhanden.");
     }
-}
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const csvUrl = 'fiktiv.csv'; // Ersetze dies mit dem tatsächlichen Pfad zu deiner CSV-Datei
-    const csvData = await loadCSV(csvUrl);
+    document.addEventListener("DOMContentLoaded", async () => {
+        const csvUrl = 'fiktiv.csv'; // Ersetze dies mit dem tatsächlichen Pfad zu deiner CSV-Datei
+        const csvData = await loadCSV(csvUrl);
 
-    // Store-Daten aus CSV laden
-    const storeInfoData = parseStoreInfo(csvData);
+        // Store-Daten aus CSV laden
+        const storeInfoData = parseStoreInfo(csvData);
 
-    // Überprüfe die Struktur von storeInfoData in der Konsole
-    console.log("Inhalt von storeInfoData:", storeInfoData);
+        // Überprüfe die Struktur von storeInfoData in der Konsole
+        console.log("Inhalt von storeInfoData:", storeInfoData);
 
-    // Prüfe, ob der Store 'New York' in den Daten vorhanden ist
-    if (storeInfoData['New York']) {
-        updateStoreInfoBox(storeInfoData['New York']);
-    } else {
-        console.warn("Store 'New York' nicht gefunden.");
-    }
-});
-        
-// Funktion zum Aktualisieren der Store-Informationen im HTML
-function updateStoreInfo(selectedStore, storeInfoData) {
-    const storeInfoContainer = document.getElementById('storeInfo');
-    const currentStoreElement = document.getElementById('currentStore');
-    storeInfoContainer.innerHTML = '';
+        // Prüfe, ob der Store 'New York' in den Daten vorhanden ist
+        if (storeInfoData['New York']) {
+            updateStoreInfoBox(storeInfoData['New York']);
+        } else {
+            console.warn("Store 'New York' nicht gefunden.");
+        }
+    });
 
-    // Aktuellen Store einfügen
-    currentStoreElement.textContent = selectedStore;
+    // Funktion zum Aktualisieren der Store-Informationen im HTML
+    function updateStoreInfo(selectedStore, storeInfoData) {
+        const storeInfoContainer = document.getElementById('storeInfo');
+        const currentStoreElement = document.getElementById('currentStore');
+        storeInfoContainer.innerHTML = '';
 
-    // Store-Informationen einfügen
-const storeInfo = storeInfoData[selectedStore];
-if (storeInfo) {
-    const storeInfoDiv = document.createElement('div');
+        // Aktuellen Store einfügen
+        currentStoreElement.textContent = selectedStore;
 
-// Stile für das Container-Div hinzufügen
-storeInfoDiv.style.display = 'flex';
-storeInfoDiv.style.flexDirection = 'row'; // Inhalte nebeneinander anordnen
-storeInfoDiv.style.alignItems = 'flex-start'; // Optionale Ausrichtung
-storeInfoDiv.style.gap = '20px'; // Abstand zwischen den Gruppen
-storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
-storeInfoDiv.style.overflow = 'hidden'; // Verhindert das Überlaufen des Inhalts
-storeInfoDiv.style.marginTop = '0px'; // Reduzierter oberer Abstand
+        // Store-Informationen einfügen
+        const storeInfo = storeInfoData[selectedStore];
+        if (storeInfo) {
+            const storeInfoDiv = document.createElement('div');
 
-storeInfoDiv.innerHTML = `
+            // Stile für das Container-Div hinzufügen
+            storeInfoDiv.style.display = 'flex';
+            storeInfoDiv.style.flexDirection = 'row'; // Inhalte nebeneinander anordnen
+            storeInfoDiv.style.alignItems = 'flex-start'; // Optionale Ausrichtung
+            storeInfoDiv.style.gap = '20px'; // Abstand zwischen den Gruppen
+            storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
+            storeInfoDiv.style.overflow = 'hidden'; // Verhindert das Überlaufen des Inhalts
+            storeInfoDiv.style.marginTop = '0px'; // Reduzierter oberer Abstand
+
+            storeInfoDiv.innerHTML = `
     <div style="display: flex; flex-direction: row; gap: 20px; overflow-wrap: break-word; max-width: 100%; margin-top: 0;">
         <div style="margin: 0 30px 0 0;">
             <p style="margin: 0;"><strong>Store Location:</strong></p>
@@ -244,60 +244,60 @@ storeInfoDiv.innerHTML = `
     </div>
 `;
 
-        storeInfoContainer.appendChild(storeInfoDiv);
-    } else {
-        storeInfoContainer.textContent = 'Store-Informationen nicht verfügbar';
+            storeInfoContainer.appendChild(storeInfoDiv);
+        } else {
+            storeInfoContainer.textContent = 'Store-Informationen nicht verfügbar';
+        }
     }
-}
 
-// Funktion zum Aktualisieren des angezeigten Stores im Carousel
-function updateSelectedStore() {
-    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-    const selectedStore = stores[selectedStoreIndex];
-    updateStoreInfo(selectedStore, storeInfoData);
-}
-
-// Funktion zum Wechseln zum nächsten Store im Carousel
-function nextStore() {
-    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-    selectedStoreIndex = (selectedStoreIndex + 1) % stores.length;
-    updateSelectedStore();
-}
-
-// Funktion zum Wechseln zum vorherigen Store im Carousel
-function prevStore() {
-    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-    selectedStoreIndex = (selectedStoreIndex - 1 + stores.length) % stores.length;
-    updateSelectedStore();
-}
-
-// Event-Listener für die nächste Store-Schaltfläche
-document.getElementById('nextStoreButton').addEventListener('click', nextStore);
-
-// Event-Listener für die vorherige Store-Schaltfläche
-document.getElementById('prevStoreButton').addEventListener('click', prevStore);
-
-// Funktion zum Aktualisieren der Schaltflächenaktivität basierend auf der Anzahl der ausgewählten Stores
-function updateButtonActivity() {
-    const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-    const prevButton = document.getElementById('prevStoreButton');
-    const nextButton = document.getElementById('nextStoreButton');
-
-    // SCHALTFLÄCHEN AKTUELL DEAKTIVIERT
-    if (stores.length < 99) {
-        prevButton.disabled = true;
-        nextButton.disabled = true;
-    } else {
-        prevButton.disabled = false;
-        nextButton.disabled = false;
+    // Funktion zum Aktualisieren des angezeigten Stores im Carousel
+    function updateSelectedStore() {
+        const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+        const selectedStore = stores[selectedStoreIndex];
+        updateStoreInfo(selectedStore, storeInfoData);
     }
-}
 
-// Event-Listener für den Anzeigen-Button
-document.getElementById('anzeigenButton').addEventListener('click', function () {
-    vorhersageWert = 1;
-    document.getElementById('vorhersageAnzeigen').textContent = vorhersageWert;
-    updateChartWithSelectedStores(); // Update the charts when the button is clicked
+    // Funktion zum Wechseln zum nächsten Store im Carousel
+    function nextStore() {
+        const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+        selectedStoreIndex = (selectedStoreIndex + 1) % stores.length;
+        updateSelectedStore();
+    }
+
+    // Funktion zum Wechseln zum vorherigen Store im Carousel
+    function prevStore() {
+        const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+        selectedStoreIndex = (selectedStoreIndex - 1 + stores.length) % stores.length;
+        updateSelectedStore();
+    }
+
+    // Event-Listener für die nächste Store-Schaltfläche
+    document.getElementById('nextStoreButton').addEventListener('click', nextStore);
+
+    // Event-Listener für die vorherige Store-Schaltfläche
+    document.getElementById('prevStoreButton').addEventListener('click', prevStore);
+
+    // Funktion zum Aktualisieren der Schaltflächenaktivität basierend auf der Anzahl der ausgewählten Stores
+    function updateButtonActivity() {
+        const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+        const prevButton = document.getElementById('prevStoreButton');
+        const nextButton = document.getElementById('nextStoreButton');
+
+        // SCHALTFLÄCHEN AKTUELL DEAKTIVIERT
+        if (stores.length < 99) {
+            prevButton.disabled = true;
+            nextButton.disabled = true;
+        } else {
+            prevButton.disabled = false;
+            nextButton.disabled = false;
+        }
+    }
+
+    // Event-Listener für den Anzeigen-Button
+    document.getElementById('anzeigenButton').addEventListener('click', function () {
+        vorhersageWert = 1;
+        document.getElementById('vorhersageAnzeigen').textContent = vorhersageWert;
+        updateChartWithSelectedStores(); // Update the charts when the button is clicked
     });
 
     // Funktion zum Erstellen der Checkboxen basierend auf den Stores aus der CSV-Datei
@@ -370,40 +370,40 @@ document.getElementById('anzeigenButton').addEventListener('click', function () 
     }
 
     // Funktion zum Aktualisieren des Graphen mit CSV-Daten
-function updateGraphWithCSVData(data, chart) {
-    const labels = Object.keys(data[Object.keys(data)[0]]);
-    const datasets = [];
+    function updateGraphWithCSVData(data, chart) {
+        const labels = Object.keys(data[Object.keys(data)[0]]);
+        const datasets = [];
 
-    let minValue = Infinity;
-    let maxValue = -Infinity;
+        let minValue = Infinity;
+        let maxValue = -Infinity;
 
-    for (const store in data) {
-        const values = [];
-        for (const label of labels) {
-            const value = data[store][label] || 0;
-            values.push(value);
-            if (value < minValue) minValue = value;
-            if (value > maxValue) maxValue = value;
+        for (const store in data) {
+            const values = [];
+            for (const label of labels) {
+                const value = data[store][label] || 0;
+                values.push(value);
+                if (value < minValue) minValue = value;
+                if (value > maxValue) maxValue = value;
+            }
+
+            datasets.push({
+                label: store,
+                data: values,
+                lineTension: 0,
+                backgroundColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', 'grey'],
+                // borderColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', 'grey'],
+                borderWidth: 2,
+                pointBackgroundColor: '#ffffff'
+            });
         }
 
-        datasets.push({
-            label: store,
-            data: values,
-            lineTension: 0,
-            backgroundColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', 'grey'],
-            // borderColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', 'grey'],
-            borderWidth: 2,
-            pointBackgroundColor: '#ffffff'
-        });
+        chart.data.labels = labels;
+        chart.data.datasets = datasets;
+
+
+
+        chart.update();
     }
-
-    chart.data.labels = labels;
-    chart.data.datasets = datasets;
-
-
-
-    chart.update();
-}
 
     // CSV-Datei laden und Checkboxen erstellen
     loadCSV('fiktiv.csv')
@@ -414,65 +414,65 @@ function updateGraphWithCSVData(data, chart) {
             const stores = Object.keys(csvData);
             createCheckboxes(stores);
 
-// Initialisierung der Line Charts
-lineChart = new Chart(lineCtx, {
-    type: 'bar',
-    data: {
-        labels: [],
-        datasets: []
-    },
-    options: {
-        plugins: {
-            legend: {
-                display: false,
-                position: 'top',
-                labels: {
-                    font: {
-                        size: 10
-                    }
-                }
-            },
-            tooltip: {
-                boxPadding: 3,
-                callbacks: {
-                    label: function(tooltipItem) {
-                        const store = tooltipItem.dataset.label; // Store-Name vom Dataset holen
-                        const month = tooltipItem.label; // Monat aus Tooltip-Label abrufen
-            
-                        // Zugriff auf die monatlichen Daten für "Customers" und "HolidaysThisMonth"
-                        const monthlyData = storeInfoData[store]?.monthlyData[month];
-                        const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
-                        const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
-                        const promos = monthlyData ? monthlyData.promos : 0; // Promotionen für den Monat
-            
-                        // Tooltip-Text zusammenstellen
-                        return [
-                            '$' + tooltipItem.formattedValue,
-                            'Customers: ' + customers,
-                            'Holidays: ' + holidaysThisMonth,
-                            'Promos: ' + promos
-                        ];
-                    }
-                }
-            }
-            
-            
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                min: 8000,
-                max: 15000,
-                ticks: {
-                    callback: function(value, index, values) {
-                        return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
-                    }
-                }
+            // Initialisierung der Line Charts
+            lineChart = new Chart(lineCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: []
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        tooltip: {
+                            boxPadding: 3,
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    const store = tooltipItem.dataset.label; // Store-Name vom Dataset holen
+                                    const month = tooltipItem.label; // Monat aus Tooltip-Label abrufen
 
-            }
-        }
-    }
-});
+                                    // Zugriff auf die monatlichen Daten für "Customers" und "HolidaysThisMonth"
+                                    const monthlyData = storeInfoData[store]?.monthlyData[month];
+                                    const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
+                                    const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
+                                    const promos = monthlyData ? monthlyData.promos : 0; // Promotionen für den Monat
+
+                                    // Tooltip-Text zusammenstellen
+                                    return [
+                                        '$' + tooltipItem.formattedValue,
+                                        'Customers: ' + customers,
+                                        'Holidays: ' + holidaysThisMonth,
+                                        'Promos: ' + promos
+                                    ];
+                                }
+                            }
+                        }
+
+
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 8000,
+                            max: 15000,
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
+                                }
+                            }
+
+                        }
+                    }
+                }
+            });
 
 
             // Media Query für kleine Bildschirme
@@ -481,420 +481,420 @@ lineChart = new Chart(lineCtx, {
                 lineChart.options.plugins.legend.display = false; // Legende ausblenden
                 // Charts aktualisieren
                 lineChart.update();
-}
-
-// Zweiten Line Chart initialisieren
-lineChart2 = new Chart(lineCtx2, {
-    type: 'bar',
-    data: {
-        labels: [],
-        datasets: []
-    },
-    options: {
-        plugins: {
-            legend: {
-                display: false,
-                position: 'top',
-                labels: {
-                    font: {
-                        size: 10
-                    }
-                }
-            },
-            tooltip: {
-                boxPadding: 3,
-                callbacks: {
-                    label: function(tooltipItem) {
-                        const store = tooltipItem.dataset.label; // Store-Name vom Dataset holen
-                        const month = tooltipItem.label; // Monat aus Tooltip-Label abrufen
-            
-                        // Zugriff auf die monatlichen Daten für "Customers" und "HolidaysThisMonth"
-                        const monthlyData = storeInfoData[store]?.monthlyData[month];
-                        const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
-                        const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
-                        const promos = monthlyData ? monthlyData.promos : 0; // Promotionen für den Monat
-            
-                        // Tooltip-Text zusammenstellen
-                        return [
-                            '$' + tooltipItem.formattedValue,
-                            'Customers: ' + customers,
-                            'Holidays: ' + holidaysThisMonth,
-                            'Promos: ' + promos
-                        ];
-                    }
-                }
             }
-            
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                min: 8000,
-                max: 15000,
-                ticks: {
-                    callback: function(value, index, values) {
-                        return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
+
+            // Zweiten Line Chart initialisieren
+            lineChart2 = new Chart(lineCtx2, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: []
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        tooltip: {
+                            boxPadding: 3,
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    const store = tooltipItem.dataset.label; // Store-Name vom Dataset holen
+                                    const month = tooltipItem.label; // Monat aus Tooltip-Label abrufen
+
+                                    // Zugriff auf die monatlichen Daten für "Customers" und "HolidaysThisMonth"
+                                    const monthlyData = storeInfoData[store]?.monthlyData[month];
+                                    const customers = monthlyData ? monthlyData.customers : 0; // Kundenanzahl für den Monat
+                                    const holidaysThisMonth = monthlyData ? monthlyData.holidaysThisMonth : 0; // Feiertage für den Monat
+                                    const promos = monthlyData ? monthlyData.promos : 0; // Promotionen für den Monat
+
+                                    // Tooltip-Text zusammenstellen
+                                    return [
+                                        '$' + tooltipItem.formattedValue,
+                                        'Customers: ' + customers,
+                                        'Holidays: ' + holidaysThisMonth,
+                                        'Promos: ' + promos
+                                    ];
+                                }
+                            }
+                        }
+
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 8000,
+                            max: 15000,
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
+                                }
+                            }
+                        }
                     }
                 }
+            });
+
+            // Media Query für kleine Bildschirme
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                // Optionen für kleine Bildschirme anpassen
+                lineChart2.options.plugins.legend.display = false; // Legende ausblenden
+                // Charts aktualisieren
+                lineChart2.update();
             }
-        }
-    }
-});
-
-// Media Query für kleine Bildschirme
-if (window.matchMedia('(max-width: 768px)').matches) {
-    // Optionen für kleine Bildschirme anpassen
-    lineChart2.options.plugins.legend.display = false; // Legende ausblenden
-    // Charts aktualisieren
-    lineChart2.update();
-}
 
 
-    lineChart2.options.animation = {
-    onComplete: function() {
-        const dataset = lineChart2.data.datasets[0];
-        //const lastValueIndex = dataset.data.length - 1;
-        //const lastValue = dataset.data[lastValueIndex];
-        const button = document.getElementById('questionButton');
-        //const scale = lineChart2.scales.y;
-        const meta = lineChart2.getDatasetMeta(0);
-        //const rect = meta.data[lastValueIndex].getProps(['x', 'y', 'base']);
+            lineChart2.options.animation = {
+                onComplete: function () {
+                    const dataset = lineChart2.data.datasets[0];
+                    //const lastValueIndex = dataset.data.length - 1;
+                    //const lastValue = dataset.data[lastValueIndex];
+                    const button = document.getElementById('questionButton');
+                    //const scale = lineChart2.scales.y;
+                    const meta = lineChart2.getDatasetMeta(0);
+                    //const rect = meta.data[lastValueIndex].getProps(['x', 'y', 'base']);
 
-        // Animation für das Einfliegen des Buttons
-        button.style.transition = 'top 0.5s, left 0.5s';
+                    // Animation für das Einfliegen des Buttons
+                    button.style.transition = 'top 0.5s, left 0.5s';
 
-        // Position des Buttons über dem Linienwert berechnen und setzen
-        //const buttonTop = scale.getPixelForValue(lastValue); // Top-Position des Linienwertes
+                    // Position des Buttons über dem Linienwert berechnen und setzen
+                    //const buttonTop = scale.getPixelForValue(lastValue); // Top-Position des Linienwertes
 
-        // Überprüfen der Bildschirmgröße
-        //const viewportWidth = window.innerWidth;
-        //const viewportHeight = window.innerHeight;
+                    // Überprüfen der Bildschirmgröße
+                    //const viewportWidth = window.innerWidth;
+                    //const viewportHeight = window.innerHeight;
 
-        // Anpassung der Position basierend auf der Bildschirmgröße
-        //let buttonOffsetTop;
+                    // Anpassung der Position basierend auf der Bildschirmgröße
+                    //let buttonOffsetTop;
 
-        // Überprüfen, ob die Bildschirmbreite unter 1200 Pixel liegt
-        //if (viewportWidth < 1200) {
-        //    buttonOffsetTop = 0; // Position unverändert lassen
-        //} else {
-        //    buttonOffsetTop = 0.29 * viewportHeight;
-//
-        //    // Neue Position des Buttons
-        //    const newTop = buttonTop - button.offsetHeight - buttonOffsetTop;
+                    // Überprüfen, ob die Bildschirmbreite unter 1200 Pixel liegt
+                    //if (viewportWidth < 1200) {
+                    //    buttonOffsetTop = 0; // Position unverändert lassen
+                    //} else {
+                    //    buttonOffsetTop = 0.29 * viewportHeight;
+                    //
+                    //    // Neue Position des Buttons
+                    //    const newTop = buttonTop - button.offsetHeight - buttonOffsetTop;
 
-        //    button.style.top = newTop + 'px'; // Neue Position nach Animation
-        //}
-    }
-};
+                    //    button.style.top = newTop + 'px'; // Neue Position nach Animation
+                    //}
+                }
+            };
 
             // Funktion zum Anzeigen des benutzerdefinierten Modalfensters mit Informationen
-// function showModalWithInfo(infoText) {
-//     const modal = document.getElementById('modal');
-//     const modalText = document.getElementById('modal-text');
-//     modalText.textContent = infoText;
-//     modal.style.display = 'block';
-// }
+            // function showModalWithInfo(infoText) {
+            //     const modal = document.getElementById('modal');
+            //     const modalText = document.getElementById('modal-text');
+            //     modalText.textContent = infoText;
+            //     modal.style.display = 'block';
+            // }
 
-// Funktion zum Schließen des Modalfensters
-// function closeModal() {
-//     document.getElementById('modal').style.display = 'none';
-// }
+            // Funktion zum Schließen des Modalfensters
+            // function closeModal() {
+            //     document.getElementById('modal').style.display = 'none';
+            // }
 
-// Eventlistener für den Close-Button im Modalfenster
-// const closeBtn = document.querySelector('#modal .close');
-// closeBtn.addEventListener('click', closeModal);
+            // Eventlistener für den Close-Button im Modalfenster
+            // const closeBtn = document.querySelector('#modal .close');
+            // closeBtn.addEventListener('click', closeModal);
 
-// Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
-// document.getElementById('questionButton').addEventListener('click', function() {
-//     const modal = document.getElementById('modal');
-//     modal.style.display = 'block';
-//     showModalWithInfo();
-// });
+            // Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
+            // document.getElementById('questionButton').addEventListener('click', function() {
+            //     const modal = document.getElementById('modal');
+            //     modal.style.display = 'block';
+            //     showModalWithInfo();
+            // });
 
-// Funktion zum Öffnen des zweiten Modalfensters
-// document.getElementById('mehrButton').addEventListener('click', function() {
-//     document.getElementById('modal2').style.display = 'block';
-// });
+            // Funktion zum Öffnen des zweiten Modalfensters
+            // document.getElementById('mehrButton').addEventListener('click', function() {
+            //     document.getElementById('modal2').style.display = 'block';
+            // });
 
-// Funktion zum Leeren des Eingabefelds
-// function clearInputField() {
-//     document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
-// }
+            // Funktion zum Leeren des Eingabefelds
+            // function clearInputField() {
+            //     document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
+            // }
 
-// Funktion zum Entfernen des zusätzlichen Texts
-// function removeAdditionalText() {
-//     const additionalText = document.getElementById('additionalText');
-//     if (additionalText) {
-//         additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
-//     }
-// }
+            // Funktion zum Entfernen des zusätzlichen Texts
+            // function removeAdditionalText() {
+            //     const additionalText = document.getElementById('additionalText');
+            //     if (additionalText) {
+            //         additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
+            //     }
+            // }
 
-// Funktion zum Schließen des zweiten Modalfensters
-// function closeModal2() {
-//     document.getElementById('modal2').style.display = 'none';
-//     clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
-//     removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
-// }
+            // Funktion zum Schließen des zweiten Modalfensters
+            // function closeModal2() {
+            //     document.getElementById('modal2').style.display = 'none';
+            //     clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
+            //     removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
+            // }
 
-// Eventlistener für den zweiten Close-Button im zweiten Modalfenster
-// const closeBtn2 = document.querySelector('#modal2 .close');
-// closeBtn2.addEventListener('click', closeModal2);
+            // Eventlistener für den zweiten Close-Button im zweiten Modalfenster
+            // const closeBtn2 = document.querySelector('#modal2 .close');
+            // closeBtn2.addEventListener('click', closeModal2);
 
-// Funktion zum Erstellen der Tabs basierend auf den ausgewählten Stores
-// function createTabs(selectedStores) {
-//     const tabContainer = document.getElementById('myTab');
-//     const tabContentContainer = document.getElementById('myTabContent');
-//     const questionButton = document.getElementById('questionButton');
-//     tabContainer.innerHTML = '';
-//     tabContentContainer.innerHTML = '';
+            // Funktion zum Erstellen der Tabs basierend auf den ausgewählten Stores
+            // function createTabs(selectedStores) {
+            //     const tabContainer = document.getElementById('myTab');
+            //     const tabContentContainer = document.getElementById('myTabContent');
+            //     const questionButton = document.getElementById('questionButton');
+            //     tabContainer.innerHTML = '';
+            //     tabContentContainer.innerHTML = '';
 
-//     selectedStores.forEach(store => {
-//         // Tab-Link erstellen
-//         const tabLink = document.createElement('button');
-//         tabLink.classList.add('nav-link');
-//         tabLink.setAttribute('id', `${store}-tab`);
-//         tabLink.setAttribute('data-bs-toggle', 'tab');
-//         tabLink.setAttribute('data-bs-target', `#${store}`);
-//         tabLink.setAttribute('type', 'button');
-//         tabLink.setAttribute('role', 'tab');
-//         tabLink.setAttribute('aria-controls', store);
-//         tabLink.setAttribute('aria-selected', 'false');
-//         tabLink.textContent = store;
+            //     selectedStores.forEach(store => {
+            //         // Tab-Link erstellen
+            //         const tabLink = document.createElement('button');
+            //         tabLink.classList.add('nav-link');
+            //         tabLink.setAttribute('id', `${store}-tab`);
+            //         tabLink.setAttribute('data-bs-toggle', 'tab');
+            //         tabLink.setAttribute('data-bs-target', `#${store}`);
+            //         tabLink.setAttribute('type', 'button');
+            //         tabLink.setAttribute('role', 'tab');
+            //         tabLink.setAttribute('aria-controls', store);
+            //         tabLink.setAttribute('aria-selected', 'false');
+            //         tabLink.textContent = store;
 
-//         // Tab-Inhalt erstellen
-//         const tabContent = document.createElement('div');
-//         tabContent.classList.add('tab-pane', 'fade');
-//         tabContent.setAttribute('id', store);
-//         tabContent.setAttribute('role', 'tabpanel');
-//         tabContent.setAttribute('aria-labelledby', `${store}-tab`);
-//         tabContent.innerHTML = `
-//             <p id="modal-text">
-//             <p></p>
-//                 <p>Following you can see which factors had the biggest influence on the sales forecast:</p>
-//                 <p></p>
-//                 <div class="progress" style="margin-bottom: 15px;">
-//                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-//                 </div>
-//                 <div class="progress">
-//                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-//                 </div>
-//                 <div class="data-container"></div>
-//             </p>
-//         `;
+            //         // Tab-Inhalt erstellen
+            //         const tabContent = document.createElement('div');
+            //         tabContent.classList.add('tab-pane', 'fade');
+            //         tabContent.setAttribute('id', store);
+            //         tabContent.setAttribute('role', 'tabpanel');
+            //         tabContent.setAttribute('aria-labelledby', `${store}-tab`);
+            //         tabContent.innerHTML = `
+            //             <p id="modal-text">
+            //             <p></p>
+            //                 <p>Following you can see which factors had the biggest influence on the sales forecast:</p>
+            //                 <p></p>
+            //                 <div class="progress" style="margin-bottom: 15px;">
+            //                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+            //                 </div>
+            //                 <div class="progress">
+            //                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+            //                 </div>
+            //                 <div class="data-container"></div>
+            //             </p>
+            //         `;
 
-//         // Tab-Link und Tab-Inhalt dem Container hinzufügen
-//         tabContainer.appendChild(tabLink);
-//         tabContentContainer.appendChild(tabContent);
-//     });
+            //         // Tab-Link und Tab-Inhalt dem Container hinzufügen
+            //         tabContainer.appendChild(tabLink);
+            //         tabContentContainer.appendChild(tabContent);
+            //     });
 
-//     // Event-Listener für den questionButton, um Daten zu laden
-//     questionButton.addEventListener('click', function() {
-//         const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
-//         const tabContent = document.querySelector(`#${activeTabId}`);
-//         fetch('http://127.0.0.1:8000/feature_importance/')
-//             .then(function(response) {
-//                 if (!response.ok) {
-//                     throw new Error('Netzwerkantwort war nicht ok');
-//                 }
-//                 return response.json();
-//             })
-//             .then(function(data) {
-//                 const progressContainers = tabContent.querySelectorAll('.progress');
-//                 const dataContainer = tabContent.querySelector('.data-container');
+            //     // Event-Listener für den questionButton, um Daten zu laden
+            //     questionButton.addEventListener('click', function() {
+            //         const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
+            //         const tabContent = document.querySelector(`#${activeTabId}`);
+            //         fetch('http://127.0.0.1:8000/feature_importance/')
+            //             .then(function(response) {
+            //                 if (!response.ok) {
+            //                     throw new Error('Netzwerkantwort war nicht ok');
+            //                 }
+            //                 return response.json();
+            //             })
+            //             .then(function(data) {
+            //                 const progressContainers = tabContent.querySelectorAll('.progress');
+            //                 const dataContainer = tabContent.querySelector('.data-container');
 
-//                 dataContainer.innerHTML = '';
-//                 progressContainers.forEach(container => {
-//                     const label = container.previousElementSibling;
-//                     if (label && label.tagName === "P") {
-//                         label.remove();
-//                     }
-//                 });
+            //                 dataContainer.innerHTML = '';
+            //                 progressContainers.forEach(container => {
+            //                     const label = container.previousElementSibling;
+            //                     if (label && label.tagName === "P") {
+            //                         label.remove();
+            //                     }
+            //                 });
 
-//                 // Beschränke die Verarbeitung auf die ersten zwei Einträge der API-Antwort
-//                 const itemsToProcess = data.slice(0, 2);
-//                 itemsToProcess.forEach((item, index) => {
-//                     if (progressContainers[index]) {
-//                         // Erstelle und füge neue Beschriftung hinzu
-//                         const progressLabel = document.createElement('p');
-//                         progressLabel.textContent = "- " + item.col_name;
-//                         progressContainers[index].parentNode.insertBefore(progressLabel, progressContainers[index]);
+            //                 // Beschränke die Verarbeitung auf die ersten zwei Einträge der API-Antwort
+            //                 const itemsToProcess = data.slice(0, 2);
+            //                 itemsToProcess.forEach((item, index) => {
+            //                     if (progressContainers[index]) {
+            //                         // Erstelle und füge neue Beschriftung hinzu
+            //                         const progressLabel = document.createElement('p');
+            //                         progressLabel.textContent = "- " + item.col_name;
+            //                         progressContainers[index].parentNode.insertBefore(progressLabel, progressContainers[index]);
 
-//                         // Aktualisiere Progress Bar
-//                         const progressBar = progressContainers[index].querySelector('.progress-bar');
-//                         const value = item.percentage_importance;
-//                         progressBar.setAttribute('aria-valuenow', value);
-//                         progressBar.style.width = `${value}%`;
-//                         progressBar.textContent = `${value}%`;
-//                     }
-//                 });
+            //                         // Aktualisiere Progress Bar
+            //                         const progressBar = progressContainers[index].querySelector('.progress-bar');
+            //                         const value = item.percentage_importance;
+            //                         progressBar.setAttribute('aria-valuenow', value);
+            //                         progressBar.style.width = `${value}%`;
+            //                         progressBar.textContent = `${value}%`;
+            //                     }
+            //                 });
 
-//             })
-//             .catch(function(error) {
-//                 console.error('Fehler beim Abrufen der Daten:', error);
-//                 dataContainer.innerHTML = `<p>Fehler beim Laden der Daten</p>`;
-//             });
-        
-//     });
+            //             })
+            //             .catch(function(error) {
+            //                 console.error('Fehler beim Abrufen der Daten:', error);
+            //                 dataContainer.innerHTML = `<p>Fehler beim Laden der Daten</p>`;
+            //             });
 
-//     questionButton.addEventListener('click', function() {
-//         var modalContent = document.querySelector('#modal2 .modal-content');
+            //     });
 
-//         // Funktion zum Entfernen alter Paragraphen
-//         function removeOldParagraphs() {
-//             // Entferne alle alten Paragraphen
-//             var paragraphs = modalContent.querySelectorAll('p');
-//             paragraphs.forEach(paragraph => {
-//                 paragraph.remove();
-//             });
-//         }
+            //     questionButton.addEventListener('click', function() {
+            //         var modalContent = document.querySelector('#modal2 .modal-content');
 
-//         // Lade die Daten von der API
-//         fetch('http://127.0.0.1:8000/counterfactual_explanations/')
-//             .then(response => response.json())
-//             .then(data => {
-//                 removeOldParagraphs(); // Entferne alte Paragraphen
+            //         // Funktion zum Entfernen alter Paragraphen
+            //         function removeOldParagraphs() {
+            //             // Entferne alle alten Paragraphen
+            //             var paragraphs = modalContent.querySelectorAll('p');
+            //             paragraphs.forEach(paragraph => {
+            //                 paragraph.remove();
+            //             });
+            //         }
 
-//                 // Variablen zum Speichern der API-Daten
-//                 let salesActual, salesCounterfactual, changes, formattedChanges;
+            //         // Lade die Daten von der API
+            //         fetch('http://127.0.0.1:8000/counterfactual_explanations/')
+            //             .then(response => response.json())
+            //             .then(data => {
+            //                 removeOldParagraphs(); // Entferne alte Paragraphen
 
-//                 data.forEach(item => {
-//                     var paragraph = document.createElement('p');
+            //                 // Variablen zum Speichern der API-Daten
+            //                 let salesActual, salesCounterfactual, changes, formattedChanges;
 
-//                     salesActual = item.sales_actual;
-//                     salesCounterfactual = item.sales_counterfactual;
-//                     changes = item.changes;
-//                     // Formatiere Absätze
-//                     formattedChanges = changes.map(change => `- ${change}`).join('<br>');
+            //                 data.forEach(item => {
+            //                     var paragraph = document.createElement('p');
 
-//                     paragraph.innerHTML = `Sales are estimated at ${salesActual}€.<br>
-//                     <br>Enter your expected sales:`;
-//                     modalContent.appendChild(paragraph);
-//                 });
+            //                     salesActual = item.sales_actual;
+            //                     salesCounterfactual = item.sales_counterfactual;
+            //                     changes = item.changes;
+            //                     // Formatiere Absätze
+            //                     formattedChanges = changes.map(change => `- ${change}`).join('<br>');
 
-//                 // Überprüfen, ob das Eingabefeld und der Button bereits existieren
-//                 if (!document.getElementById('inputDiv')) {
-//                     // Erstelle das Eingabefeld und den Bestätigen-Button dynamisch
-//                     var inputDiv = document.createElement('div');
-//                     inputDiv.id = 'inputDiv';
-//                     inputDiv.style.display = 'flex';
-//                     inputDiv.style.alignItems = 'center';
-//                     inputDiv.style.marginTop = '1px'; // optional, um Abstand zu den Textabsätzen zu schaffen
+            //                     paragraph.innerHTML = `Sales are estimated at ${salesActual}€.<br>
+            //                     <br>Enter your expected sales:`;
+            //                     modalContent.appendChild(paragraph);
+            //                 });
 
-//                     var inputField = document.createElement('input');
-//                     inputField.type = 'text';
-//                     inputField.id = 'zahlInput';
-//                     inputField.style.marginBottom = '10px';
-//                     inputField.style.marginRight = '5px';
+            //                 // Überprüfen, ob das Eingabefeld und der Button bereits existieren
+            //                 if (!document.getElementById('inputDiv')) {
+            //                     // Erstelle das Eingabefeld und den Bestätigen-Button dynamisch
+            //                     var inputDiv = document.createElement('div');
+            //                     inputDiv.id = 'inputDiv';
+            //                     inputDiv.style.display = 'flex';
+            //                     inputDiv.style.alignItems = 'center';
+            //                     inputDiv.style.marginTop = '1px'; // optional, um Abstand zu den Textabsätzen zu schaffen
 
-//                     var spanElement = document.createElement('span');
-//                     spanElement.textContent = '€';
+            //                     var inputField = document.createElement('input');
+            //                     inputField.type = 'text';
+            //                     inputField.id = 'zahlInput';
+            //                     inputField.style.marginBottom = '10px';
+            //                     inputField.style.marginRight = '5px';
 
-//                     var confirmButton = document.createElement('button');
-//                     confirmButton.id = 'bestaetigenButton';
-//                     confirmButton.className = 'btn custom-btn';
-//                     confirmButton.style.marginLeft = '10px';
-//                     confirmButton.disabled = true; // initial disabled
-//                     confirmButton.textContent = 'confirm';
+            //                     var spanElement = document.createElement('span');
+            //                     spanElement.textContent = '€';
 
-//                     inputDiv.appendChild(inputField);
-//                     inputDiv.appendChild(spanElement);
-//                     inputDiv.appendChild(confirmButton);
+            //                     var confirmButton = document.createElement('button');
+            //                     confirmButton.id = 'bestaetigenButton';
+            //                     confirmButton.className = 'btn custom-btn';
+            //                     confirmButton.style.marginLeft = '10px';
+            //                     confirmButton.disabled = true; // initial disabled
+            //                     confirmButton.textContent = 'confirm';
 
-//                     modalContent.appendChild(inputDiv);
+            //                     inputDiv.appendChild(inputField);
+            //                     inputDiv.appendChild(spanElement);
+            //                     inputDiv.appendChild(confirmButton);
 
-//                     // Füge Event-Listener für das Eingabefeld und den Bestätigen-Button hinzu
-//                     confirmButton.addEventListener('click', function() {
-//                         // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
-//                         if (!document.getElementById('additionalText')) {
-//                             // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
-//                             const additionalText = document.createElement('p');
-//                             additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
-//                             additionalText.innerHTML = `<br>Sales are not within the given range for the following reasons:<br>${formattedChanges}`;
-                            
-//                             // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
-//                             modalContent.appendChild(additionalText);
-//                         }
-//                     });
+            //                     modalContent.appendChild(inputDiv);
 
-//                     // Überprüfung der Eingabe und Aktivierung des Buttons
-//                     inputField.addEventListener('input', function() {
-//                         var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
-//                         var button = document.getElementById('bestaetigenButton');
-//                         if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
-//                             button.disabled = false;
-//                         } else {
-//                             button.disabled = true;
-//                         }
-//                     });
-//                 } else {
-//                     // Stelle sicher, dass das Eingabefeld und der Button immer am Ende bleiben
-//                     modalContent.appendChild(document.getElementById('inputDiv'));
-//                 }
-//             })
-//             .catch(error => {
-//                 console.error('Fehler beim Abrufen der Daten:', error);
-//             });
-//     });
+            //                     // Füge Event-Listener für das Eingabefeld und den Bestätigen-Button hinzu
+            //                     confirmButton.addEventListener('click', function() {
+            //                         // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
+            //                         if (!document.getElementById('additionalText')) {
+            //                             // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
+            //                             const additionalText = document.createElement('p');
+            //                             additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
+            //                             additionalText.innerHTML = `<br>Sales are not within the given range for the following reasons:<br>${formattedChanges}`;
 
-//     // Den ersten Tab als aktiv markieren
-//     const firstTab = tabContainer.firstElementChild;
-//     const firstTabContent = tabContentContainer.firstElementChild;
-//     firstTab.classList.add('active');
-//     firstTab.setAttribute('aria-selected', 'true');
-//     firstTabContent.classList.add('show', 'active');
-// }
+            //                             // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
+            //                             modalContent.appendChild(additionalText);
+            //                         }
+            //                     });
 
-// Funktion zum Aktualisieren der Tabs basierend auf den ausgewählten Stores
-// function updateTabs() {
-//     const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-//     createTabs(selectedStores);
-// }
+            //                     // Überprüfung der Eingabe und Aktivierung des Buttons
+            //                     inputField.addEventListener('input', function() {
+            //                         var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
+            //                         var button = document.getElementById('bestaetigenButton');
+            //                         if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
+            //                             button.disabled = false;
+            //                         } else {
+            //                             button.disabled = true;
+            //                         }
+            //                     });
+            //                 } else {
+            //                     // Stelle sicher, dass das Eingabefeld und der Button immer am Ende bleiben
+            //                     modalContent.appendChild(document.getElementById('inputDiv'));
+            //                 }
+            //             })
+            //             .catch(error => {
+            //                 console.error('Fehler beim Abrufen der Daten:', error);
+            //             });
+            //     });
 
-// Event-Listener für Änderungen in den Checkboxen
-// document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-//     checkbox.addEventListener('change', updateTabs);
-// });
+            //     // Den ersten Tab als aktiv markieren
+            //     const firstTab = tabContainer.firstElementChild;
+            //     const firstTabContent = tabContentContainer.firstElementChild;
+            //     firstTab.classList.add('active');
+            //     firstTab.setAttribute('aria-selected', 'true');
+            //     firstTabContent.classList.add('show', 'active');
+            // }
 
-// Balkendiagramm initialisieren
-barChart = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-        labels: ['2022', '2023', '2024 (current)'],
-        datasets: [{
-            label: 'Jahresumsatz',
-            data: [132498, 130456, 29118],
-            backgroundColor: ['grey'],
-            borderColor: 'transparent',
-            borderWidth: 1,
-            barThickness: 50,
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    callback: function(value, index, values) {
-                        return '$' + value.toLocaleString(); // Werte als Dollar-Format anzeigen
+            // Funktion zum Aktualisieren der Tabs basierend auf den ausgewählten Stores
+            // function updateTabs() {
+            //     const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+            //     createTabs(selectedStores);
+            // }
+
+            // Event-Listener für Änderungen in den Checkboxen
+            // document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            //     checkbox.addEventListener('change', updateTabs);
+            // });
+
+            // Balkendiagramm initialisieren
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2023', '2024 (current)'],
+                    datasets: [{
+                        label: 'Jahresumsatz',
+                        data: [132498, 130456, 29118],
+                        backgroundColor: ['grey'],
+                        borderColor: 'transparent',
+                        borderWidth: 1,
+                        barThickness: 50,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return '$' + value.toLocaleString(); // Werte als Dollar-Format anzeigen
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            boxPadding: 3,
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return '$' + tooltipItem.raw.toLocaleString(); // Tooltip-Werte als Dollar-Format anzeigen
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        },
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                boxPadding: 3,
-                callbacks: {
-                    label: function(tooltipItem) {
-                        return '$' + tooltipItem.raw.toLocaleString(); // Tooltip-Werte als Dollar-Format anzeigen
-                    }
-                }
-            }
-        }
-    }
-});
+            });
 
 
             // Rufe die Funktion zum Aktualisieren des Graphen mit den vorausgewählten Stores auf
