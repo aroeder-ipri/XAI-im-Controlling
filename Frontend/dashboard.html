@@ -1,714 +1,730 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XAI in controlling</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
-  <!-- Eigene CSS-Datei -->
-  <link rel="stylesheet" href="dashboard.css">
-  <!-- Eigene JavaScript-Datei -->
-  <script src="dashboard.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XAI in controlling</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
+    <!-- Eigene CSS-Datei -->
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- Eigene JavaScript-Datei -->
+    <script src="dashboard.js" defer></script>
 </head>
+
 <body>
 
-<script type="text/javascript">
-    var apiUrl = 'https://controlling.xaidemo.de/api/test';
-    fetch(apiUrl).then(response => {
-      return response.json();
-    }).then(data => {
-      // Work with JSON data here
-      console.log(data);
-    }).catch(err => {
-      console.log('Error', err)
-    });
-</script>
-
-<!-- Modalfenster -->
-<div id="modal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <div id="modal1Content"></div>
-    <!-- Link "Mehr" -->
-    <a id="mehrButton" class="text-muted" style="position: absolute; bottom: 10px; right: 10px;" hidden href="#">more</a>
-  </div>
-</div>
-
-<!-- Modalfenster 2 -->
-<div id="modal2" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <div id="modal2Content"></div>
-  </div>
-</div>
-
-<!-- Modalfenster NX -->
-<div id="modalNX" class="modal" style="display: none;">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div id="modalNXContent"></div>
-    </div>
-  </div>
-
-<!-- Modalfenster 3 -->
-<div id="modal3" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Target Setting</h2>
-    <p class="hint">You are now able to decide on your store’s sales target for the upcoming month.</p>
-    <p class="estimateSale"></p>
-    <p>What target do you want to achieve with your store in the upcoming month?</p>
-    <!-- Slider Container -->
-    <div class="slider-container">
-        <label for="targetSlider">Target Value:</label>
-        <span id="sliderValue"></span>
-        <div id="sliderWrapper">
-            <span id="minValue">$8,000</span>&nbsp;
-            <button type="button" id="decreaseButton2" class="slider-button">-</button>&nbsp;
-            <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">&nbsp;
-            <button type="button" id="increaseButton2" class="slider-button">+</button>&nbsp;
-            <span id="maxValue">$15,000</span>
-        </div>
-    </div>
-    <!-- Anzeige der erwarteten Auszahlung -->
-    <div id="payoutContainer" class="calculation">
-        <p><span class="label">Expected payout for reaching the target:</span> <span id="payoutAmount" class="value">£0.00</span></p>
-        <p><span class="label">Payout for failing to reach the target:</span> <br><span>£0</span></p>
-      </div>
-    <button id="setTargetButton" class="custom-btn">Continue</button>
-    <button id="finalSetTargetButton" class="custom-btn" style="display: none;">Submit</button>
-    <div id="redirectMessage" style="color: #74B027; display:none;"></div>
-
-  </div>
-</div>
-
-<!-- Modalfenster 4 -->
-<div id="modal4" class="modal">
-    <div class="modal-content">
-      <p><strong>You can now choose to send a message to your supervisor and ask for advice.</strong></p>
-      <div id="messageOptions">
-        <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?* (-£0.30)</button>
-        <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?* (-£0.30)</button>
-      </div>
-      <div id="noMessageoption">
-        <button id="noMessageBtn" class="option-btn">No message (no cost)</button>
-      </div>
-      <p style="font-size: 12px;">*The answer of your supervisor is not dependent on the message you send</p>
-    </div>
-  </div>
-  
-
-<!-- Modalfenster für Nachrichtenbeispiele -->
-<div id="messageExampleModal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <p><strong>Here is the answer of your supervisor:</strong></p>
-    <p id="messageExampleText"></p>
-    <button id="acknowledgeButton" class="btn custom-btn">Alright, thanks!</button>
-  </div>
-</div>
-
-<!-- Modalfenster für Estimate Sales -->
-<div id="modalEstimate" class="modal" style="display: none;">
-<div class="modal-content">
-    <span class="close">&times;</span>
-    <p><strong>After reading through the information and past sales performance, what do you expect to be your stores sales in the upcoming month?</strong></p>
-        <!-- Slider Container -->
-        <div class="slider-container">
-            <center><span id="sliderValue1">+0</span></center>
-            <div id="sliderWrapper">
-                <span id="minValue">$8,000</span>&nbsp;
-                <button type="button" id="decreaseButton" class="slider-button">-</button>&nbsp;
-                <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="8000">&nbsp;
-                <button type="button" id="increaseButton" class="slider-button">+</button>&nbsp;
-                <span id="maxValue">$15,000</span>
-            </div>
-            <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later point.</p>
-            <button type="button" id="anzeigenButton" class="btn custom-btn">Continue to Forecast</button>
-        </div>
-</div>
-</div>
-
-<!-- Modalfenster für Task overview -->
- <div id="modalTask" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h4>Store 1:</h4>
-    <p>On the upcoming pages you’ll use a sales development tool providing you with information on your store. You’ll go through the target-setting process in five steps:</p>
-    <p>1. You'll make an initial guess about your store's sales performance for the upcoming month. (Note: This is not your target!)</p>
-    <p>2. The tool will provide an AI-generated sales forecast.</p>
-    <p>3. You can set a sales target for the upcoming month.</p>
-    <p>4. You can ask your supervisor for advice.</p>
-    <p>5. You can adjust your sales target one last time.</p>
-  </div>
- </div>
-
-
-<div class="container">
-  <!-- Seitenüberschrift -->
-  <h1 class="mt-3">Sales development</h1>
-  <!-- Content -->
-  <div class="row">
-    <!-- Linke Seite - Hauptboxen -->
-    <div class="col-md-8">
-        <div class="content-box4 mt-3">
-            <div id="storeInfoContainer">
-              <div id="storeInfo"></div>
-              
-            </div>
-          </div>
-      <div class="content-box1 mt-3">
-        <!-- Hier wird der Graph eingebettet -->
-        <!-- Der erste Linechart -->
-        <canvas id="lineChart" style="width: 100%; height: 100%; position: relative; display: none;"></canvas>
-        <!-- Der zweite Linechart -->
-        <canvas id="lineChart2" style="width: 100%; height: 100%; position: relative;"></canvas>
-        <div class="canvas-container">
-          <button id="questionButton" class="position-absolute">?</button>
-        </div>
-      </div>
-      <!-- Hier wird der Chart mit den kummulierten Werten für mehrere Jahre eingebettet AKTUELL NICHT GEBRAUCHT -->
-      <div class="content-box1 mt-3" style="display: none;">
-        <canvas id="barChart" width="2000" height="600"></canvas>
-      </div>
-    </div>
-    <!-- Rechte Seite - Nebenboxen -->
-    <div class="col-md-4">
-      <div class="content-box2 mt-3" style="padding: 10px;">
-        <h2>AI-Forecast</h2>
-        <p class="AIestimate" style="display: none;">
-            <span style="display: block; margin-bottom: 0.5rem;"></span>
-            The AI estimates <span style="color: black;"><strong>$10,200</strong></span> for the month of <span style="color: black;"><strong>April.</strong></span>
-            <span style="display: block; margin-top: 0.5rem;"></span>
-          </p>
-        <p class="task"><span style="font-size: 1rem;"></span>
-            <strong>Please provide your sales estimate for the month of April.</strong>
-            <br>
-            <span style="font-size: 0.83rem;">You will receive additional information from an AI to set your targets after you provide your sales estimate for the month of April. <br>Hover over individual points on the chart to view detailed monthly data.</span>
-          </p>
-        <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
-        <div class="button-wrapper" style="margin-top: auto;">
-            <button type="button" id="continueButton" class="btn custom-btn" style="display: none; margin-top: 20px;">Continue to set target</button>
-        </div>
-        <p id="vorhersageAnzeigen" style="display: none;"></p>
-      </div>
-      <!-- CHANGE STORE mit Checkboxen dynamisch einfügen - AKTUELL NICHT GEBRAUCHT DA NUR 1 Store -->
-      <div class="content-box3 mt-3" hidden>
-        <h2>Change store</h2>
-        <div id="storeCheckboxContainer" class="mt-3"></div>
-      </div>
-      <div class="content-box3 mt-3">
-        <div id="storeHeader">
-          <h2>Information on the upcoming month of April:</h2>
-          <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
-          <span id="currentStore" class="current-store">Current Store Name</span> <!-- Added class for styling -->
-          <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
-        </div>
-        <div id="store-info-box">
-            <p></p>
-            <p><strong>Customers (expected):</strong><br><span id="customers-value">0</span></p>
-            <p><strong>School or state holidays: </strong><br><span id="holidays-value">0</span></p>
-            <p><strong>Days with local promotion:</strong><br><span id="promo-value">0</span> days</p>
-        </div>
-        
-        
-      </div>
-    </div>
-  </div>
-</div>
-<div class="container" hidden>
-  <div class="row">
-    <a onclick="btn_click();" id="nextButton" class="btn custom-btn">Further to survey</a>
-  </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
-
-<!-- Datalabels -->
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
-<script>
-var yourTarget = 8000;
-var actualSales = 10300;
-var basePayout = 0;
-var optionCost = 0;
-var questionButtonClick = "no";
-var savedSliderValue = 8000;
-var optionId = "noMessage";
-
-async function btn_click() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get('id');
-
-    // Werte aus dem localStorage abrufen
-    const uuid = localStorage.getItem("user_uuid");
-    const group = localStorage.getItem("user_group");
-    const startTime = localStorage.getItem("start_time");
-    const prolificID = localStorage.getItem("prolificID");
-    const comprehensionCheck = localStorage.getItem("comprehensionCheck");
-    const initialYourTarget = localStorage.getItem("initialYourTarget");
-    
-
-    // Neue Werte in den localStorage speichern
-    localStorage.setItem("questionButtonClick", questionButtonClick);
-    localStorage.setItem("savedSliderValue", savedSliderValue);
-    localStorage.setItem("yourTarget", yourTarget);
-    localStorage.setItem("optionId", optionId);
-
-    // Werte an die API senden
-    try {
-        const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                user_id: uuid, // Nur die reine UUID senden
-                prolificID: prolificID,
-                group: group,
-                start: startTime, // Verwende den gespeicherten Startzeitpunkt
-                comprehensionCheck: comprehensionCheck,
-                questionButton: questionButtonClick,
-                initialGuess: savedSliderValue,
-                initialTarget: initialYourTarget, //hier
-                finalTarget: yourTarget,
-                advice: optionId,
-                end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
-            })
+    <script type="text/javascript">
+        var apiUrl = 'https://controlling.xaidemo.de/api/test';
+        fetch(apiUrl).then(response => {
+            return response.json();
+        }).then(data => {
+            // Work with JSON data here
+            console.log(data);
+        }).catch(err => {
+            console.log('Error', err)
         });
+    </script>
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+    <!-- Modalfenster -->
+    <div id="modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal1Content"></div>
+            <!-- Link "Mehr" -->
+            <a id="mehrButton" class="text-muted" style="position: absolute; bottom: 10px; right: 10px;" hidden
+                href="#">more</a>
+        </div>
+    </div>
+
+    <!-- Modalfenster 2 -->
+    <div id="modal2" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal2Content"></div>
+        </div>
+    </div>
+
+    <!-- Modalfenster NX -->
+    <div id="modalNX" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalNXContent"></div>
+        </div>
+    </div>
+
+    <!-- Modalfenster 3 -->
+    <div id="modal3" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Target Setting</h2>
+            <p class="hint">You are now able to decide on your store’s sales target for the upcoming month.</p>
+            <p class="estimateSale"></p>
+            <p>What target do you want to achieve with your store in the upcoming month?</p>
+            <!-- Slider Container -->
+            <div class="slider-container">
+                <label for="targetSlider">Target Value:</label>
+                <span id="sliderValue"></span>
+                <div id="sliderWrapper">
+                    <span id="minValue">$8,000</span>&nbsp;
+                    <button type="button" id="decreaseButton2" class="slider-button">-</button>&nbsp;
+                    <input type="range" id="targetSlider" min="8000" max="15000" step="100" value="8000">&nbsp;
+                    <button type="button" id="increaseButton2" class="slider-button">+</button>&nbsp;
+                    <span id="maxValue">$15,000</span>
+                </div>
+            </div>
+            <!-- Anzeige der erwarteten Auszahlung -->
+            <div id="payoutContainer" class="calculation">
+                <p><span class="label">Expected payout for reaching the target:</span> <span id="payoutAmount"
+                        class="value">£0.00</span></p>
+                <p><span class="label">Payout for failing to reach the target:</span> <br><span>£0</span></p>
+            </div>
+            <button id="setTargetButton" class="custom-btn">Continue</button>
+            <button id="finalSetTargetButton" class="custom-btn" style="display: none;">Submit</button>
+            <div id="redirectMessage" style="color: #74B027; display:none;"></div>
+
+        </div>
+    </div>
+
+    <!-- Modalfenster 4 -->
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <p><strong>You can now choose to send a message to your supervisor and ask for advice.</strong></p>
+            <div id="messageOptions">
+                <button id="salesExpectationsBtn" class="option-btn">What are your sales expectations from our store?*
+                    (-£0.30)</button>
+                <button id="trustForecastBtn" class="option-btn">Do you think I should trust the forecast?*
+                    (-£0.30)</button>
+            </div>
+            <div id="noMessageoption">
+                <button id="noMessageBtn" class="option-btn">No message (no cost)</button>
+            </div>
+            <p style="font-size: 12px;">*The answer of your supervisor is not dependent on the message you send</p>
+        </div>
+    </div>
+
+
+    <!-- Modalfenster für Nachrichtenbeispiele -->
+    <div id="messageExampleModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p><strong>Here is the answer of your supervisor:</strong></p>
+            <p id="messageExampleText"></p>
+            <button id="acknowledgeButton" class="btn custom-btn">Alright, thanks!</button>
+        </div>
+    </div>
+
+    <!-- Modalfenster für Estimate Sales -->
+    <div id="modalEstimate" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p><strong>After reading through the information and past sales performance, what do you expect to be your
+                    stores sales in the upcoming month?</strong></p>
+            <!-- Slider Container -->
+            <div class="slider-container">
+                <center><span id="sliderValue1">+0</span></center>
+                <div id="sliderWrapper">
+                    <span id="minValue">$8,000</span>&nbsp;
+                    <button type="button" id="decreaseButton" class="slider-button">-</button>&nbsp;
+                    <input type="range" id="targetSlider1" min="8000" max="15000" step="100" value="8000">&nbsp;
+                    <button type="button" id="increaseButton" class="slider-button">+</button>&nbsp;
+                    <span id="maxValue">$15,000</span>
+                </div>
+                <p style="font-size: 12px;"><strong>*This is not a target!</strong> Sales targets will be set at a later
+                    point.</p>
+                <button type="button" id="anzeigenButton" class="btn custom-btn">Continue to Forecast</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modalfenster für Task overview -->
+    <div id="modalTask" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h4>Store 1:</h4>
+            <p>On the upcoming pages you’ll use a sales development tool providing you with information on your store.
+                You’ll go through the target-setting process in five steps:</p>
+            <p>1. You'll make an initial guess about your store's sales performance for the upcoming month. (Note: This
+                is not your target!)</p>
+            <p>2. The tool will provide an AI-generated sales forecast.</p>
+            <p>3. You can set a sales target for the upcoming month.</p>
+            <p>4. You can ask your supervisor for advice.</p>
+            <p>5. You can adjust your sales target one last time.</p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <!-- Seitenüberschrift -->
+        <h1 class="mt-3">Sales development</h1>
+        <!-- Content -->
+        <div class="row">
+            <!-- Linke Seite - Hauptboxen -->
+            <div class="col-md-8">
+                <div class="content-box4 mt-3">
+                    <div id="storeInfoContainer">
+                        <div id="storeInfo"></div>
+
+                    </div>
+                </div>
+                <div class="content-box1 mt-3">
+                    <!-- Hier wird der Graph eingebettet -->
+                    <!-- Der erste Linechart -->
+                    <canvas id="lineChart"
+                        style="width: 100%; height: 100%; position: relative; display: none;"></canvas>
+                    <!-- Der zweite Linechart -->
+                    <canvas id="lineChart2" style="width: 100%; height: 100%; position: relative;"></canvas>
+                    <div class="canvas-container">
+                        <button id="questionButton" class="position-absolute">?</button>
+                    </div>
+                </div>
+                <!-- Hier wird der Chart mit den kummulierten Werten für mehrere Jahre eingebettet AKTUELL NICHT GEBRAUCHT -->
+                <div class="content-box1 mt-3" style="display: none;">
+                    <canvas id="barChart" width="2000" height="600"></canvas>
+                </div>
+            </div>
+            <!-- Rechte Seite - Nebenboxen -->
+            <div class="col-md-4">
+                <div class="content-box2 mt-3" style="padding: 10px;">
+                    <h2>AI-Forecast</h2>
+                    <p class="AIestimate" style="display: none;">
+                        <span style="display: block; margin-bottom: 0.5rem;"></span>
+                        The AI estimates <span style="color: black;"><strong>$10,200</strong></span> for the month of
+                        <span style="color: black;"><strong>April.</strong></span>
+                        <span style="display: block; margin-top: 0.5rem;"></span>
+                    </p>
+                    <p class="task"><span style="font-size: 1rem;"></span>
+                        <strong>Please provide your sales estimate for the month of April.</strong>
+                        <br>
+                        <span style="font-size: 0.83rem;">You will receive additional information from an AI to set your
+                            targets after you provide your sales estimate for the month of April. <br>Hover over
+                            individual points on the chart to view detailed monthly data.</span>
+                    </p>
+                    <button type="button" id="estimateButton" class="btn custom-btn">Estimate Sales</button>
+                    <div class="button-wrapper" style="margin-top: auto;">
+                        <button type="button" id="continueButton" class="btn custom-btn"
+                            style="display: none; margin-top: 20px;">Continue to set target</button>
+                    </div>
+                    <p id="vorhersageAnzeigen" style="display: none;"></p>
+                </div>
+                <!-- CHANGE STORE mit Checkboxen dynamisch einfügen - AKTUELL NICHT GEBRAUCHT DA NUR 1 Store -->
+                <div class="content-box3 mt-3" hidden>
+                    <h2>Change store</h2>
+                    <div id="storeCheckboxContainer" class="mt-3"></div>
+                </div>
+                <div class="content-box3 mt-3">
+                    <div id="storeHeader">
+                        <h2>Information on the upcoming month of April:</h2>
+                        <button id="prevStoreButton"><i class="fas fa-arrow-left"></i></button>
+                        <span id="currentStore" class="current-store">Current Store Name</span>
+                        <!-- Added class for styling -->
+                        <button id="nextStoreButton"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div id="store-info-box">
+                        <p></p>
+                        <p><strong>Customers (expected):</strong><br><span id="customers-value">0</span></p>
+                        <p><strong>School or state holidays: </strong><br><span id="holidays-value">0</span></p>
+                        <p><strong>Days with local promotion:</strong><br><span id="promo-value">0</span> days</p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" hidden>
+        <div class="row">
+            <a onclick="btn_click();" id="nextButton" class="btn custom-btn">Further to survey</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"></script>
+
+    <!-- Datalabels -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <script>
+        var yourTarget = 8000;
+        var actualSales = 10300;
+        var basePayout = 0;
+        var optionCost = 0;
+        var questionButtonClick = "no";
+        var savedSliderValue = 8000;
+        var optionId = "noMessage";
+
+        async function btn_click() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const id = urlParams.get('id');
+
+            // Werte aus dem localStorage abrufen
+            const uuid = localStorage.getItem("user_uuid");
+            const group = localStorage.getItem("user_group");
+            const startTime = localStorage.getItem("start_time");
+            const prolificID = localStorage.getItem("prolificID");
+            const comprehensionCheck = localStorage.getItem("comprehensionCheck");
+            const initialYourTarget = localStorage.getItem("initialYourTarget");
+
+
+            // Neue Werte in den localStorage speichern
+            localStorage.setItem("questionButtonClick", questionButtonClick);
+            localStorage.setItem("savedSliderValue", savedSliderValue);
+            localStorage.setItem("yourTarget", yourTarget);
+            localStorage.setItem("optionId", optionId);
+
+            // Werte an die API senden
+            try {
+                const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: uuid, // Nur die reine UUID senden
+                        prolificID: prolificID,
+                        group: group,
+                        start: startTime, // Verwende den gespeicherten Startzeitpunkt
+                        comprehensionCheck: comprehensionCheck,
+                        questionButton: questionButtonClick,
+                        initialGuess: savedSliderValue,
+                        initialTarget: initialYourTarget, //hier
+                        finalTarget: yourTarget,
+                        advice: optionId,
+                        end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Data successfully sent to the API:", data);
+
+                // Weiterleitung zur nächsten Seite
+                window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/"
+                    + "?id=" + encodeURIComponent(id)
+                    + "&YourTarget=" + encodeURIComponent(yourTarget)
+                    + "&actualSales=" + encodeURIComponent(actualSales)
+                    + "&basePayout=" + encodeURIComponent(basePayout)
+                    + "&optionCost=" + encodeURIComponent(optionCost)
+                    + "&initialYourTarget=" + encodeURIComponent(initialYourTarget);
+
+                //window.location.href = "survey.html?id=" + encodeURIComponent(id)
+                //+ "&YourTarget=" + encodeURIComponent(yourTarget)
+                //+ "&actualSales=" + encodeURIComponent(actualSales)
+                //+ "&basePayout=" + encodeURIComponent(basePayout)
+                //+ "&optionCost=" + encodeURIComponent(optionCost);
+
+            } catch (error) {
+                console.error('Error sending data to the API:', error);
+            }
         }
 
-        const data = await response.json();
-        console.log("Data successfully sent to the API:", data);
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var modal3 = document.getElementById("modal3");
+            var modal4 = document.getElementById("modal4");
+            var messageExampleModal = document.getElementById("messageExampleModal");
+            var continueButton = document.getElementById("continueButton");
+            var closeButtons = document.querySelectorAll(".close");
+            var targetSlider = document.getElementById("targetSlider");
+            var sliderValue = document.getElementById("sliderValue");
+            var payoutAmount = document.getElementById("payoutAmount");
+            var setTargetButton = document.getElementById("setTargetButton");
+            var finalSetTargetButton = document.getElementById("finalSetTargetButton");
+            var noMessageBtn = document.getElementById("noMessageBtn");
+            var salesExpectationsBtn = document.getElementById("salesExpectationsBtn");
+            var trustForecastBtn = document.getElementById("trustForecastBtn");
+            var acknowledgeButton = document.getElementById("acknowledgeButton");
+            var optionButtons = [noMessageBtn, salesExpectationsBtn, trustForecastBtn];
+            var messageExampleText = document.getElementById("messageExampleText");
+            var estimateButton = document.getElementById("estimateButton");
+            var modalEstimate = document.getElementById("modalEstimate");
+            var targetSlider1 = document.getElementById("targetSlider1");
+            var sliderValue1 = document.getElementById("sliderValue1");
+            var anzeigenButton = document.getElementById("anzeigenButton");
+            var taskParagraph = document.querySelector('p.task');
+            var estimateSale = document.querySelector('p.estimateSale');
+            var selectedOption = 'noMessage';
+            var AIestimate = document.querySelector('p.AIestimate');
+            var decreaseButton = document.getElementById('decreaseButton');
+            var increaseButton = document.getElementById('increaseButton');
+            var decreaseButton2 = document.getElementById('decreaseButton2');
+            var increaseButton2 = document.getElementById('increaseButton2');
+            var taskOverview = document.getElementById('modalTask');
 
-        // Weiterleitung zur nächsten Seite
-window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/"
-    + "?id=" + encodeURIComponent(id)
-    + "&YourTarget=" + encodeURIComponent(yourTarget)
-    + "&actualSales=" + encodeURIComponent(actualSales)
-    + "&basePayout=" + encodeURIComponent(basePayout)
-    + "&optionCost=" + encodeURIComponent(optionCost)
-    + "&initialYourTarget=" + encodeURIComponent(initialYourTarget);
+            function showModalTask() {
+                taskOverview.style.display = "block";
+            }
+            window.onload = showModalTask;
 
-        //window.location.href = "survey.html?id=" + encodeURIComponent(id)
-            //+ "&YourTarget=" + encodeURIComponent(yourTarget)
-            //+ "&actualSales=" + encodeURIComponent(actualSales)
-            //+ "&basePayout=" + encodeURIComponent(basePayout)
-            //+ "&optionCost=" + encodeURIComponent(optionCost);
+            // Zeige Modal3 bei Klick auf den Continue-Button
+            continueButton.onclick = function () {
+                modal3.style.display = "block";
+            }
 
-    } catch (error) {
-        console.error('Error sending data to the API:', error);
-    }
-}
+            // Schließe alle Modale, wenn der Schließen-Button geklickt wird
+            closeButtons.forEach(function (button) {
+                button.onclick = function () {
+                    button.closest('.modal').style.display = "none";
+                }
+            });
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    var modal3 = document.getElementById("modal3");
-    var modal4 = document.getElementById("modal4");
-    var messageExampleModal = document.getElementById("messageExampleModal");
-    var continueButton = document.getElementById("continueButton");
-    var closeButtons = document.querySelectorAll(".close");
-    var targetSlider = document.getElementById("targetSlider");
-    var sliderValue = document.getElementById("sliderValue");
-    var payoutAmount = document.getElementById("payoutAmount");
-    var setTargetButton = document.getElementById("setTargetButton");
-    var finalSetTargetButton = document.getElementById("finalSetTargetButton");
-    var noMessageBtn = document.getElementById("noMessageBtn");
-    var salesExpectationsBtn = document.getElementById("salesExpectationsBtn");
-    var trustForecastBtn = document.getElementById("trustForecastBtn");
-    var acknowledgeButton = document.getElementById("acknowledgeButton");
-    var optionButtons = [noMessageBtn, salesExpectationsBtn, trustForecastBtn];
-    var messageExampleText = document.getElementById("messageExampleText");
-    var estimateButton = document.getElementById("estimateButton");
-    var modalEstimate = document.getElementById("modalEstimate");
-    var targetSlider1 = document.getElementById("targetSlider1");
-    var sliderValue1 = document.getElementById("sliderValue1");
-    var anzeigenButton = document.getElementById("anzeigenButton");
-    var taskParagraph = document.querySelector('p.task');
-    var estimateSale = document.querySelector('p.estimateSale');
-    var selectedOption = 'noMessage';
-    var AIestimate = document.querySelector('p.AIestimate');
-    var decreaseButton = document.getElementById('decreaseButton');
-    var increaseButton = document.getElementById('increaseButton');
-    var decreaseButton2 = document.getElementById('decreaseButton2');
-    var increaseButton2 = document.getElementById('increaseButton2');
-    var taskOverview = document.getElementById('modalTask');
+            // Initialisiere den Slider und die Auszahlung
+            var initialSliderValue = targetSlider.value;
+            sliderValue.textContent = `$${initialSliderValue}`;
+            updatePayout(initialSliderValue);
 
-    function showModalTask() {
-        taskOverview.style.display = "block";
-    }
-    window.onload = showModalTask;
-    
-    // Zeige Modal3 bei Klick auf den Continue-Button
-    continueButton.onclick = function() {
-        modal3.style.display = "block";
-    }
+            // Event-Listener für Slider-Eingaben
+            targetSlider.oninput = function () {
+                var currentValue = this.value;
+                const formattedValue = formatNumberWithCommas(currentValue);
+                sliderValue.textContent = `$${formattedValue}`;
+                yourTarget = currentValue; // Speichern des aktuellen Werts
+                updatePayout(currentValue);
+            };
 
-    // Schließe alle Modale, wenn der Schließen-Button geklickt wird
-    closeButtons.forEach(function(button) {
-        button.onclick = function() {
-            button.closest('.modal').style.display = "none";
-        }
-    });
+            // Event-Listener für den Minus-Button
+            decreaseButton2.onclick = function () {
+                var currentValue = parseInt(targetSlider.value);
+                if (currentValue > parseInt(targetSlider.min)) {
+                    targetSlider.value = currentValue - parseInt(targetSlider.step);
+                    const formattedValue = formatNumberWithCommas(targetSlider.value);
+                    currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
+                    sliderValue.textContent = `$${formattedValue}`;
+                    yourTarget = currentValue; // Speichern des aktuellen Werts
+                    updatePayout(currentValue);
+                }
+            };
 
-    // Initialisiere den Slider und die Auszahlung
-    var initialSliderValue = targetSlider.value;
-sliderValue.textContent = `$${initialSliderValue}`;
-updatePayout(initialSliderValue);
+            // Event-Listener für den Plus-Button
+            increaseButton2.onclick = function () {
+                var currentValue = parseInt(targetSlider.value);
+                if (currentValue < parseInt(targetSlider.max)) {
+                    targetSlider.value = currentValue + parseInt(targetSlider.step);
+                    const formattedValue = formatNumberWithCommas(targetSlider.value);
+                    currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
+                    sliderValue.textContent = `$${formattedValue}`;
+                    yourTarget = currentValue; // Speichern des aktuellen Werts
+                    updatePayout(currentValue);
+                }
+            };
 
-// Event-Listener für Slider-Eingaben
-targetSlider.oninput = function() {
-    var currentValue = this.value;
-    const formattedValue = formatNumberWithCommas(currentValue);
-    sliderValue.textContent = `$${formattedValue}`;
-    yourTarget = currentValue; // Speichern des aktuellen Werts
-    updatePayout(currentValue);
-};
-
-// Event-Listener für den Minus-Button
-decreaseButton2.onclick = function() {
-    var currentValue = parseInt(targetSlider.value);
-    if (currentValue > parseInt(targetSlider.min)) {
-        targetSlider.value = currentValue - parseInt(targetSlider.step);
-        const formattedValue = formatNumberWithCommas(targetSlider.value);
-        currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
-        sliderValue.textContent = `$${formattedValue}`;
-        yourTarget = currentValue; // Speichern des aktuellen Werts
-        updatePayout(currentValue);
-    }
-};
-
-// Event-Listener für den Plus-Button
-increaseButton2.onclick = function() {
-    var currentValue = parseInt(targetSlider.value);
-    if (currentValue < parseInt(targetSlider.max)) {
-        targetSlider.value = currentValue + parseInt(targetSlider.step);
-        const formattedValue = formatNumberWithCommas(targetSlider.value);
-        currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
-        sliderValue.textContent = `$${formattedValue}`;
-        yourTarget = currentValue; // Speichern des aktuellen Werts
-        updatePayout(currentValue);
-    }
-};
-
-    // Funktion zur Berechnung und Anzeige der Auszahlung
-    function updatePayout(value) {
-        basePayout = calculatePayout(value); // Berechne und aktualisiere die globale Basis-Auszahlung
-        var payout = basePayout - optionCost; // Ziehe die Kosten für die ausgewählte Option ab
-        if (optionCost > 0) {
-            payoutAmount.innerHTML = `
+            // Funktion zur Berechnung und Anzeige der Auszahlung
+            function updatePayout(value) {
+                basePayout = calculatePayout(value); // Berechne und aktualisiere die globale Basis-Auszahlung
+                var payout = basePayout - optionCost; // Ziehe die Kosten für die ausgewählte Option ab
+                if (optionCost > 0) {
+                    payoutAmount.innerHTML = `
                 <div class="calculation">
                 <p class="value">£${basePayout.toFixed(2)} - <span style="color: red;">£${optionCost.toFixed(2)}</span> = £${Math.max(payout, 0).toFixed(2)}</p>
                 </div>
             `;
-        } else {
-            payoutAmount.innerHTML = `
+                } else {
+                    payoutAmount.innerHTML = `
                 <div class="calculation">
                 <p class="value">£${basePayout.toFixed(2)}</p>
                 </div>
             `;
-        }
-    }
+                }
+            }
 
-    // Berechnung der Auszahlung
-    function calculatePayout(value) {
-        var bonusPerUnit = 0.20 / 1000; // 0,20 USD für 1000 Sales
-        return (value * bonusPerUnit) - 1.20;
-    }
+            // Berechnung der Auszahlung
+            function calculatePayout(value) {
+                var bonusPerUnit = 0.20 / 1000; // 0,20 USD für 1000 Sales
+                return (value * bonusPerUnit) - 1.20;
+            }
 
-    // Funktion zum Anzeigen von Modal4
-    function showModal4() {
-        modal4.style.display = "block";
-    }
+            // Funktion zum Anzeigen von Modal4
+            function showModal4() {
+                modal4.style.display = "block";
+            }
 
-    // Funktion zum Anzeigen des Nachrichtensbeispiel-Modals
-    function showMessageExample(text) {
-        var text = `
+            // Funktion zum Anzeigen des Nachrichtensbeispiel-Modals
+            function showMessageExample(text) {
+                var text = `
             <p>Hello,</p>
             <p>I appreciate your message and I can see you have already made an educated guess on your sales targets.</p>
             <p>I feel like the AI is very accurate with its prediction and I don‘t think you can expect sales to exceed $10,300 for the month of April.</p>
             <p>Kind Regards,</p>
             <p>Supervisor</p>
         `;
-        messageExampleText.innerHTML = text; // Setze HTML-Inhalt
-        messageExampleModal.style.display = "block";
-    }
-
-    setTargetButton.onclick = function() {
-    // Hole den aktuellen Wert des Sliders (falls er noch nicht aktualisiert wurde)
-    yourTarget = targetSlider.value; 
-
-    // Ursprünglichen Wert von yourTarget zwischenspeichern, falls noch nicht geschehen
-        localStorage.setItem("initialYourTarget", yourTarget);
-    
-
-    // Zeige Modal4 an
-    showModal4();
-};
-
-
-    // Funktion zur Auswahl einer Option im Modal4
-    function selectOption(optionId) {
-        selectedOption = optionId;
-        optionButtons.forEach(function(btn) {
-            btn.classList.remove('active');
-        });
-        document.getElementById(optionId + 'Btn').classList.add('active');
-        optionCost = calculateOptionCost(selectedOption); // Berechne und aktualisiere die globale Option-Kosten
-        updatePayout(targetSlider.value); // Aktualisiere die Auszahlung nach Auswahl der Option
-    }
-
-    function showHintInModal3(text) {
-        var modal3 = document.getElementById('modal3');
-        var hintElement = modal3.querySelector('.hint');
-        if (hintElement) {
-            hintElement.textContent = text;
-        }
-    }
-
-    // Event-Listener für die Auswahloptionen im Modal4
-    optionButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            var selectedOptionId = this.id.replace('Btn', '');
-            var exampleText = "";
-            var hintText = "";
-
-            if (selectedOptionId === 'noMessage') {
-                modal4.style.display = "none";
-                optionCost = 0.00; // Keine Kosten
-                hintText = "You can now adjust your target level one last time. ";
-            } else {
-                if (selectedOptionId === 'salesExpectations') {
-                    exampleText = "What are your sales expectations from our store?";
-                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
-                } else if (selectedOptionId === 'trustForecast') {
-                    exampleText = "Do you think I should trust the forecast?";
-                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
-                }
-                modal4.style.display = "none";
-                showMessageExample(exampleText);
-                optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
-                // Aktualisiere die globale optionId
-                optionId = selectedOptionId;
+                messageExampleText.innerHTML = text; // Setze HTML-Inhalt
+                messageExampleModal.style.display = "block";
             }
 
-            // Zeige den Hinweistext in Modal3
-            showHintInModal3(hintText);
+            setTargetButton.onclick = function () {
+                // Hole den aktuellen Wert des Sliders (falls er noch nicht aktualisiert wurde)
+                yourTarget = targetSlider.value;
 
-            // Blende den Set Target Button aus und zeige den Final Set Target Button an
-            setTargetButton.style.display = "none";
-            finalSetTargetButton.style.display = "block";
+                // Ursprünglichen Wert von yourTarget zwischenspeichern, falls noch nicht geschehen
+                localStorage.setItem("initialYourTarget", yourTarget);
 
-            updatePayout(targetSlider.value); // Aktualisiere die Auszahlung
-        });
-    });
 
-    function calculateOptionCost(option) {
-    if (option === 'noMessage') {
-        return 0.00;
-    } else if (option === 'salesExpectations' || option === 'trustForecast') {
-        return 0.30;
-    }
-    return 0.00;
-}
+                // Zeige Modal4 an
+                showModal4();
+            };
 
-      // Event-Listener für den Final Set Target Button
-      finalSetTargetButton.onclick = function() {
-          // Blende den Final Set Target Button aus
-          finalSetTargetButton.style.display = "none";
-          // Mache den Continue-Button nicht mehr klickbar
-          continueButton.style.pointerEvents = "none";
-          continueButton.style.opacity = "0.5";
-          //target slider deaktivieren
-          document.getElementById('targetSlider').disabled = true;
-          // Deaktiviert die Buttons
-            document.getElementById('decreaseButton2').disabled = true;
-            document.getElementById('increaseButton2').disabled = true;
-          
-          // Zeige die Redirect Message
-          const redirectMessage = document.getElementById('redirectMessage');
-          let countdown = 5;
-          redirectMessage.style.display = 'block';
-          redirectMessage.textContent =`Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
-          
-          const countdownInterval = setInterval(() => {
-              countdown--;
-              if (countdown > 0) {
-                  redirectMessage.textContent =`Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
-              } else {
-                  clearInterval(countdownInterval);
-                  // Hier wird die btn_click Funktion nach Ablauf des Countdowns aufgerufen
-                  btn_click();
-              }
-          }, 1000); // Update every second
-      };
 
-      // Event-Listener für den "Alright, thanks!" Button
-      acknowledgeButton.onclick = function() {
-          // Schließe das Nachrichtensbeispiel-Modal
-          messageExampleModal.style.display = "none";
-          // Berechne und aktualisiere die Auszahlung
-          var currentValue = targetSlider.value;
-          updatePayout(currentValue);
-          // Zeige Modal3 wieder an
-          modal3.style.display = "block";
-      };
+            // Funktion zur Auswahl einer Option im Modal4
+            function selectOption(optionId) {
+                selectedOption = optionId;
+                optionButtons.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+                document.getElementById(optionId + 'Btn').classList.add('active');
+                optionCost = calculateOptionCost(selectedOption); // Berechne und aktualisiere die globale Option-Kosten
+                updatePayout(targetSlider.value); // Aktualisiere die Auszahlung nach Auswahl der Option
+            }
 
-      // Berechnung der Kosten für die Auswahloptionen
-      function calculateOptionCost(option) {
-          switch(option) {
-              case 'salesExpectations':
-              case 'trustForecast':
-                  return 0.30;
-              default:
-                  return 0.00;
-          }
-      }
+            function showHintInModal3(text) {
+                var modal3 = document.getElementById('modal3');
+                var hintElement = modal3.querySelector('.hint');
+                if (hintElement) {
+                    hintElement.textContent = text;
+                }
+            }
 
-      // Zeige ModalEstimate bei Klick auf den Estimate-Button
-      estimateButton.onclick = function() {
-          modalEstimate.style.display = "block";
-      }
+            // Event-Listener für die Auswahloptionen im Modal4
+            optionButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var selectedOptionId = this.id.replace('Btn', '');
+                    var exampleText = "";
+                    var hintText = "";
 
-      // Initialisiere den Slider und die Auszahlung
-      var initialSliderValue1 = targetSlider1.value;
-      sliderValue1.textContent = `$${initialSliderValue1}`;
+                    if (selectedOptionId === 'noMessage') {
+                        modal4.style.display = "none";
+                        optionCost = 0.00; // Keine Kosten
+                        hintText = "You can now adjust your target level one last time. ";
+                    } else {
+                        if (selectedOptionId === 'salesExpectations') {
+                            exampleText = "What are your sales expectations from our store?";
+                            hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                        } else if (selectedOptionId === 'trustForecast') {
+                            exampleText = "Do you think I should trust the forecast?";
+                            hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                        }
+                        modal4.style.display = "none";
+                        showMessageExample(exampleText);
+                        optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
+                        // Aktualisiere die globale optionId
+                        optionId = selectedOptionId;
+                    }
 
-      // Event-Listener für den Minus-Button
-decreaseButton.onclick = function() {
-    var currentValue1 = parseInt(targetSlider1.value);
-    if (currentValue1 > parseInt(targetSlider1.min)) {
-        targetSlider1.value = currentValue1 - parseInt(targetSlider1.step);
-        const formattedValue = formatNumberWithCommas(targetSlider1.value);
-        sliderValue1.textContent = `$${formattedValue}`;
-        savedSliderValue = targetSlider1.value;
-    }
-};
+                    // Zeige den Hinweistext in Modal3
+                    showHintInModal3(hintText);
 
-// Event-Listener für den Plus-Button
-increaseButton.onclick = function() {
-    var currentValue1 = parseInt(targetSlider1.value);
-    if (currentValue1 < parseInt(targetSlider1.max)) {
-        targetSlider1.value = currentValue1 + parseInt(targetSlider1.step);
-        const formattedValue = formatNumberWithCommas(targetSlider1.value);
-        sliderValue1.textContent = `$${formattedValue}`;
-        savedSliderValue = targetSlider1.value;
-    }
-};
+                    // Blende den Set Target Button aus und zeige den Final Set Target Button an
+                    setTargetButton.style.display = "none";
+                    finalSetTargetButton.style.display = "block";
 
-      // Event-Listener für Slider-Eingaben
-      targetSlider1.oninput = function() {
-          var currentValue1 = this.value;
-          const formattedValue = formatNumberWithCommas(currentValue1);
-          sliderValue1.textContent = `$${formattedValue}`;
-          savedSliderValue = currentValue1; // Speichern des aktuellen Werts
-      };
+                    updatePayout(targetSlider.value); // Aktualisiere die Auszahlung
+                });
+            });
 
-      anzeigenButton.onclick = function() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get('id');
+            function calculateOptionCost(option) {
+                if (option === 'noMessage') {
+                    return 0.00;
+                } else if (option === 'salesExpectations' || option === 'trustForecast') {
+                    return 0.30;
+                }
+                return 0.00;
+            }
 
-    modalEstimate.style.display = "none";
-    continueButton.style.display = "block";
-    estimateButton.style.display = "none";
-    AIestimate.style.display = "block";
+            // Event-Listener für den Final Set Target Button
+            finalSetTargetButton.onclick = function () {
+                // Blende den Final Set Target Button aus
+                finalSetTargetButton.style.display = "none";
+                // Mache den Continue-Button nicht mehr klickbar
+                continueButton.style.pointerEvents = "none";
+                continueButton.style.opacity = "0.5";
+                //target slider deaktivieren
+                document.getElementById('targetSlider').disabled = true;
+                // Deaktiviert die Buttons
+                document.getElementById('decreaseButton2').disabled = true;
+                document.getElementById('increaseButton2').disabled = true;
 
-    // Bedingung für Gruppe NX
-    if (id && id.startsWith("NX")) {
-        taskParagraph.innerHTML = ''; // Leer
-    } else {
-        // Text hinzufügen, wenn nicht in Gruppe NX
-        taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.';
-    }
+                // Zeige die Redirect Message
+                const redirectMessage = document.getElementById('redirectMessage');
+                let countdown = 5;
+                redirectMessage.style.display = 'block';
+                redirectMessage.textContent = `Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
 
-    // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
-    estimateSale.innerHTML = `Your estimated sales were $${formatNumberWithCommas(savedSliderValue)}.`;
-    determineAndOpenModal();
-}
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        redirectMessage.textContent = `Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
+                    } else {
+                        clearInterval(countdownInterval);
+                        // Hier wird die btn_click Funktion nach Ablauf des Countdowns aufgerufen
+                        btn_click();
+                    }
+                }, 1000); // Update every second
+            };
 
-      const modal = document.getElementById("modal");
-      const modal2 = document.getElementById("modal2");
-      const modalNX = document.getElementById("modalNX");
-      const questionButton = document.getElementById("questionButton");
-      const mehrButton = document.getElementById("mehrButton");
+            // Event-Listener für den "Alright, thanks!" Button
+            acknowledgeButton.onclick = function () {
+                // Schließe das Nachrichtensbeispiel-Modal
+                messageExampleModal.style.display = "none";
+                // Berechne und aktualisiere die Auszahlung
+                var currentValue = targetSlider.value;
+                updatePayout(currentValue);
+                // Zeige Modal3 wieder an
+                modal3.style.display = "block";
+            };
 
-      // Funktion zum Laden von JSON-Daten
-      async function loadJSON(url) {
-          const response = await fetch(url);
-          if (!response.ok) {
-              throw new Error("Netzwerkantwort war nicht ok.");
-          }
-          return await response.json();
-      }
+            // Berechnung der Kosten für die Auswahloptionen
+            function calculateOptionCost(option) {
+                switch (option) {
+                    case 'salesExpectations':
+                    case 'trustForecast':
+                        return 0.30;
+                    default:
+                        return 0.00;
+                }
+            }
 
-      // Funktion zum Öffnen des Modals NX
-async function openModalNX() {
-    try {
-        // Stelle sicher, dass der Modal-Container vorhanden ist
-        const modalNXContent = document.getElementById("modalNXContent");
-        if (!modalNXContent) {
-            console.error("Das Element 'modalNXContent' wurde nicht gefunden.");
-            return;
-        }
+            // Zeige ModalEstimate bei Klick auf den Estimate-Button
+            estimateButton.onclick = function () {
+                modalEstimate.style.display = "block";
+            }
 
-        // Berechne die benutzerdefinierte Schieberegler-Wertformatierung
-        const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+            // Initialisiere den Slider und die Auszahlung
+            var initialSliderValue1 = targetSlider1.value;
+            sliderValue1.textContent = `$${initialSliderValue1}`;
 
-        // HTML-Inhalt des Modals anpassen
-        modalNXContent.innerHTML = `
+            // Event-Listener für den Minus-Button
+            decreaseButton.onclick = function () {
+                var currentValue1 = parseInt(targetSlider1.value);
+                if (currentValue1 > parseInt(targetSlider1.min)) {
+                    targetSlider1.value = currentValue1 - parseInt(targetSlider1.step);
+                    const formattedValue = formatNumberWithCommas(targetSlider1.value);
+                    sliderValue1.textContent = `$${formattedValue}`;
+                    savedSliderValue = targetSlider1.value;
+                }
+            };
+
+            // Event-Listener für den Plus-Button
+            increaseButton.onclick = function () {
+                var currentValue1 = parseInt(targetSlider1.value);
+                if (currentValue1 < parseInt(targetSlider1.max)) {
+                    targetSlider1.value = currentValue1 + parseInt(targetSlider1.step);
+                    const formattedValue = formatNumberWithCommas(targetSlider1.value);
+                    sliderValue1.textContent = `$${formattedValue}`;
+                    savedSliderValue = targetSlider1.value;
+                }
+            };
+
+            // Event-Listener für Slider-Eingaben
+            targetSlider1.oninput = function () {
+                var currentValue1 = this.value;
+                const formattedValue = formatNumberWithCommas(currentValue1);
+                sliderValue1.textContent = `$${formattedValue}`;
+                savedSliderValue = currentValue1; // Speichern des aktuellen Werts
+            };
+
+            anzeigenButton.onclick = function () {
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const id = urlParams.get('id');
+
+                modalEstimate.style.display = "none";
+                continueButton.style.display = "block";
+                estimateButton.style.display = "none";
+                AIestimate.style.display = "block";
+
+                // Bedingung für Gruppe NX
+                if (id && id.startsWith("NX")) {
+                    taskParagraph.innerHTML = ''; // Leer
+                } else {
+                    // Text hinzufügen, wenn nicht in Gruppe NX
+                    taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.';
+                }
+
+                // Hier wird der gespeicherte Slider-Wert im <span> Element angezeigt
+                estimateSale.innerHTML = `Your estimated sales were $${formatNumberWithCommas(savedSliderValue)}.`;
+                determineAndOpenModal();
+            }
+
+            const modal = document.getElementById("modal");
+            const modal2 = document.getElementById("modal2");
+            const modalNX = document.getElementById("modalNX");
+            const questionButton = document.getElementById("questionButton");
+            const mehrButton = document.getElementById("mehrButton");
+
+            // Funktion zum Laden von JSON-Daten
+            async function loadJSON(url) {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error("Netzwerkantwort war nicht ok.");
+                }
+                return await response.json();
+            }
+
+            // Funktion zum Öffnen des Modals NX
+            async function openModalNX() {
+                try {
+                    // Stelle sicher, dass der Modal-Container vorhanden ist
+                    const modalNXContent = document.getElementById("modalNXContent");
+                    if (!modalNXContent) {
+                        console.error("Das Element 'modalNXContent' wurde nicht gefunden.");
+                        return;
+                    }
+
+                    // Berechne die benutzerdefinierte Schieberegler-Wertformatierung
+                    const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+
+                    // HTML-Inhalt des Modals anpassen
+                    modalNXContent.innerHTML = `
             <p>The AI estimates <strong>$10,200</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
         `;
 
-        // Modal anzeigen
-        const modalNX = document.getElementById("modalNX");
-        if (!modalNX) {
-            console.error("Das Modal-Element wurde nicht gefunden.");
-            return;
-        }
-        modalNX.style.display = "block";
+                    // Modal anzeigen
+                    const modalNX = document.getElementById("modalNX");
+                    if (!modalNX) {
+                        console.error("Das Modal-Element wurde nicht gefunden.");
+                        return;
+                    }
+                    modalNX.style.display = "block";
 
-    } catch (error) {
-        console.error("Fehler beim Öffnen des Modals NX:", error);
-    }
-}
+                } catch (error) {
+                    console.error("Fehler beim Öffnen des Modals NX:", error);
+                }
+            }
 
-      // Funktion zum Öffnen des ersten Modals und Laden der JSON-Daten
-      async function openModal1() {
-    try {
-        // Stelle sicher, dass der Modal-Container vorhanden ist
-        const modal1Content = document.getElementById("modal1Content");
-        if (!modal1Content) {
-            console.error("Das Element 'modal1Content' wurde nicht gefunden.");
-            return;
-        }
+            // Funktion zum Öffnen des ersten Modals und Laden der JSON-Daten
+            async function openModal1() {
+                try {
+                    // Stelle sicher, dass der Modal-Container vorhanden ist
+                    const modal1Content = document.getElementById("modal1Content");
+                    if (!modal1Content) {
+                        console.error("Das Element 'modal1Content' wurde nicht gefunden.");
+                        return;
+                    }
 
-        // Lade die JSON-Daten
-        const response = await fetch("/shap_feature_importance.json");
-        if (!response.ok) {
-            throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
-        }
-        const data = await response.json();
+                    // Lade die JSON-Daten
+                    const response = await fetch("/shap_feature_importance.json");
+                    if (!response.ok) {
+                        throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
+                    }
+                    const data = await response.json();
 
-        // Generiere den HTML-Code für die Progress Bars
-        const firstTwoItems = data.slice(0, 3);
-        const progressBarsHTML = firstTwoItems.map(item => {
-            const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
-            return `
+                    // Generiere den HTML-Code für die Progress Bars
+                    const firstTwoItems = data.slice(0, 3);
+                    const progressBarsHTML = firstTwoItems.map(item => {
+                        const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
+                        return `
                 <div class="progress-container" style="margin-bottom: 15px;">
                     <p><strong>${item.col_name}</strong></p>
                     <div class="progress">
@@ -716,155 +732,156 @@ async function openModalNX() {
                     </div>
                 </div>
             `;
-        }).join('');
+                    }).join('');
 
-        // Berechne die geschätzten und benutzerdefinierten Werte
-        const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+                    // Berechne die geschätzten und benutzerdefinierten Werte
+                    const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
 
-        // HTML-Inhalt des Modals anpassen
-        modal1Content.innerHTML = `
+                    // HTML-Inhalt des Modals anpassen
+                    modal1Content.innerHTML = `
             <p>The AI estimates <strong>$10,200</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
             <p>Here you can see which factors had the biggest influence on the AI forecast:</p>
             ${progressBarsHTML}
         `;
 
-        // Modal anzeigen
-        const modal = document.getElementById("modal");
-        if (!modal) {
-            console.error("Das Modal-Element wurde nicht gefunden.");
-            return;
-        }
-        modal.style.display = "block";
+                    // Modal anzeigen
+                    const modal = document.getElementById("modal");
+                    if (!modal) {
+                        console.error("Das Modal-Element wurde nicht gefunden.");
+                        return;
+                    }
+                    modal.style.display = "block";
 
-    } catch (error) {
-        console.error("Fehler:", error);
-    }
-}
+                } catch (error) {
+                    console.error("Fehler:", error);
+                }
+            }
 
 
 
-      async function openModal2() {
-          try {
-              // Lade die JSON-Daten
-              const data = await loadJSON("/cf_470.json");
-              
-              // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
-              let closestData = null;
-              let closestDifference = Infinity;
+            async function openModal2() {
+                try {
+                    // Lade die JSON-Daten
+                    const data = await loadJSON("/cf_470.json");
 
-              data.forEach(item => {
-                  const difference = Math.abs(item.Sales_CF - savedSliderValue);
-                  if (difference < closestDifference) {
-                      closestDifference = difference;
-                      closestData = item;
-                  }
-              });
+                    // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
+                    let closestData = null;
+                    let closestDifference = Infinity;
 
-              // Prüfe, ob wir eine passende Datenreihe gefunden haben
-              if (closestData) {
-                  const modal2Content = document.getElementById("modal2Content");
-                  
-                  // Extrahiere die Issues
-                  const issues = closestData.Explanation.Issues;
+                    data.forEach(item => {
+                        const difference = Math.abs(item.Sales_CF - savedSliderValue);
+                        if (difference < closestDifference) {
+                            closestDifference = difference;
+                            closestData = item;
+                        }
+                    });
 
-                  // Formatiere die Issues als HTML-Liste
-                  const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
+                    // Prüfe, ob wir eine passende Datenreihe gefunden haben
+                    if (closestData) {
+                        const modal2Content = document.getElementById("modal2Content");
 
-                  const formattedClosestDataSales = formatNumberWithCommas(Math.round(closestData.Sales));
-                  const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+                        // Extrahiere die Issues
+                        const issues = closestData.Explanation.Issues;
 
-                  modal2Content.innerHTML = `
+                        // Formatiere die Issues als HTML-Liste
+                        const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
+
+                        const formattedClosestDataSales = formatNumberWithCommas(Math.round(closestData.Sales));
+                        const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+
+                        modal2Content.innerHTML = `
                       <p>The AI estimates <strong>$${formattedClosestDataSales}</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation) for the following reasons:</p>
                       <ul style="color: #555;">
                           ${issuesList}
                       </ul>
                   `;
-                  modal2.style.display = "block";
-              } else {
-                  console.error("Keine passende Datenreihe gefunden.");
-              }
-          } catch (error) {
-              console.error("Fehler beim Laden der JSON-Daten:", error);
-          }
-      }
+                        modal2.style.display = "block";
+                    } else {
+                        console.error("Keine passende Datenreihe gefunden.");
+                    }
+                } catch (error) {
+                    console.error("Fehler beim Laden der JSON-Daten:", error);
+                }
+            }
 
-      // Funktion zum Bestimmen, welches Modal geöffnet werden soll
-      function determineAndOpenModal() {
-          const queryString = window.location.search;
-          const urlParams = new URLSearchParams(queryString);
-          const id = urlParams.get('id');
+            // Funktion zum Bestimmen, welches Modal geöffnet werden soll
+            function determineAndOpenModal() {
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const id = urlParams.get('id');
 
-          // Überprüfe, ob eine ID vorhanden ist und ob sie gültig ist
-          if (id.startsWith("NX")) {
-              questionButton.style.display = 'none';
-                openModalNX();
-              return;
-          }
+                // Überprüfe, ob eine ID vorhanden ist und ob sie gültig ist
+                if (id.startsWith("NX")) {
+                    questionButton.style.display = 'none';
+                    openModalNX();
+                    return;
+                }
 
-          if (id.startsWith("FI")) {
-              openModal1();
-          } else if (id.startsWith("CF")) {
-              openModal2();
-          } else {
-              console.error("Ungültige ID in der URL. Öffne Modal 1.");
-              openModal2();
-          }
-      }
+                if (id.startsWith("FI")) {
+                    openModal1();
+                } else if (id.startsWith("CF")) {
+                    openModal2();
+                } else {
+                    console.error("Ungültige ID in der URL. Öffne Modal 1.");
+                    openModal2();
+                }
+            }
 
-      // Event Listener für den "Mehr"-Button im ersten Modal
-      mehrButton.addEventListener("click", function(event) {
-          event.preventDefault();
-          modal.style.display = "none";
-          openModal2();
-      });
+            // Event Listener für den "Mehr"-Button im ersten Modal
+            mehrButton.addEventListener("click", function (event) {
+                event.preventDefault();
+                modal.style.display = "none";
+                openModal2();
+            });
 
-      // Event Listener für den "questionButton"
-questionButton.addEventListener("click", async function() {
-    determineAndOpenModal();
-    //questionButton.style.display = "none";
-    questionButtonClick = "yes";
-});
+            // Event Listener für den "questionButton"
+            questionButton.addEventListener("click", async function () {
+                determineAndOpenModal();
+                //questionButton.style.display = "none";
+                questionButtonClick = "yes";
+            });
 
-// Funktion zum Mischen eines Arrays
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+            // Funktion zum Mischen eines Arrays
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
 
-// Das parent Element für die Buttons
-const messageOptions = document.getElementById('messageOptions');
+            // Das parent Element für die Buttons
+            const messageOptions = document.getElementById('messageOptions');
 
-// Die Buttons sammeln und in ein Array konvertieren
-const buttons = Array.from(messageOptions.getElementsByTagName('button'));
+            // Die Buttons sammeln und in ein Array konvertieren
+            const buttons = Array.from(messageOptions.getElementsByTagName('button'));
 
-// Die Reihenfolge der Buttons randomisieren
-const shuffledButtons = shuffle(buttons);
+            // Die Reihenfolge der Buttons randomisieren
+            const shuffledButtons = shuffle(buttons);
 
-// Die alten Buttons entfernen
-messageOptions.innerHTML = '';
+            // Die alten Buttons entfernen
+            messageOptions.innerHTML = '';
 
-// Die neu sortierten Buttons hinzufügen und den Text anpassen
-shuffledButtons.forEach((button, index) => {
-    // Ändere den Text je nach Index
-    if (index === 0) {
-        button.textContent = "Message Option 1: " + button.textContent; // Erster Button
-        localStorage.setItem('firstMessageOption', button.innerText)
-    } else if (index === 1) {
-        button.textContent = "Message Option 2: " + button.textContent; // Zweiter Button
-    }
-    messageOptions.appendChild(button);
-});
+            // Die neu sortierten Buttons hinzufügen und den Text anpassen
+            shuffledButtons.forEach((button, index) => {
+                // Ändere den Text je nach Index
+                if (index === 0) {
+                    button.textContent = "Message Option 1: " + button.textContent; // Erster Button
+                    localStorage.setItem('firstMessageOption', button.innerText)
+                } else if (index === 1) {
+                    button.textContent = "Message Option 2: " + button.textContent; // Zweiter Button
+                }
+                messageOptions.appendChild(button);
+            });
 
-// Funktion, um eine Zahl mit Tausendertrennzeichen zu formatieren
-function formatNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+            // Funktion, um eine Zahl mit Tausendertrennzeichen zu formatieren
+            function formatNumberWithCommas(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
 
 
-});
-</script>
+        });
+    </script>
 </body>
+
 </html>
