@@ -36,6 +36,16 @@
     height: 20%; /* Höhe automatisch entsprechend dem Inhalt */
 }
 
+.content-box5 {
+    background-color: #F2F2F2; /* Hintergrundfarbe */
+    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
+    border-radius: 5px; /* Abrundung der Ecken */
+    padding: 5px; /* Verringert Innenabstand */
+    margin-top: 5px; /* Entfernt Abstand nach oben */
+    margin-bottom: 5px; /* Beibehaltung des Abstands nach unten */
+    height: 70px;
+}
+
 .content-box4 p, .content-box4 div {
     margin-bottom: 5px;
     padding: 0;

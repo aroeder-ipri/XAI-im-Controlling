@@ -193,63 +193,133 @@
         console.log("Inhalt von storeInfoData:", storeInfoData);
 
         // Prüfe, ob der Store 'New York' in den Daten vorhanden ist
-        if (storeInfoData['New York']) {
-            updateStoreInfoBox(storeInfoData['New York']);
-        } else {
-            console.warn("Store 'New York' nicht gefunden.");
-        }
+        // if (storeInfoData['New York']) {
+        //     updateStoreInfoBox(storeInfoData['New York']);
+        // } else {
+        //     console.warn("Store 'New York' nicht gefunden.");
+        // }
     });
 
     // Funktion zum Aktualisieren der Store-Informationen im HTML
     function updateStoreInfo(selectedStore, storeInfoData) {
-        const storeInfoContainer = document.getElementById('storeInfo');
-        const currentStoreElement = document.getElementById('currentStore');
-        storeInfoContainer.innerHTML = '';
+        const storeInfoContainerLocation = document.getElementById('storeInfo-location');
+        const storeInfoContainerDate = document.getElementById('storeInfo-date');
+        const storeInfoContainerType = document.getElementById('storeInfo-type');
+        const storeInfoContainerAssortment = document.getElementById('storeInfo-assortment');
+        const storeInfoContainerDistanceNextStore = document.getElementById('storeInfo-distanceNextStore');
+        const storeInfoContainerCustomers = document.getElementById('storeInfo-customers');
+        const storeInfoContainerHolidays = document.getElementById('storeInfo-holidays');
+        const storeInfoContainerPromotions = document.getElementById('storeInfo-promotion');
+        // const currentStoreElement = document.getElementById('currentStore');  // gibt es wohl nicht mehr
 
-        // Aktuellen Store einfügen
-        currentStoreElement.textContent = selectedStore;
 
         // Store-Informationen einfügen
         const storeInfo = storeInfoData[selectedStore];
+
         if (storeInfo) {
-            const storeInfoDiv = document.createElement('div');
-
-            // Stile für das Container-Div hinzufügen
-            storeInfoDiv.style.display = 'flex';
-            storeInfoDiv.style.flexDirection = 'row'; // Inhalte nebeneinander anordnen
-            storeInfoDiv.style.alignItems = 'flex-start'; // Optionale Ausrichtung
-            storeInfoDiv.style.gap = '20px'; // Abstand zwischen den Gruppen
-            storeInfoDiv.style.maxWidth = '100%'; // Maximale Breite setzen
-            storeInfoDiv.style.overflow = 'hidden'; // Verhindert das Überlaufen des Inhalts
-            storeInfoDiv.style.marginTop = '0px'; // Reduzierter oberer Abstand
-
-            storeInfoDiv.innerHTML = `
-                <div style="display: flex; flex-direction: row; gap: 20px; overflow-wrap: break-word; max-width: 100%; margin-top: 0;">
-                    <div style="margin: 0 30px 0 0;">
-                        <p style="margin: 0;"><strong>Store Location:</strong></p>
-                        <p style="margin: 0;">${currentStoreElement.textContent}</p>
-                    </div>
-                    <div style="margin: 0 30px 0 0;">
-                        <p style="margin: 0;"><strong>Store Type:</strong></p>
-                        <p style="margin: 0;">${storeInfo.storeType}</p>
-                    </div>
-                    <div style="margin: 0 30px 0 0;">
-                        <p style="margin: 0;"><strong>Assortment:</strong></p>
-                        <p style="margin: 0;">${storeInfo.assortment}</p>
-                    </div>
-                    <div style="margin: 0 30px 0 0;">
-                        <p style="margin: 0;"><strong>Distance to Next Store:</strong></p>
-                        <p style="margin: 0;">${storeInfo.competitionDistance} miles</p>
-                    </div>
+            // Daten für Location 
+            storeInfoContainerLocation.innerHTML = `
+                <div style="margin: 0 30px 0 0;">
+                    <p style="margin: 0;">
+                        <span style="font-size: 20px; font-weight: bold; color: #004E9D;">${selectedStore}</span> 
+                        <span style="font-size: 20px; color: black;"> | Sales Development</span></p>
                 </div>
             `;
 
-            storeInfoContainer.appendChild(storeInfoDiv);
-        } else {
-            storeInfoContainer.textContent = 'Store-Informationen nicht verfügbar';
+            // Daten für Date
+            storeInfoContainerDate.innerHTML = `
+                <div style="margin: 0 30px 0 0;">
+                    <p style="margin: 0;">Date: 2021</p>
+                </div>
+            `;
+
+            // Daten für Store Type
+            storeInfoContainerType.innerHTML = `
+            <div style="margin: 0 30px 0 0; text-align: center;">
+                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                    ${storeInfo.storeType}
+                </p>
+                <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                    Store Type
+                </p>
+            </div>
+            `;
+
+            // Daten für Assortment
+            storeInfoContainerAssortment.innerHTML = `
+            <div style="margin: 0 30px 0 0; text-align: center;">
+                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                    ${storeInfo.assortment}
+                </p>
+                <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                    Assortment
+                </p>
+            </div>
+            `;
+
+            // Daten für Distance to Next Store
+            storeInfoContainerDistanceNextStore.innerHTML = `
+            <div style="margin: 0 30px 0 0; text-align: center;">
+                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                    ${storeInfo.competitionDistance} miles
+                </p>
+                <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                    Distance to Next Store
+                </p>
+            </div>
+            `;
+        }
+
+        if (storeInfo) {
+            // Rufe die Daten des letzten Datensatzes ab
+            const lastRecordData = getLastRecordData(storeInfo);
+
+            if (lastRecordData) {
+                const customers = lastRecordData.customers || 0;
+                const holidaysThisMonth = lastRecordData.holidaysThisMonth || 0;
+                const promo = lastRecordData.promos || 0;
+
+
+                // Daten für Customers
+                storeInfoContainerCustomers.innerHTML = `
+                <div style="margin: 0 30px 0 0; text-align: center;">
+                    <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                        ${customers}
+                    </p>
+                    <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                        Expected Customers
+                    </p>
+                </div>
+                `;
+
+                // Daten für Holidays
+                storeInfoContainerHolidays.innerHTML = `
+                <div style="margin: 0 30px 0 0; text-align: center;">
+                    <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                        ${holidaysThisMonth}
+                    </p>
+                    <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                        School or State Holidays
+                    </p>
+                </div>
+                `;
+
+                // Daten für Promotions
+                storeInfoContainerPromotions.innerHTML = `
+                <div style="margin: 0 30px 0 0; text-align: center;">
+                    <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                        ${promo}
+                    </p>
+                    <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                        Days with Local Promotion
+                    </p>
+                </div>
+                `;
+            }
         }
     }
 
+    
     // Funktion zum Aktualisieren des angezeigten Stores im Carousel
     function updateSelectedStore() {
         const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
