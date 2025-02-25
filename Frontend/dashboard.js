@@ -427,6 +427,17 @@
                 },
                 options: {
                     plugins: {
+                        title: {
+                            display: true,
+                            text: 'Sales Development | in USD', // Hier die gewünschte Überschrift einfügen
+                            font: {
+                                size: 16
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
                         legend: {
                             display: false,
                             position: 'top',
@@ -467,19 +478,17 @@
                             },
                             color: 'black', // Label-Farbe
                             formatter: function (value, context) {
-                                return value; // Zeigt den Wert über jedem Balken an
+                                return value.toLocaleString('en-US'); // Zeigt den Wert über jedem Balken an
                             }
                         }
                     },
                     scales: {
                         y: {
-                            beginAtZero: false,
-                            min: 8000,
-                            max: 15000,
-                            ticks: {
-                                callback: function (value, index, values) {
-                                    return '$' + (Math.round(value / 100) * 100); // Rundet die Werte auf der Y-Achse
-                                }
+                            display: false // Y-Achse komplett ausblenden
+                        },
+                        x: {
+                            grid: {
+                                display: false // Gitterlinien im Hintergrund entfernen
                             }
                         }
                     }
@@ -505,6 +514,17 @@
                 },
                 options: {
                     plugins: {
+                        title: {
+                            display: true,
+                            text: 'Sales Development | in USD', // Hier die gewünschte Überschrift einfügen
+                            font: {
+                                size: 16
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
                         legend: {
                             display: false,
                             position: 'top',
@@ -545,20 +565,18 @@
                             },
                             color: 'black', // Label-Farbe
                             formatter: function (value, context) {
-                                return value; // Zeigt den Wert über jedem Balken an
+                                return value.toLocaleString('en-US'); // Zeigt den Wert über jedem Balken an
                             }
                         }
 
                     },
                     scales: {
                         y: {
-                            beginAtZero: false,
-                            min: 8000,
-                            max: 15000,
-                            ticks: {
-                                callback: function (value, index, values) {
-                                    return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
-                                }
+                            display: false // Y-Achse komplett ausblenden
+                        },
+                        x: {
+                            grid: {
+                                display: false // Gitterlinien im Hintergrund entfernen
                             }
                         }
                     }
