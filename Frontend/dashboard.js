@@ -390,8 +390,8 @@ function updateGraphWithCSVData(data, chart) {
             label: store,
             data: values,
             lineTension: 0,
-            backgroundColor: '#004E9D',
-            borderColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D'],
+            backgroundColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', 'grey'],
+            // borderColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', 'grey'],
             borderWidth: 2,
             pointBackgroundColor: '#ffffff'
         });
