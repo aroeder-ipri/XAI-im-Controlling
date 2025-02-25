@@ -390,8 +390,8 @@ function updateGraphWithCSVData(data, chart) {
             label: store,
             data: values,
             lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: ['grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey', 'grey'],
+            backgroundColor: '#004E9D',
+            borderColor: ['#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D', '#004E9D'],
             borderWidth: 2,
             pointBackgroundColor: '#ffffff'
         });
@@ -416,7 +416,7 @@ function updateGraphWithCSVData(data, chart) {
 
 // Initialisierung der Line Charts
 lineChart = new Chart(lineCtx, {
-    type: 'line',
+    type: 'bar',
     data: {
         labels: [],
         datasets: []
@@ -485,7 +485,7 @@ lineChart = new Chart(lineCtx, {
 
 // Zweiten Line Chart initialisieren
 lineChart2 = new Chart(lineCtx2, {
-    type: 'line',
+    type: 'bar',
     data: {
         labels: [],
         datasets: []
