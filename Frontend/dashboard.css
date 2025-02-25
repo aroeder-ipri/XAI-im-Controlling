@@ -172,7 +172,7 @@ p {
     }
     #lineChart, #lineChart2 {
         width: 100%;
-        height: 250px; /* Moderate Höhe für Diagramme */
+        height: 200px; /* Moderate Höhe für Diagramme */
     }
 
     /* Verbesserte Lesbarkeit in kleinen Containern */
