@@ -224,25 +224,25 @@
             storeInfoDiv.style.marginTop = '0px'; // Reduzierter oberer Abstand
 
             storeInfoDiv.innerHTML = `
-    <div style="display: flex; flex-direction: row; gap: 20px; overflow-wrap: break-word; max-width: 100%; margin-top: 0;">
-        <div style="margin: 0 30px 0 0;">
-            <p style="margin: 0;"><strong>Store Location:</strong></p>
-            <p style="margin: 0;">${currentStoreElement.textContent}</p>
-        </div>
-        <div style="margin: 0 30px 0 0;">
-            <p style="margin: 0;"><strong>Store Type:</strong></p>
-            <p style="margin: 0;">${storeInfo.storeType}</p>
-        </div>
-        <div style="margin: 0 30px 0 0;">
-            <p style="margin: 0;"><strong>Assortment:</strong></p>
-            <p style="margin: 0;">${storeInfo.assortment}</p>
-        </div>
-        <div style="margin: 0 30px 0 0;">
-            <p style="margin: 0;"><strong>Distance to Next Store:</strong></p>
-            <p style="margin: 0;">${storeInfo.competitionDistance} miles</p>
-        </div>
-    </div>
-`;
+                <div style="display: flex; flex-direction: row; gap: 20px; overflow-wrap: break-word; max-width: 100%; margin-top: 0;">
+                    <div style="margin: 0 30px 0 0;">
+                        <p style="margin: 0;"><strong>Store Location:</strong></p>
+                        <p style="margin: 0;">${currentStoreElement.textContent}</p>
+                    </div>
+                    <div style="margin: 0 30px 0 0;">
+                        <p style="margin: 0;"><strong>Store Type:</strong></p>
+                        <p style="margin: 0;">${storeInfo.storeType}</p>
+                    </div>
+                    <div style="margin: 0 30px 0 0;">
+                        <p style="margin: 0;"><strong>Assortment:</strong></p>
+                        <p style="margin: 0;">${storeInfo.assortment}</p>
+                    </div>
+                    <div style="margin: 0 30px 0 0;">
+                        <p style="margin: 0;"><strong>Distance to Next Store:</strong></p>
+                        <p style="margin: 0;">${storeInfo.competitionDistance} miles</p>
+                    </div>
+                </div>
+            `;
 
             storeInfoContainer.appendChild(storeInfoDiv);
         } else {
@@ -414,7 +414,11 @@
             const stores = Object.keys(csvData);
             createCheckboxes(stores);
 
+            Chart.register(ChartDataLabels);
+
             // Initialisierung der Line Charts
+            Chart.register(ChartDataLabels); // DataLabels Plugin registrieren
+
             lineChart = new Chart(lineCtx, {
                 type: 'bar',
                 data: {
@@ -454,9 +458,18 @@
                                     ];
                                 }
                             }
+                        },
+                        datalabels: {
+                            anchor: 'end', // Labels am Ende des Balkens positionieren
+                            align: 'top',  // Über dem Balken
+                            font: {
+                                size: 10
+                            },
+                            color: 'black', // Label-Farbe
+                            formatter: function (value, context) {
+                                return value; // Zeigt den Wert über jedem Balken an
+                            }
                         }
-
-
                     },
                     scales: {
                         y: {
@@ -465,14 +478,14 @@
                             max: 15000,
                             ticks: {
                                 callback: function (value, index, values) {
-                                    return '$' + Math.round(value); // Rundet die Werte auf der Y-Achse
+                                    return '$' + (Math.round(value / 100) * 100); // Rundet die Werte auf der Y-Achse
                                 }
                             }
-
                         }
                     }
                 }
             });
+
 
 
             // Media Query für kleine Bildschirme
@@ -522,6 +535,17 @@
                                         'Promos: ' + promos
                                     ];
                                 }
+                            }
+                        },
+                        datalabels: {
+                            anchor: 'end', // Labels am Ende des Balkens positionieren
+                            align: 'top',  // Über dem Balken
+                            font: {
+                                size: 10
+                            },
+                            color: 'black', // Label-Farbe
+                            formatter: function (value, context) {
+                                return value; // Zeigt den Wert über jedem Balken an
                             }
                         }
 
