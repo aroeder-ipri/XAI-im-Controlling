@@ -1,4 +1,5 @@
 import couchdb
+import pandas as pd
 
 def main():
     # Connect to CouchDB
