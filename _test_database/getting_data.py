@@ -1,5 +1,5 @@
 import couchdb
-import pandas as pd
+import csv
 
 def main():
     # Connect to CouchDB
@@ -18,10 +18,24 @@ def main():
         data_list.append(doc)
 
     # Convert the list of dictionaries to a DataFrame
-    df = pd.DataFrame(data_list)
+    if not data_list:
+        print("Keine Daten gefunden.")
+        return
 
-    # Saving the dataframe as csv
-    df.to_csv('/home/ubuntu/XAI-im-Controlling/_test_database/click_events.csv', index=False)
+    # CSV-Datei schreiben
+    csv_file = "/home/ubuntu/XAI-im-Controlling/_test_database/click_events.csv"
+
+    # Header aus den Keys des ersten Dokuments ableiten
+    fieldnames = list(data_list[0].keys())
+
+    with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+        writer.writeheader()  # Schreibe die Header-Zeile
+        writer.writerows(data_list)  # Schreibe die Datenzeilen
+
+    print(f"Daten wurden als {csv_file} gespeichert.")
+
 
 
 if __name__ == "__main__":
