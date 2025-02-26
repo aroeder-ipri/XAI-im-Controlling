@@ -10,9 +10,13 @@ Backend: Container, der Anfragen verarbeitet und mit der CouchDB-Datenbank kommu
 CouchDB: Container für die CouchDB-Datenbank.
 Nginx: Reverse-Proxy-Container für das Routing zwischen Frontend und Backend.
 
-Starten der Container mit sudo docker-compose up läuft aber eig automatisch wenn man neue commits pushed
+Starten der Container mit sudo docker-compose up <i>(läuft aber eig automatisch wenn man neue commits pushed)</i>
+Um zu schauen, ob die Container laufen, kann man den Befehl sudo docker ps verwenden.
+
 
 In der Datei daemon.json im Ordner /etc/docker/ ist definiert, welches Verzeichnis verwendet wird. 
-```{
+```
+{
   "data-root": "/media/xai-controlling-volume/docker-cache"
 }
+```
