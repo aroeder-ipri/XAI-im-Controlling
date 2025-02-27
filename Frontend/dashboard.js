@@ -319,7 +319,7 @@
         }
     }
 
-    
+
     // Funktion zum Aktualisieren des angezeigten Stores im Carousel
     function updateSelectedStore() {
         const stores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
@@ -700,274 +700,6 @@
                 }
             };
 
-            // Funktion zum Anzeigen des benutzerdefinierten Modalfensters mit Informationen
-            // function showModalWithInfo(infoText) {
-            //     const modal = document.getElementById('modal');
-            //     const modalText = document.getElementById('modal-text');
-            //     modalText.textContent = infoText;
-            //     modal.style.display = 'block';
-            // }
-
-            // Funktion zum Schließen des Modalfensters
-            // function closeModal() {
-            //     document.getElementById('modal').style.display = 'none';
-            // }
-
-            // Eventlistener für den Close-Button im Modalfenster
-            // const closeBtn = document.querySelector('#modal .close');
-            // closeBtn.addEventListener('click', closeModal);
-
-            // Event-Listener für die Schaltfläche, um das Modalfenster zu öffnen
-            // document.getElementById('questionButton').addEventListener('click', function() {
-            //     const modal = document.getElementById('modal');
-            //     modal.style.display = 'block';
-            //     showModalWithInfo();
-            // });
-
-            // Funktion zum Öffnen des zweiten Modalfensters
-            // document.getElementById('mehrButton').addEventListener('click', function() {
-            //     document.getElementById('modal2').style.display = 'block';
-            // });
-
-            // Funktion zum Leeren des Eingabefelds
-            // function clearInputField() {
-            //     document.getElementById('zahlInput').value = ''; // Setzen des Wertes auf leer
-            // }
-
-            // Funktion zum Entfernen des zusätzlichen Texts
-            // function removeAdditionalText() {
-            //     const additionalText = document.getElementById('additionalText');
-            //     if (additionalText) {
-            //         additionalText.remove(); // Entfernen des zusätzlichen Texts, falls vorhanden
-            //     }
-            // }
-
-            // Funktion zum Schließen des zweiten Modalfensters
-            // function closeModal2() {
-            //     document.getElementById('modal2').style.display = 'none';
-            //     clearInputField(); // Aufruf der Funktion zum Leeren des Eingabefelds
-            //     removeAdditionalText(); // Aufruf der Funktion zum Entfernen des zusätzlichen Texts
-            // }
-
-            // Eventlistener für den zweiten Close-Button im zweiten Modalfenster
-            // const closeBtn2 = document.querySelector('#modal2 .close');
-            // closeBtn2.addEventListener('click', closeModal2);
-
-            // Funktion zum Erstellen der Tabs basierend auf den ausgewählten Stores
-            // function createTabs(selectedStores) {
-            //     const tabContainer = document.getElementById('myTab');
-            //     const tabContentContainer = document.getElementById('myTabContent');
-            //     const questionButton = document.getElementById('questionButton');
-            //     tabContainer.innerHTML = '';
-            //     tabContentContainer.innerHTML = '';
-
-            //     selectedStores.forEach(store => {
-            //         // Tab-Link erstellen
-            //         const tabLink = document.createElement('button');
-            //         tabLink.classList.add('nav-link');
-            //         tabLink.setAttribute('id', `${store}-tab`);
-            //         tabLink.setAttribute('data-bs-toggle', 'tab');
-            //         tabLink.setAttribute('data-bs-target', `#${store}`);
-            //         tabLink.setAttribute('type', 'button');
-            //         tabLink.setAttribute('role', 'tab');
-            //         tabLink.setAttribute('aria-controls', store);
-            //         tabLink.setAttribute('aria-selected', 'false');
-            //         tabLink.textContent = store;
-
-            //         // Tab-Inhalt erstellen
-            //         const tabContent = document.createElement('div');
-            //         tabContent.classList.add('tab-pane', 'fade');
-            //         tabContent.setAttribute('id', store);
-            //         tabContent.setAttribute('role', 'tabpanel');
-            //         tabContent.setAttribute('aria-labelledby', `${store}-tab`);
-            //         tabContent.innerHTML = `
-            //             <p id="modal-text">
-            //             <p></p>
-            //                 <p>Following you can see which factors had the biggest influence on the sales forecast:</p>
-            //                 <p></p>
-            //                 <div class="progress" style="margin-bottom: 15px;">
-            //                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-            //                 </div>
-            //                 <div class="progress">
-            //                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-            //                 </div>
-            //                 <div class="data-container"></div>
-            //             </p>
-            //         `;
-
-            //         // Tab-Link und Tab-Inhalt dem Container hinzufügen
-            //         tabContainer.appendChild(tabLink);
-            //         tabContentContainer.appendChild(tabContent);
-            //     });
-
-            //     // Event-Listener für den questionButton, um Daten zu laden
-            //     questionButton.addEventListener('click', function() {
-            //         const activeTabId = tabContainer.querySelector('.active').getAttribute('aria-controls');
-            //         const tabContent = document.querySelector(`#${activeTabId}`);
-            //         fetch('http://127.0.0.1:8000/feature_importance/')
-            //             .then(function(response) {
-            //                 if (!response.ok) {
-            //                     throw new Error('Netzwerkantwort war nicht ok');
-            //                 }
-            //                 return response.json();
-            //             })
-            //             .then(function(data) {
-            //                 const progressContainers = tabContent.querySelectorAll('.progress');
-            //                 const dataContainer = tabContent.querySelector('.data-container');
-
-            //                 dataContainer.innerHTML = '';
-            //                 progressContainers.forEach(container => {
-            //                     const label = container.previousElementSibling;
-            //                     if (label && label.tagName === "P") {
-            //                         label.remove();
-            //                     }
-            //                 });
-
-            //                 // Beschränke die Verarbeitung auf die ersten zwei Einträge der API-Antwort
-            //                 const itemsToProcess = data.slice(0, 2);
-            //                 itemsToProcess.forEach((item, index) => {
-            //                     if (progressContainers[index]) {
-            //                         // Erstelle und füge neue Beschriftung hinzu
-            //                         const progressLabel = document.createElement('p');
-            //                         progressLabel.textContent = "- " + item.col_name;
-            //                         progressContainers[index].parentNode.insertBefore(progressLabel, progressContainers[index]);
-
-            //                         // Aktualisiere Progress Bar
-            //                         const progressBar = progressContainers[index].querySelector('.progress-bar');
-            //                         const value = item.percentage_importance;
-            //                         progressBar.setAttribute('aria-valuenow', value);
-            //                         progressBar.style.width = `${value}%`;
-            //                         progressBar.textContent = `${value}%`;
-            //                     }
-            //                 });
-
-            //             })
-            //             .catch(function(error) {
-            //                 console.error('Fehler beim Abrufen der Daten:', error);
-            //                 dataContainer.innerHTML = `<p>Fehler beim Laden der Daten</p>`;
-            //             });
-
-            //     });
-
-            //     questionButton.addEventListener('click', function() {
-            //         var modalContent = document.querySelector('#modal2 .modal-content');
-
-            //         // Funktion zum Entfernen alter Paragraphen
-            //         function removeOldParagraphs() {
-            //             // Entferne alle alten Paragraphen
-            //             var paragraphs = modalContent.querySelectorAll('p');
-            //             paragraphs.forEach(paragraph => {
-            //                 paragraph.remove();
-            //             });
-            //         }
-
-            //         // Lade die Daten von der API
-            //         fetch('http://127.0.0.1:8000/counterfactual_explanations/')
-            //             .then(response => response.json())
-            //             .then(data => {
-            //                 removeOldParagraphs(); // Entferne alte Paragraphen
-
-            //                 // Variablen zum Speichern der API-Daten
-            //                 let salesActual, salesCounterfactual, changes, formattedChanges;
-
-            //                 data.forEach(item => {
-            //                     var paragraph = document.createElement('p');
-
-            //                     salesActual = item.sales_actual;
-            //                     salesCounterfactual = item.sales_counterfactual;
-            //                     changes = item.changes;
-            //                     // Formatiere Absätze
-            //                     formattedChanges = changes.map(change => `- ${change}`).join('<br>');
-
-            //                     paragraph.innerHTML = `Sales are estimated at ${salesActual}€.<br>
-            //                     <br>Enter your expected sales:`;
-            //                     modalContent.appendChild(paragraph);
-            //                 });
-
-            //                 // Überprüfen, ob das Eingabefeld und der Button bereits existieren
-            //                 if (!document.getElementById('inputDiv')) {
-            //                     // Erstelle das Eingabefeld und den Bestätigen-Button dynamisch
-            //                     var inputDiv = document.createElement('div');
-            //                     inputDiv.id = 'inputDiv';
-            //                     inputDiv.style.display = 'flex';
-            //                     inputDiv.style.alignItems = 'center';
-            //                     inputDiv.style.marginTop = '1px'; // optional, um Abstand zu den Textabsätzen zu schaffen
-
-            //                     var inputField = document.createElement('input');
-            //                     inputField.type = 'text';
-            //                     inputField.id = 'zahlInput';
-            //                     inputField.style.marginBottom = '10px';
-            //                     inputField.style.marginRight = '5px';
-
-            //                     var spanElement = document.createElement('span');
-            //                     spanElement.textContent = '€';
-
-            //                     var confirmButton = document.createElement('button');
-            //                     confirmButton.id = 'bestaetigenButton';
-            //                     confirmButton.className = 'btn custom-btn';
-            //                     confirmButton.style.marginLeft = '10px';
-            //                     confirmButton.disabled = true; // initial disabled
-            //                     confirmButton.textContent = 'confirm';
-
-            //                     inputDiv.appendChild(inputField);
-            //                     inputDiv.appendChild(spanElement);
-            //                     inputDiv.appendChild(confirmButton);
-
-            //                     modalContent.appendChild(inputDiv);
-
-            //                     // Füge Event-Listener für das Eingabefeld und den Bestätigen-Button hinzu
-            //                     confirmButton.addEventListener('click', function() {
-            //                         // Überprüfung, ob der zusätzliche Text bereits vorhanden ist
-            //                         if (!document.getElementById('additionalText')) {
-            //                             // Erstellen eines neuen Absatz-Elements für den zusätzlichen Text
-            //                             const additionalText = document.createElement('p');
-            //                             additionalText.id = 'additionalText'; // Setzen einer ID für das zusätzliche Text-Element
-            //                             additionalText.innerHTML = `<br>Sales are not within the given range for the following reasons:<br>${formattedChanges}`;
-
-            //                             // Einfügen des zusätzlichen Texts am Ende des Modalfensters 2
-            //                             modalContent.appendChild(additionalText);
-            //                         }
-            //                     });
-
-            //                     // Überprüfung der Eingabe und Aktivierung des Buttons
-            //                     inputField.addEventListener('input', function() {
-            //                         var eingabeWert = this.value.trim(); // Trimmen von Leerzeichen
-            //                         var button = document.getElementById('bestaetigenButton');
-            //                         if (eingabeWert && !isNaN(eingabeWert)) { // Überprüfung auf nicht leer und numerisch
-            //                             button.disabled = false;
-            //                         } else {
-            //                             button.disabled = true;
-            //                         }
-            //                     });
-            //                 } else {
-            //                     // Stelle sicher, dass das Eingabefeld und der Button immer am Ende bleiben
-            //                     modalContent.appendChild(document.getElementById('inputDiv'));
-            //                 }
-            //             })
-            //             .catch(error => {
-            //                 console.error('Fehler beim Abrufen der Daten:', error);
-            //             });
-            //     });
-
-            //     // Den ersten Tab als aktiv markieren
-            //     const firstTab = tabContainer.firstElementChild;
-            //     const firstTabContent = tabContentContainer.firstElementChild;
-            //     firstTab.classList.add('active');
-            //     firstTab.setAttribute('aria-selected', 'true');
-            //     firstTabContent.classList.add('show', 'active');
-            // }
-
-            // Funktion zum Aktualisieren der Tabs basierend auf den ausgewählten Stores
-            // function updateTabs() {
-            //     const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
-            //     createTabs(selectedStores);
-            // }
-
-            // Event-Listener für Änderungen in den Checkboxen
-            // document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            //     checkbox.addEventListener('change', updateTabs);
-            // });
-
             // Balkendiagramm initialisieren
             barChart = new Chart(barCtx, {
                 type: 'bar',
@@ -1015,3 +747,666 @@
         });
 
 })();
+
+
+
+
+// Copy vom html Dokument
+var yourTarget = 8000;
+var actualSales = 10300;
+var basePayout = 0;
+var optionCost = 0;
+var questionButtonClick = "no";
+var savedSliderValue = 8000;
+var optionId = "noMessage";
+
+async function btn_click() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+
+    // Werte aus dem localStorage abrufen
+    const uuid = localStorage.getItem("user_uuid");
+    const group = localStorage.getItem("user_group");
+    const startTime = localStorage.getItem("start_time");
+    const prolificID = localStorage.getItem("prolificID");
+    const comprehensionCheck = localStorage.getItem("comprehensionCheck");
+    const initialYourTarget = localStorage.getItem("initialYourTarget");
+
+
+    // Neue Werte in den localStorage speichern
+    localStorage.setItem("questionButtonClick", questionButtonClick);
+    localStorage.setItem("savedSliderValue", savedSliderValue);
+    localStorage.setItem("yourTarget", yourTarget);
+    localStorage.setItem("optionId", optionId);
+
+    // Werte an die API senden
+    try {
+        const response = await fetch("https://controlling.xaidemo.de/api/clicks", { // Endpunkt hier anpassen
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: uuid, // Nur die reine UUID senden
+                prolificID: prolificID,
+                group: group,
+                start: startTime, // Verwende den gespeicherten Startzeitpunkt
+                comprehensionCheck: comprehensionCheck,
+                questionButton: questionButtonClick,
+                initialGuess: savedSliderValue,
+                initialTarget: initialYourTarget, //hier
+                finalTarget: yourTarget,
+                advice: optionId,
+                end: Date.now() // Das Ende ist der aktuelle Zeitpunkt
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Data successfully sent to the API:", data);
+
+        // Weiterleitung zur nächsten Seite
+        window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/"
+            + "?id=" + encodeURIComponent(id)
+            + "&YourTarget=" + encodeURIComponent(yourTarget)
+            + "&actualSales=" + encodeURIComponent(actualSales)
+            + "&basePayout=" + encodeURIComponent(basePayout)
+            + "&optionCost=" + encodeURIComponent(optionCost)
+            + "&initialYourTarget=" + encodeURIComponent(initialYourTarget);
+
+        //window.location.href = "survey.html?id=" + encodeURIComponent(id)
+        //+ "&YourTarget=" + encodeURIComponent(yourTarget)
+        //+ "&actualSales=" + encodeURIComponent(actualSales)
+        //+ "&basePayout=" + encodeURIComponent(basePayout)
+        //+ "&optionCost=" + encodeURIComponent(optionCost);
+
+    } catch (error) {
+        console.error('Error sending data to the API:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    var modal3 = document.getElementById("modal3");
+    var modal4 = document.getElementById("modal4");
+    var messageExampleModal = document.getElementById("messageExampleModal");
+    var continueButton = document.getElementById("continueButton");
+    var closeButtons = document.querySelectorAll(".close");
+    var targetSlider = document.getElementById("targetSlider");
+    var sliderValue = document.getElementById("sliderValue");
+    var payoutAmount = document.getElementById("payoutAmount");
+    var setTargetButton = document.getElementById("setTargetButton");
+    var finalSetTargetButton = document.getElementById("finalSetTargetButton");
+    var noMessageBtn = document.getElementById("noMessageBtn");
+    var salesExpectationsBtn = document.getElementById("salesExpectationsBtn");
+    var trustForecastBtn = document.getElementById("trustForecastBtn");
+    var acknowledgeButton = document.getElementById("acknowledgeButton");
+    var optionButtons = [noMessageBtn, salesExpectationsBtn, trustForecastBtn];
+    var messageExampleText = document.getElementById("messageExampleText");
+    var estimateButton = document.getElementById("estimateButton");
+    var modalEstimate = document.getElementById("modalEstimate");
+    var targetSlider1 = document.getElementById("targetSlider1");
+    var sliderValue1 = document.getElementById("sliderValue1");
+    var anzeigenButton = document.getElementById("anzeigenButton");
+    var taskParagraph = document.querySelector('p.task');
+    var estimateSale = document.querySelector('p.estimateSale');
+    var selectedOption = 'noMessage';
+    var AIestimate = document.querySelector('p.AIestimate');
+    var decreaseButton = document.getElementById('decreaseButton');
+    var increaseButton = document.getElementById('increaseButton');
+    var decreaseButton2 = document.getElementById('decreaseButton2');
+    var increaseButton2 = document.getElementById('increaseButton2');
+    var taskOverview = document.getElementById('modalTask');
+
+    function showModalTask() {
+        taskOverview.style.display = "block";
+    }
+    window.onload = showModalTask;
+
+    // Zeige Modal3 bei Klick auf den Continue-Button
+    continueButton.onclick = function () {
+        modal3.style.display = "block";
+    }
+
+    // Schließe alle Modale, wenn der Schließen-Button geklickt wird
+    closeButtons.forEach(function (button) {
+        button.onclick = function () {
+            button.closest('.modal').style.display = "none";
+        }
+    });
+
+    // Initialisiere den Slider und die Auszahlung
+    var initialSliderValue = targetSlider.value;
+    sliderValue.textContent = `$${initialSliderValue}`;
+    updatePayout(initialSliderValue);
+
+    // Event-Listener für Slider-Eingaben
+    targetSlider.oninput = function () {
+        var currentValue = this.value;
+        const formattedValue = formatNumberWithCommas(currentValue);
+        sliderValue.textContent = `$${formattedValue}`;
+        yourTarget = currentValue; // Speichern des aktuellen Werts
+        updatePayout(currentValue);
+    };
+
+    // Event-Listener für den Minus-Button
+    decreaseButton2.onclick = function () {
+        var currentValue = parseInt(targetSlider.value);
+        if (currentValue > parseInt(targetSlider.min)) {
+            targetSlider.value = currentValue - parseInt(targetSlider.step);
+            const formattedValue = formatNumberWithCommas(targetSlider.value);
+            currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
+            sliderValue.textContent = `$${formattedValue}`;
+            yourTarget = currentValue; // Speichern des aktuellen Werts
+            updatePayout(currentValue);
+        }
+    };
+
+    // Event-Listener für den Plus-Button
+    increaseButton2.onclick = function () {
+        var currentValue = parseInt(targetSlider.value);
+        if (currentValue < parseInt(targetSlider.max)) {
+            targetSlider.value = currentValue + parseInt(targetSlider.step);
+            const formattedValue = formatNumberWithCommas(targetSlider.value);
+            currentValue = targetSlider.value; // Aktualisiere den aktuellen Wert
+            sliderValue.textContent = `$${formattedValue}`;
+            yourTarget = currentValue; // Speichern des aktuellen Werts
+            updatePayout(currentValue);
+        }
+    };
+
+    // Funktion zur Berechnung und Anzeige der Auszahlung
+    function updatePayout(value) {
+        basePayout = calculatePayout(value); // Berechne und aktualisiere die globale Basis-Auszahlung
+        var payout = basePayout - optionCost; // Ziehe die Kosten für die ausgewählte Option ab
+        if (optionCost > 0) {
+            payoutAmount.innerHTML = `
+                <div class="calculation">
+                <p class="value">£${basePayout.toFixed(2)} - <span style="color: red;">£${optionCost.toFixed(2)}</span> = £${Math.max(payout, 0).toFixed(2)}</p>
+                </div>
+            `;
+        } else {
+            payoutAmount.innerHTML = `
+                <div class="calculation">
+                <p class="value">£${basePayout.toFixed(2)}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Berechnung der Auszahlung
+    function calculatePayout(value) {
+        var bonusPerUnit = 0.20 / 1000; // 0,20 USD für 1000 Sales
+        return (value * bonusPerUnit) - 1.20;
+    }
+
+    // Funktion zum Anzeigen von Modal4
+    function showModal4() {
+        modal4.style.display = "block";
+    }
+
+    // Funktion zum Anzeigen des Nachrichtensbeispiel-Modals
+    function showMessageExample(text) {
+        var text = `
+            <p>Hello,</p>
+            <p>I appreciate your message and I can see you have already made an educated guess on your sales targets.</p>
+            <p>I feel like the AI is very accurate with its prediction and I don‘t think you can expect sales to exceed $10,300 for the month of April.</p>
+            <p>Kind Regards,</p>
+            <p>Supervisor</p>
+        `;
+        messageExampleText.innerHTML = text; // Setze HTML-Inhalt
+        messageExampleModal.style.display = "block";
+    }
+
+    setTargetButton.onclick = function () {
+        // Hole den aktuellen Wert des Sliders (falls er noch nicht aktualisiert wurde)
+        yourTarget = targetSlider.value;
+
+        // Ursprünglichen Wert von yourTarget zwischenspeichern, falls noch nicht geschehen
+        localStorage.setItem("initialYourTarget", yourTarget);
+
+
+        // Zeige Modal4 an
+        showModal4();
+    };
+
+
+    // Funktion zur Auswahl einer Option im Modal4
+    function selectOption(optionId) {
+        selectedOption = optionId;
+        optionButtons.forEach(function (btn) {
+            btn.classList.remove('active');
+        });
+        document.getElementById(optionId + 'Btn').classList.add('active');
+        optionCost = calculateOptionCost(selectedOption); // Berechne und aktualisiere die globale Option-Kosten
+        updatePayout(targetSlider.value); // Aktualisiere die Auszahlung nach Auswahl der Option
+    }
+
+    function showHintInModal3(text) {
+        var modal3 = document.getElementById('modal3');
+        var hintElement = modal3.querySelector('.hint');
+        if (hintElement) {
+            hintElement.textContent = text;
+        }
+    }
+
+    // Event-Listener für die Auswahloptionen im Modal4
+    optionButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            var selectedOptionId = this.id.replace('Btn', '');
+            var exampleText = "";
+            var hintText = "";
+
+            if (selectedOptionId === 'noMessage') {
+                modal4.style.display = "none";
+                optionCost = 0.00; // Keine Kosten
+                hintText = "You can now adjust your target level one last time. ";
+            } else {
+                if (selectedOptionId === 'salesExpectations') {
+                    exampleText = "What are your sales expectations from our store?";
+                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                } else if (selectedOptionId === 'trustForecast') {
+                    exampleText = "Do you think I should trust the forecast?";
+                    hintText = "After asking your supervisor you can now adjust your target level one last time.";
+                }
+                modal4.style.display = "none";
+                showMessageExample(exampleText);
+                optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
+                // Aktualisiere die globale optionId
+                optionId = selectedOptionId;
+            }
+
+            // Zeige den Hinweistext in Modal3
+            showHintInModal3(hintText);
+
+            // Blende den Set Target Button aus und zeige den Final Set Target Button an
+            setTargetButton.style.display = "none";
+            finalSetTargetButton.style.display = "block";
+
+            updatePayout(targetSlider.value); // Aktualisiere die Auszahlung
+        });
+    });
+
+    function calculateOptionCost(option) {
+        if (option === 'noMessage') {
+            return 0.00;
+        } else if (option === 'salesExpectations' || option === 'trustForecast') {
+            return 0.30;
+        }
+        return 0.00;
+    }
+
+    // Event-Listener für den Final Set Target Button
+    finalSetTargetButton.onclick = function () {
+        // Blende den Final Set Target Button aus
+        finalSetTargetButton.style.display = "none";
+        // Mache den Continue-Button nicht mehr klickbar
+        continueButton.style.pointerEvents = "none";
+        continueButton.style.opacity = "0.5";
+        //target slider deaktivieren
+        document.getElementById('targetSlider').disabled = true;
+        // Deaktiviert die Buttons
+        document.getElementById('decreaseButton2').disabled = true;
+        document.getElementById('increaseButton2').disabled = true;
+
+        // Zeige die Redirect Message
+        const redirectMessage = document.getElementById('redirectMessage');
+        let countdown = 5;
+        redirectMessage.style.display = 'block';
+        redirectMessage.textContent = `Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
+
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                redirectMessage.textContent = `Your sales target has been saved. You will be redirected to the survey in ${countdown} seconds.`;
+            } else {
+                clearInterval(countdownInterval);
+                // Hier wird die btn_click Funktion nach Ablauf des Countdowns aufgerufen
+                btn_click();
+            }
+        }, 1000); // Update every second
+    };
+
+    // Event-Listener für den "Alright, thanks!" Button
+    acknowledgeButton.onclick = function () {
+        // Schließe das Nachrichtensbeispiel-Modal
+        messageExampleModal.style.display = "none";
+        // Berechne und aktualisiere die Auszahlung
+        var currentValue = targetSlider.value;
+        updatePayout(currentValue);
+        // Zeige Modal3 wieder an
+        modal3.style.display = "block";
+    };
+
+    // Berechnung der Kosten für die Auswahloptionen
+    function calculateOptionCost(option) {
+        switch (option) {
+            case 'salesExpectations':
+            case 'trustForecast':
+                return 0.30;
+            default:
+                return 0.00;
+        }
+    }
+
+    // Zeige ModalEstimate bei Klick auf den Estimate-Button
+    estimateButton.onclick = function () {
+        modalEstimate.style.display = "block";
+    }
+
+    // Initialisiere den Slider und die Auszahlung
+    var initialSliderValue1 = targetSlider1.value;
+    sliderValue1.textContent = `$${initialSliderValue1}`;
+
+    // Event-Listener für den Minus-Button
+    decreaseButton.onclick = function () {
+        var currentValue1 = parseInt(targetSlider1.value);
+        if (currentValue1 > parseInt(targetSlider1.min)) {
+            targetSlider1.value = currentValue1 - parseInt(targetSlider1.step);
+            const formattedValue = formatNumberWithCommas(targetSlider1.value);
+            sliderValue1.textContent = `$${formattedValue}`;
+            savedSliderValue = targetSlider1.value;
+        }
+    };
+
+    // Event-Listener für den Plus-Button
+    increaseButton.onclick = function () {
+        var currentValue1 = parseInt(targetSlider1.value);
+        if (currentValue1 < parseInt(targetSlider1.max)) {
+            targetSlider1.value = currentValue1 + parseInt(targetSlider1.step);
+            const formattedValue = formatNumberWithCommas(targetSlider1.value);
+            sliderValue1.textContent = `$${formattedValue}`;
+            savedSliderValue = targetSlider1.value;
+        }
+    };
+
+    // Event-Listener für Slider-Eingaben
+    targetSlider1.oninput = function () {
+        var currentValue1 = this.value;
+        const formattedValue = formatNumberWithCommas(currentValue1);
+        sliderValue1.textContent = `$${formattedValue}`;
+        savedSliderValue = currentValue1; // Speichern des aktuellen Werts
+    };
+
+    anzeigenButton.onclick = function () {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+        const ForecastDiv = document.getElementById("AIForecastContainer");
+
+
+        modalEstimate.style.display = "none";
+        // continueButton.style.display = "block";
+        // estimateButton.style.display = "none";
+
+
+
+        // Bedingung für Gruppe NX
+        if (id && id.startsWith("NX")) {
+            taskParagraph.innerHTML = ''; // Leer
+        } else {
+            // Text hinzufügen, wenn nicht in Gruppe NX
+            taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.';
+            ForecastDiv.innerHTML = `
+                    <div class="row h-25" style="height: calc(25% - 10px); margin-bottom: 5px;">
+                        <div class="col d-flex flex-column align-items-center justify-content-center content-box7">
+                            <p style="margin: 0; font-size: 16px; font-weight: bold; color: black;">
+                                $10,200
+                            </p>
+                            <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
+                                AI-Forecast
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row h-50" style="height: calc(50% - 10px); margin-top: 5px;">
+                        <div class="col d-flex content-box2" >
+                            <p class="task"><span style="font-size: 1.2rem;"></span>
+                                Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row h-25" style="height: calc(25% - 10px);">
+                        <div class="col d-flex align-items-center justify-content-center">
+                            <!-- Continue to set target Button -->
+                            <button type="button" id="continueButton" class="btn custom-btn"
+                                    style=" width: 100%; height: 80%;">Continue to set target</button>
+                        </div>
+                    </div>
+
+                    `;
+
+        }
+
+        
+
+        determineAndOpenModal();
+    }
+
+    const modal = document.getElementById("modal");
+    const modal2 = document.getElementById("modal2");
+    const modalNX = document.getElementById("modalNX");
+    const questionButton = document.getElementById("questionButton");
+    const mehrButton = document.getElementById("mehrButton");
+
+    // Funktion zum Laden von JSON-Daten
+    async function loadJSON(url) {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Netzwerkantwort war nicht ok.");
+        }
+        return await response.json();
+    }
+
+    // Funktion zum Öffnen des Modals NX
+    async function openModalNX() {
+        try {
+            // Stelle sicher, dass der Modal-Container vorhanden ist
+            const modalNXContent = document.getElementById("modalNXContent");
+            if (!modalNXContent) {
+                console.error("Das Element 'modalNXContent' wurde nicht gefunden.");
+                return;
+            }
+
+            // Berechne die benutzerdefinierte Schieberegler-Wertformatierung
+            const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+
+            // HTML-Inhalt des Modals anpassen
+            modalNXContent.innerHTML = `
+            <p>The AI estimates <strong>$10,200</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
+        `;
+
+            // Modal anzeigen
+            const modalNX = document.getElementById("modalNX");
+            if (!modalNX) {
+                console.error("Das Modal-Element wurde nicht gefunden.");
+                return;
+            }
+            modalNX.style.display = "block";
+
+        } catch (error) {
+            console.error("Fehler beim Öffnen des Modals NX:", error);
+        }
+    }
+
+    // Funktion zum Öffnen des ersten Modals und Laden der JSON-Daten
+    async function openModal1() {
+        try {
+            // Stelle sicher, dass der Modal-Container vorhanden ist
+            const modal1Content = document.getElementById("modal1Content");
+            if (!modal1Content) {
+                console.error("Das Element 'modal1Content' wurde nicht gefunden.");
+                return;
+            }
+
+            // Lade die JSON-Daten
+            const response = await fetch("/shap_feature_importance.json");
+            if (!response.ok) {
+                throw new Error(`Fehler beim Laden der JSON-Daten: ${response.statusText}`);
+            }
+            const data = await response.json();
+
+            // Generiere den HTML-Code für die Progress Bars
+            const firstTwoItems = data.slice(0, 3);
+            const progressBarsHTML = firstTwoItems.map(item => {
+                const percentage = Math.min(100, item.percentage_importance); // Falls die Werte größer als 100 sind, auf 100 begrenzen
+                return `
+                <div class="progress-container" style="margin-bottom: 15px;">
+                    <p><strong>${item.col_name}</strong></p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentage}%;"></div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+
+            // Berechne die geschätzten und benutzerdefinierten Werte
+            const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+
+            // HTML-Inhalt des Modals anpassen
+            modal1Content.innerHTML = `
+            <p>The AI estimates <strong>$10,200</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
+            <p>Here you can see which factors had the biggest influence on the AI forecast:</p>
+            ${progressBarsHTML}
+        `;
+
+            // Modal anzeigen
+            const modal = document.getElementById("modal");
+            if (!modal) {
+                console.error("Das Modal-Element wurde nicht gefunden.");
+                return;
+            }
+            modal.style.display = "block";
+
+        } catch (error) {
+            console.error("Fehler:", error);
+        }
+    }
+
+
+
+    async function openModal2() {
+        try {
+            // Lade die JSON-Daten
+            const data = await loadJSON("/cf_470.json");
+
+            // Finde die Datenreihe mit dem `Sales_CF`, der dem Benutzerwert am nächsten ist
+            let closestData = null;
+            let closestDifference = Infinity;
+
+            data.forEach(item => {
+                const difference = Math.abs(item.Sales_CF - savedSliderValue);
+                if (difference < closestDifference) {
+                    closestDifference = difference;
+                    closestData = item;
+                }
+            });
+
+            // Prüfe, ob wir eine passende Datenreihe gefunden haben
+            if (closestData) {
+                const modal2Content = document.getElementById("modal2Content");
+
+                // Extrahiere die Issues
+                const issues = closestData.Explanation.Issues;
+
+                // Formatiere die Issues als HTML-Liste
+                const issuesList = issues.map(issue => `<li>${issue}</li>`).join('');
+
+                const formattedClosestDataSales = formatNumberWithCommas(Math.round(closestData.Sales));
+                const formattedSavedSliderValue = formatNumberWithCommas(savedSliderValue);
+
+                modal2Content.innerHTML = `
+                      <p>The AI estimates <strong>$${formattedClosestDataSales}</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation) for the following reasons:</p>
+                      <ul style="color: #555;">
+                          ${issuesList}
+                      </ul>
+                  `;
+                modal2.style.display = "block";
+            } else {
+                console.error("Keine passende Datenreihe gefunden.");
+            }
+        } catch (error) {
+            console.error("Fehler beim Laden der JSON-Daten:", error);
+        }
+    }
+
+    // Funktion zum Bestimmen, welches Modal geöffnet werden soll
+    function determineAndOpenModal() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+
+        // Überprüfe, ob eine ID vorhanden ist und ob sie gültig ist
+        if (id.startsWith("NX")) {
+            questionButton.style.display = 'none';
+            openModalNX();
+            return;
+        }
+
+        if (id.startsWith("FI")) {
+            openModal1();
+        } else if (id.startsWith("CF")) {
+            openModal2();
+        } else {
+            console.error("Ungültige ID in der URL. Öffne Modal 1.");
+            openModal2();
+        }
+    }
+
+    // Event Listener für den "Mehr"-Button im ersten Modal
+    mehrButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        modal.style.display = "none";
+        openModal2();
+    });
+
+    // Event Listener für den "questionButton"
+    questionButton.addEventListener("click", async function () {
+        determineAndOpenModal();
+        //questionButton.style.display = "none";
+        questionButtonClick = "yes";
+    });
+
+    // Funktion zum Mischen eines Arrays
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Das parent Element für die Buttons
+    const messageOptions = document.getElementById('messageOptions');
+
+    // Die Buttons sammeln und in ein Array konvertieren
+    const buttons = Array.from(messageOptions.getElementsByTagName('button'));
+
+    // Die Reihenfolge der Buttons randomisieren
+    const shuffledButtons = shuffle(buttons);
+
+    // Die alten Buttons entfernen
+    messageOptions.innerHTML = '';
+
+    // Die neu sortierten Buttons hinzufügen und den Text anpassen
+    shuffledButtons.forEach((button, index) => {
+        // Ändere den Text je nach Index
+        if (index === 0) {
+            button.textContent = "Message Option 1: " + button.textContent; // Erster Button
+            localStorage.setItem('firstMessageOption', button.innerText)
+        } else if (index === 1) {
+            button.textContent = "Message Option 2: " + button.textContent; // Zweiter Button
+        }
+        messageOptions.appendChild(button);
+    });
+
+    // Funktion, um eine Zahl mit Tausendertrennzeichen zu formatieren
+    function formatNumberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+
+});
