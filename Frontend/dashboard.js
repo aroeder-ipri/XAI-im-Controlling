@@ -219,7 +219,7 @@
         if (storeInfo) {
             // Daten für Location 
             storeInfoContainerLocation.innerHTML = `
-                <div style="margin: 0 30px 0 0;">
+                <div style="margin: 0 30px 0 0; justify-content: center" >
                     <p style="margin: 0;">
                         <span style="font-size: 20px; font-weight: bold; color: #004E9D;">${selectedStore}</span> 
                         <span style="font-size: 20px; color: black;"> | Sales Development</span></p>
@@ -228,7 +228,7 @@
 
             // Daten für Date
             storeInfoContainerDate.innerHTML = `
-                <div style="margin: 0 30px 0 0;">
+                <div style="margin: 0 30px 0 0; text-align: center;">
                     <p style="margin: 0;">Date: 2021</p>
                 </div>
             `;
@@ -236,10 +236,10 @@
             // Daten für Store Type
             storeInfoContainerType.innerHTML = `
             <div style="margin: 0 30px 0 0; text-align: center;">
-                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
                     ${storeInfo.storeType}
                 </p>
-                <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                     Store Type
                 </p>
             </div>
@@ -248,10 +248,10 @@
             // Daten für Assortment
             storeInfoContainerAssortment.innerHTML = `
             <div style="margin: 0 30px 0 0; text-align: center;">
-                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
                     ${storeInfo.assortment}
                 </p>
-                <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                     Assortment
                 </p>
             </div>
@@ -260,10 +260,10 @@
             // Daten für Distance to Next Store
             storeInfoContainerDistanceNextStore.innerHTML = `
             <div style="margin: 0 30px 0 0; text-align: center;">
-                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
                     ${storeInfo.competitionDistance} miles
                 </p>
-                <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                     Distance to Next Store
                 </p>
             </div>
@@ -283,10 +283,10 @@
                 // Daten für Customers
                 storeInfoContainerCustomers.innerHTML = `
                 <div style="margin: 0 30px 0 0; text-align: center;">
-                    <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                    <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
                         ${customers}
                     </p>
-                    <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                    <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                         Expected Customers
                     </p>
                 </div>
@@ -295,10 +295,10 @@
                 // Daten für Holidays
                 storeInfoContainerHolidays.innerHTML = `
                 <div style="margin: 0 30px 0 0; text-align: center;">
-                    <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                    <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
                         ${holidaysThisMonth}
                     </p>
-                    <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                    <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                         School or State Holidays
                     </p>
                 </div>
@@ -307,10 +307,10 @@
                 // Daten für Promotions
                 storeInfoContainerPromotions.innerHTML = `
                 <div style="margin: 0 30px 0 0; text-align: center;">
-                    <p style="margin: 0; font-size: 20px; font-weight: bold; color: #004E9D;">
+                    <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
                         ${promo}
                     </p>
-                    <p style="margin: 0; font-size: 12px; font-weight: bold; color: black;">
+                    <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                         Days with Local Promotion
                     </p>
                 </div>
@@ -341,11 +341,11 @@
         updateSelectedStore();
     }
 
-    // Event-Listener für die nächste Store-Schaltfläche
-    document.getElementById('nextStoreButton').addEventListener('click', nextStore);
+    // // Event-Listener für die nächste Store-Schaltfläche
+    // document.getElementById('nextStoreButton').addEventListener('click', nextStore);
 
-    // Event-Listener für die vorherige Store-Schaltfläche
-    document.getElementById('prevStoreButton').addEventListener('click', prevStore);
+    // // Event-Listener für die vorherige Store-Schaltfläche
+    // document.getElementById('prevStoreButton').addEventListener('click', prevStore);
 
     // Funktion zum Aktualisieren der Schaltflächenaktivität basierend auf der Anzahl der ausgewählten Stores
     function updateButtonActivity() {
@@ -552,6 +552,7 @@
                             }
                         }
                     },
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             display: false // Y-Achse komplett ausblenden

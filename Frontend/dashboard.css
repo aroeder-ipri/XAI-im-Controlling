@@ -1,35 +1,34 @@
 /* Allgemeine Stile für die Boxen */
 .content-box1 {
     background-color: #F2F2F2; /* Hintergrundfarbe */
-    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
-    border-radius: 5px; /* Abrundung der Ecken */
-    padding: 15px; /* Innenabstand */
+    border: 3px solid grey; /* Rahmenfarbe und -stärke */
+    /* border-radius: 5px; /* Abrundung der Ecken */
+    /* padding: 15px; /* Innenabstand */
     margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 72.5%;
+    height: 50vh;  /* Höhe der Box */
 }
 .content-box2 {
     background-color: #FFE699; /* Hintergrundfarbe */
-    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
-    border-radius: 5px; /* Abrundung der Ecken */
+    border: 3px solid grey; /* Rahmenfarbe und -stärke */
+    /* border-radius: 5px; /* Abrundung der Ecken */
     padding: 15px; /* Innenabstand */
-    margin-top: 15px; /* Abstand nach oben */
-    margin-bottom: 15px; /* Abstand nach unten */
-    height: 40%;
+    /*margin-top: 15px; /* Abstand nach oben */
+    /* margin-bottom: 15px; /* Abstand nach unten */
 }
 .content-box3 {
     background-color: #F2F2F2; /* Hintergrundfarbe */
-    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
-    border-radius: 5px; /* Abrundung der Ecken */
+    border: 3px solid grey; /* Rahmenfarbe und -stärke */
+    /* border-radius: 5px; /* Abrundung der Ecken */
     padding: 15px; /* Innenabstand */
-    margin-top: 15px; /* Abstand nach oben */
+    /* margin-top: 15px; /* Abstand nach oben */
     margin-bottom: 15px; /* Abstand nach unten */
-    height: 52.5%;
+    /* height: 52.5%; */
 }
 .content-box4 {
     background-color: #F2F2F2; /* Hintergrundfarbe */
-    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
-    border-radius: 5px; /* Abrundung der Ecken */
+    border: 3px solid grey; /* Rahmenfarbe und -stärke */
+    /* border-radius: 5px; /* Abrundung der Ecken */
     padding: 5px; /* Verringert Innenabstand */
     margin-top: 5px; /* Entfernt Abstand nach oben */
     margin-bottom: 5px; /* Beibehaltung des Abstands nach unten */
@@ -38,12 +37,23 @@
 
 .content-box5 {
     background-color: #F2F2F2; /* Hintergrundfarbe */
-    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
-    border-radius: 5px; /* Abrundung der Ecken */
+    border: 3px solid grey; /* Rahmenfarbe und -stärke */
     padding: 5px; /* Verringert Innenabstand */
-    margin-top: 5px; /* Entfernt Abstand nach oben */
-    margin-bottom: 5px; /* Beibehaltung des Abstands nach unten */
     height: 70px;
+    margin: 5px auto;
+    width: 32%;
+    text-align: center; /* Zentriert den Text */
+}
+
+.content-box6 {
+    background-color: #F2F2F2; /* Hintergrundfarbe */
+    border: 3px solid grey; /* Rahmenfarbe und -stärke */
+    /* border-radius: 5px; /* Abrundung der Ecken */
+    padding: 5px; /* Verringert Innenabstand */
+    height: 70px;
+    margin: 5px auto;
+    width: 65%;
+    text-align: left;
 }
 
 .content-box4 p, .content-box4 div {
