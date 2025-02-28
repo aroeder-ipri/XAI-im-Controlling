@@ -1148,9 +1148,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // Bedingung für Gruppe NX
         if (id && id.startsWith("NX")) {
             taskParagraph.innerHTML = ''; // Leer
+            ForecastDiv.innerHTML = `
+                    <div class="row h-25" style="height: calc(25% - 10px); margin-bottom: 5px;">
+                        <div class="col d-flex flex-column align-items-center justify-content-center content-box7">
+                            <p style="margin: 0; font-size: 16px; font-weight: bold; color: black;">
+                                $10,200
+                            </p>
+                            <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
+                                AI-Forecast
+                            </p>
+                        </div>
+                    </div>
+                    `;
         } else {
             // Text hinzufügen, wenn nicht in Gruppe NX
-            taskParagraph.innerHTML = 'Let the AI explain how it calculates the forecast by clicking on <span class="question-mark">?</span> in the forecast.';
             ForecastDiv.innerHTML = `
                     <div class="row h-25" style="height: calc(25% - 10px); margin-bottom: 5px;">
                         <div class="col d-flex flex-column align-items-center justify-content-center content-box7">
