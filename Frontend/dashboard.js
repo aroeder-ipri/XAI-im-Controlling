@@ -219,17 +219,22 @@
         if (storeInfo) {
             // Daten für Location 
             storeInfoContainerLocation.innerHTML = `
-                <div style="margin: 0 30px 0 0; justify-content: center" >
+                <div style="margin: 0 30px 0 0; justify-content: bottom display: flex;" >
                     <p style="margin: 0;">
-                        <span style="font-size: 20px; font-weight: bold; color: #004E9D;">${selectedStore}</span> 
-                        <span style="font-size: 20px; color: black;"> | Sales Development</span></p>
+                        <span style="font-size: 28px; font-weight: bold; color: #004E9D;">${selectedStore}</span> 
+                        <span style="font-size: 28px; color: black;"> | Sales Development</span></p>
                 </div>
             `;
 
             // Daten für Date
             storeInfoContainerDate.innerHTML = `
                 <div style="margin: 0 30px 0 0; text-align: center;">
-                    <p style="margin: 0;">Date: 2021</p>
+                    <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
+                    01 Mar 2024
+                </p>
+                <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
+                    Date
+                </p>
                 </div>
             `;
 
@@ -1015,7 +1020,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 }
                 modal4.style.display = "none";
                 showMessageExample(exampleText);
-                optionCost = 0.30; // Abzug der Kosten für die ausgewählte Option
+                optionCost = 0.06; // Abzug der Kosten für die ausgewählte Option
                 // Aktualisiere die globale optionId
                 optionId = selectedOptionId;
             }
@@ -1035,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (option === 'noMessage') {
             return 0.00;
         } else if (option === 'salesExpectations' || option === 'trustForecast') {
-            return 0.30;
+            return 0.06;
         }
         return 0.00;
     }
@@ -1087,7 +1092,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         switch (option) {
             case 'salesExpectations':
             case 'trustForecast':
-                return 0.30;
+                return 0.06;
             default:
                 return 0.00;
         }
@@ -1398,10 +1403,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     shuffledButtons.forEach((button, index) => {
         // Ändere den Text je nach Index
         if (index === 0) {
-            button.textContent = "Message Option 1: " + button.textContent; // Erster Button
+            button.textContent = "Message Option: " + button.textContent; // Erster Button
             localStorage.setItem('firstMessageOption', button.innerText)
         } else if (index === 1) {
-            button.textContent = "Message Option 2: " + button.textContent; // Zweiter Button
+            button.textContent = "Message Option: " + button.textContent; // Zweiter Button
         }
         messageOptions.appendChild(button);
     });
