@@ -811,7 +811,7 @@ async function btn_click() {
         console.log("Data successfully sent to the API:", data);
 
         // Weiterleitung zur nächsten Seite
-        window.location.href = "https://www.soscisurvey.de/salesd-evelopment-forecast/"
+        window.location.href = "https://www.soscisurvey.de/sales-development-forecast/"
             + "?id=" + encodeURIComponent(id)
             + "&YourTarget=" + encodeURIComponent(yourTarget)
             + "&actualSales=" + encodeURIComponent(actualSales)
