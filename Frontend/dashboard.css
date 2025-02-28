@@ -401,7 +401,7 @@ html {
 /* Slider */
 #targetSlider {
     width: 100%;
-    accent-color: #004E9D ; /* Setzt die Farbe des Sliders auf Grün */
+    accent-color: #73B059 ; /* Setzt die Farbe des Sliders auf Grün */
 }
 /* Slider im deaktivierten Zustand */
 #targetSlider:disabled {
@@ -428,13 +428,13 @@ html {
 /* Slider1 */
 #targetSlider1 {
     width: 100%;
-    accent-color: #004E9D ; /* Setzt die Farbe des Sliders auf Grün */
+    accent-color: #73B059 ; /* Setzt die Farbe des Sliders auf Grün */
 }
 
 /* Slider-Wert1 */
 #sliderValue1 {
     font-weight: bold;
-    color: #004E9D ; /* Grüner Farbton für den Slider-Wert */
+    color: #73B059 ; /* Grüner Farbton für den Slider-Wert */
     margin-left: 10px;
 }
 
@@ -513,7 +513,7 @@ h2 {
 
 
 .slider-button {
-    background-color: #004E9D;
+    background-color: #73B059;
     color: white;
     border: none;
     padding: 2px 5px;
@@ -523,5 +523,5 @@ h2 {
 }
 
 .slider-button:hover {
-    background-color: #004488; /* Leicht dunklerer Farbton bei Hover */
+    background-color: #5a9b1e; /* Leicht dunklerer Farbton bei Hover */
 }
