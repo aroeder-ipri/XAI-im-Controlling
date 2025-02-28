@@ -254,7 +254,7 @@ html {
     margin: 15% auto;
     padding: 20px;
     border-radius: 10px; /* Runde Ecken für das Modalfenster */
-    border: 3px solid #74B027; /* Rahmenfarbe und -stärke */
+    border: 3px solid #004E9D; /* Rahmenfarbe und -stärke */
     max-width: 500px; /* Maximalbreite des Modalfensters */
     width: 90%; /* 90% der verfügbaren Breite */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatten für das Modalfenster */
@@ -274,7 +274,7 @@ html {
 
 .close:hover,
 .close:focus {
-    color: #74B027;
+    color: #004E9D;
     text-decoration: none;
     cursor: pointer;
 }
@@ -401,7 +401,7 @@ html {
 /* Slider */
 #targetSlider {
     width: 100%;
-    accent-color: #74B027; /* Setzt die Farbe des Sliders auf Grün */
+    accent-color: #004E9D ; /* Setzt die Farbe des Sliders auf Grün */
 }
 /* Slider im deaktivierten Zustand */
 #targetSlider:disabled {
@@ -421,20 +421,20 @@ html {
 /* Slider-Wert */
 #sliderValue {
     font-weight: bold;
-    color: #74B027; /* Grüner Farbton für den Slider-Wert */
+    color: #004E9D ; /* Grüner Farbton für den Slider-Wert */
     margin-left: 10px;
 }
 
 /* Slider1 */
 #targetSlider1 {
     width: 100%;
-    accent-color: #74B027; /* Setzt die Farbe des Sliders auf Grün */
+    accent-color: #004E9D ; /* Setzt die Farbe des Sliders auf Grün */
 }
 
 /* Slider-Wert1 */
 #sliderValue1 {
     font-weight: bold;
-    color: #74B027; /* Grüner Farbton für den Slider-Wert */
+    color: #004E9D ; /* Grüner Farbton für den Slider-Wert */
     margin-left: 10px;
 }
 
@@ -513,7 +513,7 @@ h2 {
 
 
 .slider-button {
-    background-color: #74B027;
+    background-color: #004E9D;
     color: white;
     border: none;
     padding: 2px 5px;
@@ -523,5 +523,5 @@ h2 {
 }
 
 .slider-button:hover {
-    background-color: #5a9b1e; /* Leicht dunklerer Farbton bei Hover */
+    background-color: #004488; /* Leicht dunklerer Farbton bei Hover */
 }
