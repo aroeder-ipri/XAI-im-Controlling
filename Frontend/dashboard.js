@@ -752,12 +752,12 @@
 
 
 // Copy vom html Dokument
-var yourTarget = 8000;
+var yourTarget = "8000";
 var actualSales = 10300;
 var basePayout = 0;
 var optionCost = 0;
 var questionButtonClick = "no";
-var savedSliderValue = 8000;
+var savedSliderValue = "8000";
 var optionId = "noMessage";
 
 async function btn_click() {
