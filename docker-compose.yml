@@ -32,7 +32,6 @@ services:
 
   nginx:
   image: nginx:alpine
-  user: root  # Fügen Sie diese Zeile hinzu
   volumes:
     - ./nginx.conf:/etc/nginx/nginx.conf:ro
     - /etc/letsencrypt/archive/controlling.xaidemo.de/:/letsencrypt/:ro
