@@ -20,3 +20,15 @@ In der Datei daemon.json im Ordner /etc/docker/ ist definiert, welches Verzeichn
   "data-root": "/media/xai-controlling-volume/docker-cache"
 }
 ```
+
+
+
+## Frontend
+1. [index.html](frontend/index.html)
+2. [index2.html](frontend/index2.html) -> Prolific ID
+3. [setting.html](frontend/setting.html) -> Introduction to the task
+4. [setting2.html](frontend/setting2.html) -> Introduction to the task (2) - Bonus payment
+5. [setting3.html](frontend/setting3.html) -> Introduction to the task (3) - Bonus payment example
+6. [control.html](frontend/control.html) -> Comprehension check (answer: 1.10)
+7. [dashboard.html](frontend/dashboard.html) -> Dashboard
+
