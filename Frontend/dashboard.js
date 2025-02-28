@@ -1136,12 +1136,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id');
-        const ForecastDiv = document.getElementById("AIForecastContainer");
+        const ForecastDiv = document.getElementById("TextAIForecast");
 
 
         modalEstimate.style.display = "none";
-        // continueButton.style.display = "block";
-        // estimateButton.style.display = "none";
+        continueButton.style.display = "block";
+        estimateButton.style.display = "none";
 
 
 
@@ -1169,14 +1169,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             </p>
                         </div>
                     </div>
-                    <div class="row h-25" style="height: calc(25% - 10px);">
-                        <div class="col d-flex align-items-center justify-content-center">
-                            <!-- Continue to set target Button -->
-                            <button type="button" id="continueButton" class="btn custom-btn"
-                                    style=" width: 100%; height: 80%;">Continue to set target</button>
-                        </div>
-                    </div>
-
                     `;
 
         }
