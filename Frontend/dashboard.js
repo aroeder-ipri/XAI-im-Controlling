@@ -230,7 +230,7 @@
             storeInfoContainerDate.innerHTML = `
                 <div style="margin: 0 30px 0 0; text-align: center;">
                     <p style="margin: 0; font-size: 24px; font-weight: bold; color: #004E9D;">
-                    01 Mar 2024
+                    01 Mar 2025
                 </p>
                 <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                     Date
@@ -1157,7 +1157,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     <div class="row h-25" style="height: calc(25% - 10px); margin-bottom: 5px;">
                         <div class="col d-flex flex-column align-items-center justify-content-center content-box7">
                             <p style="margin: 0; font-size: 16px; font-weight: bold; color: black;">
-                                $10,200
+                                $9,900
                             </p>
                             <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                                 AI-Forecast
@@ -1171,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     <div class="row h-25" style="height: calc(25% - 10px); margin-bottom: 5px;">
                         <div class="col d-flex flex-column align-items-center justify-content-center content-box7">
                             <p style="margin: 0; font-size: 16px; font-weight: bold; color: black;">
-                                $10,200
+                                $9,900
                             </p>
                             <p style="margin: 0; font-size: 14px; font-weight: bold; color: black;">
                                 AI-Forecast
@@ -1224,7 +1224,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             // HTML-Inhalt des Modals anpassen
             modalNXContent.innerHTML = `
-            <p>The AI estimates <strong>$10,200</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
+            <p>The AI estimates <strong>$$9,900</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
         `;
 
             // Modal anzeigen
@@ -1276,7 +1276,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             // HTML-Inhalt des Modals anpassen
             modal1Content.innerHTML = `
-            <p>The AI estimates <strong>$10,200</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
+            <p>The AI estimates <strong>$$9,900</strong> instead of <strong>$${formattedSavedSliderValue}</strong> (your estimation).</p>
             <p>Here you can see which factors had the biggest influence on the AI forecast:</p>
             ${progressBarsHTML}
         `;
